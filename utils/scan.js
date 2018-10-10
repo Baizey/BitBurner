@@ -15,8 +15,7 @@ export async function main(ns) {
         let name = server.name;
         let hackColor = ns.hasRootAccess(name) ? "lime" : "red";
         let nameColor = facServers[name] ? "yellow" : "white";
-        output += '<br>';
-        output += ' '.repeat(server.depth);
+        output += `<br>${' '.repeat(server.depth)}`;
         output += `<span style="color:${hackColor}">■ </span>`;
         output += `<a class='scan-analyze-link' style="color:${nameColor}">${name}</a>`;
     });
