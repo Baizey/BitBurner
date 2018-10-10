@@ -36,10 +36,10 @@ Contract.prototype.toString = function () {
 };
 
 export async function main(ns) {
-
+    let servers = getServers(ns);
     while(true) {
         let contracts = [];
-        getServers(ns).forEach(server =>
+        servers.forEach(server =>
             ns.ls(server.name, ".cct").forEach(name =>
                 contracts.push(new Contract(ns, server.name, name))));
         contracts.forEach(contract => {
@@ -54,26 +54,61 @@ export async function main(ns) {
     }
 }
 
-function findLargestPrimeFactor(number) {
+/**
+ * @param {number} data
+ * @returns {number}
+ */
+function findLargestPrimeFactor(data) {
     return null;
 }
 
-function subArrayWithBiggestSum(array) {
+/**
+ * @param {number[]} data
+ * @returns {number[]}
+ */
+function subArrayWithBiggestSum(data) {
     return null;
 }
 
-function mergeOverlappingIntervals(array) {
+/**
+ * Given as [[1, 2][3,5]]
+ * Merge to least necessary intervals
+ * @param {number[][]} data
+ * @returns {number[][]}
+ */
+function mergeOverlappingIntervals(data) {
     return null;
 }
 
-function stockTrading2(array) {
+/**
+ * Each index is the i'th day
+ * Determine max profit
+ * You can only hold 1 stock at a time
+ * @param {number[]} data
+ * @returns {number}
+ */
+function stockTrading2(data) {
     return null;
 }
 
-function arrayJumpingGame(array) {
+/**
+ * Start on first index
+ * Determine if you can you to the last index exactly
+ * IDFK
+ * Return 1 for true and 0 for false
+ * @param {number[]} data
+ * @returns {number}
+ */
+function arrayJumpingGame(data) {
     return null;
 }
 
-function generateIpAddresses(string) {
+/**
+ * Given string of digit
+ * Return different ways it can be split into legal IP addresses
+ * @param {string} data
+ * @returns {string[]}
+ */
+function generateIpAddresses(data) {
     return null;
 }
