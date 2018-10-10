@@ -3,8 +3,12 @@
  */
 class Ns {
 
-    Ns() { this.args = []; }
+    Ns() {
+        this.codingcontract = new Codingcontract();
+        this.args = [];
+    }
 
+    ls(target, filetype){}
     disableLog(fn){}
     enableLog(fn){}
     getServerMoneyAvailable(target){}
@@ -48,4 +52,11 @@ class Ns {
     async weaken(time){}
     async prompt(time){}
     async wget(time){}
+}
+
+class Codingcontract {
+    getContractType(fn, server){}
+    getDescription(fn, server){}
+    getData(fn, server){}
+    attempt(answer, fn, server){}
 }

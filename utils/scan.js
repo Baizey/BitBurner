@@ -18,6 +18,8 @@ export async function main(ns) {
         output += `<br>${' '.repeat(server.depth)}`;
         output += `<span style='color:${hackColor}'>■ </span>`;
         output += `<a class='scan-analyze-link' style='color:${nameColor}'>${name}</a>`;
+        for (let i = 0; i < ns.ls(name, ".cct").length; i++)
+            output += "<span style='color:fuchisa'>©</span>"
     });
     ns.tprint(output);
     cmd(ns, 'scan-analyze 0');
