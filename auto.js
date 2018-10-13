@@ -1,10 +1,8 @@
 import {getRunner} from "runner";
 
-export async function main(ns){
-    let host = ns.getHostname();
-    let runner = getRunner(ns, host);
-
-    await runner.start('autocrack.ns');
-    await runner.start('autostock.ns');
+export async function main(ns) {
+    let runner = getRunner(ns, ns.getHostname());
+    await runner.finish('crack.ns');
+    await runner.start('stock.ns');
     await runner.start('autohack.ns');
 }

@@ -11,6 +11,7 @@ class Ns {
     ls(target, filetype){}
     disableLog(fn){}
     enableLog(fn){}
+    clearLog(){}
     getServerMoneyAvailable(target){}
     getServerRequiredHackingLevel(target){}
     print(stuff){}
@@ -42,6 +43,13 @@ class Ns {
     relaysmtp(target){}
     httpworm(target){}
     sqlinject(target){}
+
+    /**
+     * Bitnode-4 functions
+     * @param program
+     */
+    purchaseProgram(program){};
+    purchaseTor(){};
 
     async sleep(time){}
     async run(time){}

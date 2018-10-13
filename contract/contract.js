@@ -2,7 +2,6 @@ import {getServers} from "helper.ns";
 import {getPrimes} from 'primes.ns';
 
 let primes = getPrimes();
-let lastPrime = primes[primes.length - 1];
 
 function Contract(ns, server, contract) {
     this.ns = ns;
@@ -75,18 +74,18 @@ export async function main(ns) {
 function findLargestPrimeFactor(data) {
     let curr = data;
     let limit = Math.sqrt(curr);
-    let biggest = 0;
-    primes.forEach(prime => {
-        if (prime > limit)
-            return;
-        if (curr % prime === 0)
-            biggest = prime;
-        while (curr % prime === 0)
-            curr /= prime;
-    });
-    if ((curr > biggest && curr <= lastPrime) || curr > lastPrime)
-        biggest = curr;
-    return biggest;
+    let result = 0;
+    for(let i = 0; i < primes.length && primes[i] <= limit; i++) {
+        if (curr % primes[i] !== 0)
+            continue;
+        result = primes[i];
+        while (curr % primes[i] === 0)
+            curr /= primes[i];
+        limit = Math.sqrt(curr);
+    }
+    if (curr > result)
+        result = curr;
+    return result;
 }
 
 /**

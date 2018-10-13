@@ -8,31 +8,29 @@ export function inject(ns, code) {
     ns.tprint(output);
 }
 
-export function cmd(ns, cmd) {
-    let code = `document.getElementById('terminal-input-text-box').value = '${cmd}'; document.body.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 13 }));`
-    inject(ns, code);
-}
-
 export function availThreads(ns, self) {
     let ram = ns.getServerRam(self);
     return Math.floor((ram[0] - ram[1]) / 2);
 }
 
-export function getCracks() {
-    return ['brutessh.exe', 'ftpcrack.exe', 'relaysmtp.exe', 'httpworm.exe', 'sqlinject.exe'];
+export function cmd(ns, cmd) {
+    let code = `document.getElementById('terminal-input-text-box').value = '${cmd}'; document.body.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 13 }));`
+    inject(ns, code);
 }
 
 export function display(number) {
-    const isNeg = number < 0;
+    const neg = number < 0 ? '-' : '';
     number = Math.abs(number);
 
+    let units = [' _', ' K', ' M', ' B', ' T', ' Q', ' 5', ' 6'];
     let i = 0;
-    for (; number >= 1000; i += 3)
+    for (; i < units.length && number >= 1000; i++)
         number /= 1000;
+    i = Math.min(i, units.length - 1);
 
-    const unit = 'e' + i.toString().padStart(3, '_');
-    number = (isNeg ? '-' : '') + Math.floor(number);
-    return number.padStart(4, ' ') + unit;
+    let resp = (neg + Math.round(number) + units[i]);
+    while(resp.length < 6) resp = ' ' + resp;
+    return resp;
 }
 
 let asObj = (name = 'home', depth = 0) => ({

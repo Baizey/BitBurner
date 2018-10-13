@@ -32,7 +32,7 @@ export async function main(ns) {
     await runner.kill(['grow.script', 'weaken.script', 'hack.script']);
 
     while (!ns.hasRootAccess(target))
-        await runner.finish('crack.script', 1, target);
+        await ns.sleep(10000);
 
     ns.print(`Got root access`);
 
