@@ -1,5 +1,5 @@
 /**
- * Just here to let the IDE know how the ns argument in all main functions look
+ * Just here to let the IDE know how the ns argument in all subarray functions look
  */
 class Ns {
 
