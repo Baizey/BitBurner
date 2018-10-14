@@ -18,19 +18,20 @@ export function cmd(ns, cmd) {
     inject(ns, code);
 }
 
+
+export function asPercent(num) {
+    return (Math.round(num * 100) + '%').padStart(4, '.');
+}
+
 export function display(number) {
     const neg = number < 0 ? '-' : '';
     number = Math.abs(number);
-
-    let units = [' _', ' K', ' M', ' B', ' T', ' Q', ' 5', ' 6'];
+    let units = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp'];
     let i = 0;
     for (; i < units.length && number >= 1000; i++)
         number /= 1000;
     i = Math.min(i, units.length - 1);
-
-    let resp = (neg + Math.round(number) + units[i]);
-    while(resp.length < 6) resp = ' ' + resp;
-    return resp;
+    return neg.padStart(1, '.') + ('' + Math.round(number)).padStart(3, '.') + units[i].padEnd(2, '.');
 }
 
 let asObj = (name = 'home', depth = 0) => ({
