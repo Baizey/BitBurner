@@ -64,5 +64,5 @@ export async function main(ns) {
     ];
     let taking = ns.args.length > 0 ? ns.args[0] : '';
     for(let i = 0; i < targets.length; i++)
-        await ns.start('calculator.js', 1, targets[i] + (taking ? `;${taking}` : ''));
+        await ns.run('calculator.js', 1, targets[i] + (taking ? `;${taking}` : ''));
 }

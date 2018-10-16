@@ -9,7 +9,8 @@ let facServers = {
     'avmnite-02h' : 'yellow',
     'I.I.I.I' : 'yellow',
     'run4theh111z' : 'yellow',
-    'The-Cave' : 'orange'
+    'The-Cave' : 'orange',
+    'w0r1d_d43m0n': 'red'
 };
 
 
