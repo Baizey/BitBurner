@@ -1,76 +1,66 @@
-import {getServers} from "helper.ns";
-import {getPrimes} from 'primes.ns';
-
+import {getPrimes} from "primes.js";
 let primes = getPrimes();
 
-function Contract(ns, server, contract) {
-    this.ns = ns;
-    this.server = server;
-    this.contract = contract;
-    this.type = ns.codingcontract.getContractType(contract, server);
-    this.desc = ns.codingcontract.getDescription(contract, server);
-    this.data = ns.codingcontract.getData(contract, server);
-}
+export class Contract {
+    constructor(ns, server, filename) {
+        this.ns = ns;
+        this.server = server;
+        this.filename = filename;
 
-Contract.prototype.findAnswer = function () {
-    switch (this.type) {
-        case 'Spiralize Matrix':
-            return spiralizeMatrix(this.data);
-        case 'Total Ways to Sum':
-            return totalWaysToSum(this.data);
-        case 'Subarray with Maximum Sum':
-            return subArrayWithBiggestSum(this.data);
-        case 'Find Largest Prime Factor':
-            return findLargestPrimeFactor(this.data);
-        case 'Merge Overlapping Intervals':
-            return mergeOverlappingIntervals(this.data);
-        case 'Algorithmic Stock Trader I':
-            return stockTrading1(this.data);
-        case 'Algorithmic Stock Trader II':
-            return stockTrading2(this.data);
-        case 'Algorithmic Stock Trader III':
-            return stockTrading3(this.data);
-        case 'Array Jumping Game':
-            return arrayJumpingGame(this.data);
-        case 'Generate IP Addresses':
-            return generateIpAddresses(this.data);
-        default:
-            this.ns.print(`Unknown type: ${this.type}`);
-            this.ns.print(`Server: ${this.server}`);
-            this.ns.print(`File: ${this.contract}`);
-            this.ns.tprint(`Unknown type: ${this.type}, see logs for more details`);
-            return null;
+        this.failed = false;
+
+        this.type = ns.codingcontract.getContractType(filename, server);
+        this.data = ns.codingcontract.getData(filename, server);
     }
-};
 
-Contract.prototype.answer = function (answer) {
-    return this.ns.codingcontract.attempt(answer, this.contract, this.server);
-};
+    findAnswer() {
+        switch (this.type) {
+            case 'Spiralize Matrix':
+                return spiralingMatrix(this.data);
+            case 'Total Ways to Sum':
+                return totalWaysToSum(this.data);
+            case 'Subarray with Maximum Sum':
+                return subArrayWithBiggestSum(this.data);
+            case 'Find Largest Prime Factor':
+                return findLargestPrimeFactor(this.data);
+            case 'Merge Overlapping Intervals':
+                return mergeOverlappingIntervals(this.data);
+            case 'Algorithmic Stock Trader I':
+                return stockTrading1(this.data);
+            case 'Algorithmic Stock Trader II':
+                return stockTrading2(this.data);
+            case 'Algorithmic Stock Trader III':
+                return stockTrading3(this.data);
+            case 'Array Jumping Game':
+                return arrayJumpingGame(this.data);
+            case 'Generate IP Addresses':
+                return generateIpAddresses(this.data);
+            default:
+                this.reportError('Unknown challenge type');
+                return null;
+        }
+    }
 
-Contract.prototype.toString = function () {
-    return `${this.type}`;
-};
+    answer() {
+        let answer = this.findAnswer();
+        let resp = this.ns.codingcontract.attempt(answer, this.filename, this.server);
+        if (resp) this.ns.print(`Completed ${this.filename}`);
+        else this.reportError('Gave wrong answer');
+        return resp;
+    }
 
-export async function main(ns) {
-    let servers = getServers(ns);
-    while (true) {
-        let contracts = [];
-        servers.forEach(server =>
-            ns.ls(server.name, ".cct").forEach(name =>
-                contracts.push(new Contract(ns, server.name, name))));
-        contracts.forEach(contract => {
-            let answer = contract.findAnswer();
-            if (answer !== null && answer !== undefined)
-                contract.answer(answer);
-        });
-        await ns.sleep(60000);
+    reportError(error) {
+        this.ns.print([
+            `Error : ${error}`,
+            `Server: ${this.server}`,
+            `File  : ${this.filename}`
+        ].join('<br>'));
+        this.ns.tprint('Error occurred with contract');
+        this.failed = true;
     }
 }
 
-/**
- * @param {number} data
- * @returns {number}
- */
+
 function findLargestPrimeFactor(data) {
     let curr = data;
     let limit = Math.sqrt(curr);
@@ -87,11 +77,6 @@ function findLargestPrimeFactor(data) {
         result = curr;
     return result;
 }
-
-/**
- * @param {number[]} state
- * @returns {number}
- */
 function subArrayWithBiggestSum(state) {
     let shouldJoin = (a, b) => a === 0 || b === 0 || (a > 0) === (b > 0);
     for (let i = 0; i < state.length; i++) {
@@ -125,14 +110,6 @@ function subArrayWithBiggestSum(state) {
 
     return Math.max(...state);
 }
-
-
-/**
- * Given as [[1, 2][3,5]]
- * Merge to least necessary intervals
- * @param {number[][]} data
- * @returns {string}
- */
 function mergeOverlappingIntervals(data) {
     data.sort((a, b) => a[0] - b[0]);
     console.log(data.map(d => `[${d.join(', ')}]`).join(', '));
@@ -150,12 +127,6 @@ function mergeOverlappingIntervals(data) {
     data.sort((a, b) => a[0] - b[0]);
     return `[${data.map(d => `[${d.join(', ')}]`).join(', ')}]`;
 }
-
-/**
- * buy and sell at most once
- * @param {number[]} data
- * @returns {?}
- */
 function stockTrading1(data) {
     let profit = 0;
     let bestBuy = data[0];
@@ -165,24 +136,12 @@ function stockTrading1(data) {
     }
     return profit;
 }
-
-/**
- * buy and sell as much as your heart desires, just no overlap on transactions
- * @param {number[]} data
- * @returns {number}
- */
 function stockTrading2(data) {
     let profit = 0;
     for (let i = 1; i < data.length; ++i)
         profit += Math.max(data[i] - data[i - 1], 0);
     return profit;
 }
-
-/**
- * sell and buy 2 twice, cannot overlap transaction intervals
- * @param {number[]} data
- * @returns {number}
- */
 function stockTrading3(data) {
     let firstBuy = -999999,
         secondBuy = firstBuy,
@@ -197,28 +156,12 @@ function stockTrading3(data) {
     }
     return secondSell;
 }
-
-/**
- * Start on first index
- * Determine if you can you to the last index exactly
- * IDFK
- * Return 1 for true and 0 for false
- * @param {number[]} data
- * @returns {string}
- */
 function arrayJumpingGame(data) {
     let i = 0;
     for (let j = 0; i < data.length && i <= j; i++)
         j = Math.max(i + data[i], j);
     return i === data.length ? '1' : '0';
 }
-
-/**
- * Given string of digit
- * Return different ways it can be split into legal IP addresses
- * @param {string} data
- * @returns {string}
- */
 function generateIpAddresses(data) {
     let result = [];
     for(let a = 1; a <= 3; a++) {
@@ -244,12 +187,6 @@ function generateIpAddresses(data) {
     }
     return result.join(',');
 }
-
-/**
- *
- * @param {number} data
- * @returns {number}
- */
 function totalWaysToSum(data) {
     let lookup = [1];
     for(let i = 0; i < data; i++)
@@ -259,17 +196,7 @@ function totalWaysToSum(data) {
             lookup[j] += lookup[j - i];
     return lookup[data];
 }
-
-/**
- * fx:  [1,2,3]
- *       [4,5,6]
- *      [7,8,9]
- * should return 1, 2, 3, 6, 9, 8, 7, 4, 5
- * Matrix is shape: N x M not N x N
- * @param {String} data
- * @returns {string}
- */
-function spiralizeMatrix(data) {
+function spiralingMatrix(data) {
     let n = data.length;
     let m = data[0].length;
 

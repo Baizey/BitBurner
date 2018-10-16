@@ -1,4 +1,4 @@
-import {getServers} from 'helper.ns';
+import {getServerNames} from 'helper.js';
 
 let cracks = ['brutessh.exe', 'ftpcrack.exe', 'relaysmtp.exe', 'httpworm.exe', 'sqlinject.exe'];
 
@@ -29,7 +29,7 @@ function runCrack(ns, name, target) {
 
 export async function main(ns) {
     let c = cracks.filter(crack => ns.fileExists(crack));
-    let remaining = getServers(ns).map(n => n.name).filter(s => !ns.hasRootAccess(s));
+    let remaining = getServerNames(ns).filter(s => !ns.hasRootAccess(s));
     while (remaining.length > 0) {
         if (c.length < cracks.length) {
             ns.purchaseTor();

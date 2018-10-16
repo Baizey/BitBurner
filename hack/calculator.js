@@ -1,4 +1,4 @@
-import {getRunner} from 'runner.ns';
+import {Runner} from 'Runner.js';
 
 let takingConst = 0.5;
 let growChange = 0.004;
@@ -27,7 +27,7 @@ export async function main(ns) {
     let maxMoney = ns.getServerMaxMoney(target);
     let minSecurity = ns.getServerMinSecurityLevel(target);
 
-    let runner = getRunner(ns, self, target);
+    let runner = new Runner(ns, self, target);
     // Clean-up on restarts
     await runner.kill(['grow.script', 'weaken.script', 'hack.script']);
 
@@ -94,5 +94,5 @@ export async function main(ns) {
         await weaken(ns, minSecurity, runner);
     }
 
-    await runner.start('hack.ns', threads.hack, `${target};${threads.grow};${threads.weak};${taking}`);
+    await runner.start('hack.js', threads.hack, `${target};${threads.grow};${threads.weak};${taking}`);
 }

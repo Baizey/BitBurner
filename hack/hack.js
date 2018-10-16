@@ -1,4 +1,4 @@
-import {getRunner} from "runner.ns";
+import {Runner} from "Runner.js";
 
 export async function main(ns) {
     let self = ns.getHostname();
@@ -8,7 +8,7 @@ export async function main(ns) {
     let weakThreads = args[2] - 0;
     let taking = args[3];
 
-    let runner = getRunner(ns, self, target);
+    let runner = new Runner(ns, self, target);
 
     // Clean-up on restarts
     await runner.await(['grow.script', 'weaken.script']);
@@ -21,5 +21,5 @@ export async function main(ns) {
         await runner.await('grow.script');
     }
 
-    await runner.start('calculator.ns', 1, `${target};${taking}`);
+    await runner.start('calculator.js', 1, `${target};${taking}`);
 }

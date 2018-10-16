@@ -1,4 +1,4 @@
-import {inject, cmd} from "helper.ns";
+import {inject, cmd} from "helper.js";
 
 let getBody = x => `let ${x} = document.getElementsByTagName("BODY")[0];`;
 

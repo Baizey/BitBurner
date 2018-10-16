@@ -46,7 +46,6 @@ class Ns {
 
     /**
      * Bitnode-4 functions
-     * @param program
      */
     purchaseProgram(program){};
     purchaseTor(){};
@@ -63,8 +62,8 @@ class Ns {
 }
 
 class Codingcontract {
-    getContractType(fn, server){}
-    getDescription(fn, server){}
+    getContractType(filename, server){}
+    getDescription(filename, server){}
     getData(fn, server){}
-    attempt(answer, fn, server){}
+    attempt(answer, filename, server){}
 }

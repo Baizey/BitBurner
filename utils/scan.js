@@ -2,7 +2,7 @@ import {
     getServers,
     cmd,
     display
-} from 'helper.ns';
+} from 'helper.js';
 
 let facServers = {
     'CSEC' : 'yellow',
