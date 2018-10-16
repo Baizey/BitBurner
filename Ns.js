@@ -58,7 +58,7 @@ class Ns {
     async grow(time){}
     async weaken(time){}
     async prompt(time){}
-    async wget(time){}
+    async wget(url, filename, ip = ''){}
 }
 
 class Codingcontract {

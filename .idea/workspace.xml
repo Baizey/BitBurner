@@ -2,29 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="158469f9-d686-460d-a703-fd95086ab069" name="Default Changelist" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/classes/Contract.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/classes/Runner.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/classes/Stock.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/contract.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/update.js" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/manual/overview.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/manual/update.js" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/Ns.js" afterPath="$PROJECT_DIR$/Ns.js" />
-      <change beforePath="$PROJECT_DIR$/auto.js" afterPath="$PROJECT_DIR$/auto.js" />
-      <change beforePath="$PROJECT_DIR$/contract/contract.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/contract/primes.js" afterPath="$PROJECT_DIR$/utils/primes.js" />
-      <change beforePath="$PROJECT_DIR$/contract/subarray.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/contract/test.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/crack.js" afterPath="$PROJECT_DIR$/crack.js" />
-      <change beforePath="$PROJECT_DIR$/hack/autohack.js" afterPath="$PROJECT_DIR$/hack/autohack.js" />
-      <change beforePath="$PROJECT_DIR$/hack/calculator.js" afterPath="$PROJECT_DIR$/hack/calculator.js" />
-      <change beforePath="$PROJECT_DIR$/hack/hack.js" afterPath="$PROJECT_DIR$/hack/hack.js" />
-      <change beforePath="$PROJECT_DIR$/monitor.js" afterPath="$PROJECT_DIR$/monitor.js" />
-      <change beforePath="$PROJECT_DIR$/stock.js" afterPath="$PROJECT_DIR$/stock.js" />
-      <change beforePath="$PROJECT_DIR$/utils/helper.js" afterPath="$PROJECT_DIR$/utils/helper.js" />
-      <change beforePath="$PROJECT_DIR$/utils/runner.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/utils/scan.js" afterPath="$PROJECT_DIR$/utils/scan.js" />
+      <change beforePath="$PROJECT_DIR$/monitor.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/update.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/utils/scan.js" afterPath="$PROJECT_DIR$/manual/scan.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -97,16 +81,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Runner.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/classes/Runner.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="642">
-              <caret line="26" column="54" lean-forward="false" selection-start-line="26" selection-start-column="54" selection-end-line="26" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="calculator.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hack/calculator.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -164,19 +138,33 @@
       <file leaf-file-name="Ns.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ns.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="12" column="19" lean-forward="true" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+            <state relative-caret-position="944">
+              <caret line="60" column="36" lean-forward="true" selection-start-line="60" selection-start-column="36" selection-end-line="60" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="update.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/update.js">
+      <file leaf-file-name="update.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/manual/update.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="15" column="17" lean-forward="false" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="17" />
-              <folding />
+            <state relative-caret-position="990">
+              <caret line="30" column="32" lean-forward="true" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+              <folding>
+                <marker date="1539712484627" expanded="true" signature="1514:1525" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="overview.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/manual/overview.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="99">
+              <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -210,6 +198,7 @@
       <find>self</find>
       <find>runner</find>
       <find>getRunner</find>
+      <find>wget</find>
     </findStrings>
     <replaceStrings>
       <replace>,</replace>
@@ -259,6 +248,10 @@
         <option value="$PROJECT_DIR$/classes/Contract.js" />
         <option value="$PROJECT_DIR$/Ns.js" />
         <option value="$PROJECT_DIR$/update.js" />
+        <option value="$PROJECT_DIR$/utils/update.js" />
+        <option value="$PROJECT_DIR$/visuals/update.js" />
+        <option value="$PROJECT_DIR$/manual/update.js" />
+        <option value="$PROJECT_DIR$/manual/overview.js" />
       </list>
     </option>
   </component>
@@ -299,6 +292,16 @@
               <item name="BitBurner" type="b2602c69:ProjectViewProjectNode" />
               <item name="BitBurner" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="BitBurner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BitBurner" type="462c0819:PsiDirectoryNode" />
+              <item name="manual" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BitBurner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BitBurner" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -314,11 +317,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lasse\Documents\GitHub\BitBurner\visuals" />
+      <recent name="C:\Users\lasse\Documents\GitHub\BitBurner\utils" />
       <recent name="C:\Users\lasse\Documents\GitHub\BitBurner\classes" />
       <recent name="C:\Users\lasse\Documents\GitHub\BitBurner" />
-      <recent name="C:\Users\lasse\Documents\GitHub\BitBurner\utils" />
       <recent name="C:\Users\lasse\Documents\GitHub\BitBurner\contract" />
-      <recent name="C:\Users\lasse\Documents\GitHub\BitBurner\stock" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -361,12 +364,12 @@
       <workItem from="1539521736665" duration="1674000" />
       <workItem from="1539638965660" duration="44000" />
       <workItem from="1539650648396" duration="5057000" />
-      <workItem from="1539692711361" duration="3331000" />
+      <workItem from="1539692711361" duration="5644000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57806000" />
+    <option name="totallyTimeSpent" value="60119000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="2762" height="1770" extended-state="6" />
@@ -506,7 +509,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/scan.js">
+    <entry file="file://$PROJECT_DIR$/manual/scan.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
           <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="14" />
@@ -585,7 +588,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/scan.js">
+    <entry file="file://$PROJECT_DIR$/manual/scan.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
           <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="14" />
@@ -673,7 +676,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/scan.js">
+    <entry file="file://$PROJECT_DIR$/manual/scan.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1287">
           <caret line="39" column="1" lean-forward="true" selection-start-line="39" selection-start-column="1" selection-end-line="39" selection-end-column="1" />
@@ -770,17 +773,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Ns.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="12" column="19" lean-forward="true" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+        <state relative-caret-position="944">
+          <caret line="60" column="36" lean-forward="true" selection-start-line="60" selection-start-column="36" selection-end-line="60" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/update.js">
+    <entry file="file://$PROJECT_DIR$/manual/update.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="15" column="17" lean-forward="false" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="17" />
-          <folding />
+        <state relative-caret-position="990">
+          <caret line="30" column="32" lean-forward="true" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+          <folding>
+            <marker date="1539712484627" expanded="true" signature="1514:1525" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/manual/overview.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
