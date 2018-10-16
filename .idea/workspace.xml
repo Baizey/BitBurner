@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="158469f9-d686-460d-a703-fd95086ab069" name="Default Changelist" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/manual/overview.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/manual/update.js" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Ns.js" afterPath="$PROJECT_DIR$/Ns.js" />
-      <change beforePath="$PROJECT_DIR$/monitor.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/update.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/utils/scan.js" afterPath="$PROJECT_DIR$/manual/scan.js" />
+      <change beforePath="$PROJECT_DIR$/contract.js" afterPath="$PROJECT_DIR$/contract.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -113,11 +107,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="contract.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="contract.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/contract.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="627">
-              <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+            <state relative-caret-position="462">
+              <caret line="14" column="10" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="19" selection-end-column="1" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
               </folding>
@@ -157,11 +151,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="overview.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="overview.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/manual/overview.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+            <state relative-caret-position="990">
+              <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -235,7 +229,6 @@
         <option value="$PROJECT_DIR$/classes/Stock.js" />
         <option value="$PROJECT_DIR$/stock.js" />
         <option value="$PROJECT_DIR$/contract/contract.js" />
-        <option value="$PROJECT_DIR$/contract.js" />
         <option value="$PROJECT_DIR$/crack.js" />
         <option value="$PROJECT_DIR$/utils/scan.js" />
         <option value="$PROJECT_DIR$/utils/runner.js" />
@@ -252,6 +245,7 @@
         <option value="$PROJECT_DIR$/visuals/update.js" />
         <option value="$PROJECT_DIR$/manual/update.js" />
         <option value="$PROJECT_DIR$/manual/overview.js" />
+        <option value="$PROJECT_DIR$/contract.js" />
       </list>
     </option>
   </component>
@@ -261,7 +255,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="61" />
     <option name="y" value="-22" />
     <option name="width" value="1936" />
@@ -364,15 +358,15 @@
       <workItem from="1539521736665" duration="1674000" />
       <workItem from="1539638965660" duration="44000" />
       <workItem from="1539650648396" duration="5057000" />
-      <workItem from="1539692711361" duration="5644000" />
+      <workItem from="1539692711361" duration="6536000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="60119000" />
+    <option name="totallyTimeSpent" value="61011000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-13" y="-13" width="2762" height="1770" extended-state="6" />
+    <frame x="-13" y="-13" width="2762" height="1770" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2496345" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -721,16 +715,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/contract.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="627">
-          <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/hack/autohack.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1236">
@@ -791,10 +775,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/manual/overview.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+        <state relative-caret-position="990">
+          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contract.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="14" column="10" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="19" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>

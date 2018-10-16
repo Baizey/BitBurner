@@ -3,14 +3,14 @@ import {getServerNames} from "helper.js";
 
 export async function main(ns) {
     ns.disableLog('ALL');
-    let servers = getServerNames(ns);
+    let servers = getServerNames(ns).filter(s => s !== 'home');
     let failed = {};
     while (true) {
         let contracts = [];
         servers.forEach(server =>
-            ns.ls(server.name, ".cct").forEach(name => {
+            ns.ls(server, '.cct').forEach(name => {
                 if (!failed[name])
-                    contracts[name].push(new Contract(ns, server.name, name));
+                    contracts.push(new Contract(ns, server, name));
             })
         );
         contracts.forEach(contract => contract.answer());
