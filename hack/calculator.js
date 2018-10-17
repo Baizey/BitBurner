@@ -1,4 +1,5 @@
 import {Runner} from 'Runner.js';
+import {asPercent} from "helper.js";
 
 let takingConst = 0.5;
 let growChange = 0.004;
@@ -15,10 +16,11 @@ async function weaken(ns, minSecurity, runner) {
         );
         curr = ns.getServerSecurityLevel(target);
     }
+    ns.print('Weakened server...');
 }
 
 export async function main(ns) {
-    ns.disableLog('sleep');
+    ns.disableLog('ALL');
 
     let args = ns.args[0].split(';');
     let target = args[0];
@@ -32,25 +34,22 @@ export async function main(ns) {
     // Clean-up on restarts
     await runner.kill(['grow.script', 'weaken.script', 'hack.script']);
 
-    while (!ns.hasRootAccess(target))
-        await ns.sleep(10000);
+    ns.print('Starting...');
 
-    ns.print(`Got root access`);
+    while (!ns.hasRootAccess(target))
+        await ns.sleep(30000);
+    ns.print(`got root access...`);
 
     while (ns.getServerRequiredHackingLevel(target) > ns.getHackingLevel())
         await ns.sleep(30000);
-
-    ns.print(`Got hacking level`);
+    ns.print(`got hacking level...`);
 
     await weaken(ns, minSecurity, runner);
-
-    ns.print(`Weakened target`);
 
     if (ns.getServerMoneyAvailable(target) > maxMoney * 0.95)
         await runner.finish('hack.script', 50);
     await weaken(ns, minSecurity, runner);
-
-    ns.print(`Secured not too much money`);
+    ns.print(`money less than ${asPercent(0.95)}...`);
 
     let growGives = 0;
     while (growGives < 0.000001) {
@@ -58,20 +57,18 @@ export async function main(ns) {
         await runner.finish('grow.script');
         growGives = Math.abs((ns.getServerMoneyAvailable(target) - (curr + 1)) / (curr + 1));
     }
+    ns.print(`got growth as ${asPercent(growGives)}...`);
 
-    ns.print(`Grow gives ${growGives}`);
-
-    if (ns.getServerMoneyAvailable(target) < 1000000)
+    if (ns.getServerMoneyAvailable(target) < Math.min(1000000, ns.getServerMaxMoney(target)))
         await runner.finish('grow.script', 10000);
-    await weaken(ns, minSecurity, runner);
+    ns.print('got at least 1.000.000 in server...');
 
 
     let money = ns.getServerMoneyAvailable(target);
     while (ns.getServerMoneyAvailable(target) === money)
         await runner.finish('hack.script');
     let hackTakes = (money - ns.getServerMoneyAvailable(target)) / money;
-
-    ns.print(`Hack takes ${hackTakes}`);
+    ns.print(`got hack as ${asPercent(hackTakes)}`);
 
     let moneyLeftAfterHack = maxMoney * (1 - taking);
     let growFrom = (maxMoney - moneyLeftAfterHack) / moneyLeftAfterHack;
@@ -86,8 +83,10 @@ export async function main(ns) {
 
     ns.print(`Hack: ${threads.hack} Grow: ${threads.grow} Weak: ${threads.weak}`);
 
+    ns.print('Growing server to 100%');
     await weaken(ns, minSecurity, runner);
     while (ns.getServerMoneyAvailable(target) < maxMoney) {
+        ns.print(`At ${asPercent(ns.getServerMoneyAvailable(target) / maxMoney)}`);
         let money = ns.getServerMoneyAvailable(target);
         let need = (maxMoney - money) / money;
         let threads = Math.ceil(need / growGives);
