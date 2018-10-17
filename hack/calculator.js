@@ -46,11 +46,11 @@ export async function main(ns) {
 
     await weaken(ns, minSecurity, runner);
 
-    if (ns.getServerMoneyAvailable(target) > maxMoney * 0.95)
+    while (ns.getServerMoneyAvailable(target) > maxMoney * 0.95)
         await runner.finish('hack.script', 50);
-    await weaken(ns, minSecurity, runner);
     ns.print(`money less than ${asPercent(0.95)}...`);
 
+    await weaken(ns, minSecurity, runner);
     let growGives = 0;
     while (growGives < 0.000001) {
         let curr = ns.getServerMoneyAvailable(target);
@@ -59,12 +59,13 @@ export async function main(ns) {
     }
     ns.print(`got growth as ${asPercent(growGives)}...`);
 
-    if (ns.getServerMoneyAvailable(target) < Math.min(1000000, ns.getServerMaxMoney(target)))
+    while (ns.getServerMoneyAvailable(target) < Math.min(1000000, ns.getServerMaxMoney(target)))
         await runner.finish('grow.script', 10000);
     ns.print('got at least 1.000.000 in server...');
 
 
     let money = ns.getServerMoneyAvailable(target);
+    await weaken(ns, minSecurity, runner);
     while (ns.getServerMoneyAvailable(target) === money)
         await runner.finish('hack.script');
     let hackTakes = (money - ns.getServerMoneyAvailable(target)) / money;
@@ -84,15 +85,14 @@ export async function main(ns) {
     ns.print(`Hack: ${threads.hack} Grow: ${threads.grow} Weak: ${threads.weak}`);
 
     ns.print('Growing server to 100%');
-    await weaken(ns, minSecurity, runner);
     while (ns.getServerMoneyAvailable(target) < maxMoney) {
         ns.print(`At ${asPercent(ns.getServerMoneyAvailable(target) / maxMoney)}`);
         let money = ns.getServerMoneyAvailable(target);
         let need = (maxMoney - money) / money;
         let threads = Math.ceil(need / growGives);
         await runner.finish('grow.script', threads);
-        await weaken(ns, minSecurity, runner);
     }
+    await weaken(ns, minSecurity, runner);
 
     await runner.start('hack.js', threads.hack, `${target};${threads.grow};${threads.weak};${taking}`);
 }

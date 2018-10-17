@@ -1,9 +1,3 @@
-function availThreads(ns, self, script) {
-    let ram = ns.getServerRam(self);
-    let need = ns.getScriptRam();
-    return Math.floor((ram[0] - ram[1]) / need);
-}
-
 function secureScript(script) {
     return Array.isArray(script) ? script : [script];
 }
@@ -13,6 +7,14 @@ export class Runner {
         this.ns = ns;
         this.host = host;
         this.target = target;
+    }
+
+    availThreads(script) {
+        let ram = this.ns.getServerRam(this.host);
+        let need = Math.ceil(this.ns.getScriptRam());
+        let threads = Math.floor((ram[0] - ram[1]) / need);
+        this.ns.print(`${script} needs ${need} ram, with ${ram[0] - ram[1]} ram free we get ${threads} threads`);
+        return threads;
     }
 
     async await(script, arg = this.target) {
@@ -28,9 +30,9 @@ export class Runner {
     async start(script, threads = 1, arg = this.target) {
         let ns = this.ns;
         script = secureScript(script);
-        threads = Math.min(threads, availThreads(this.ns, this.host, script[0]));
+        threads = Math.min(threads, this.availThreads(script[0]));
         for (let i in script)
-            while(!(await ns.run(script[i], threads, arg)))
+            while (!(await ns.run(script[i], threads, arg)))
                 await ns.sleep(1000);
     }
 
