@@ -8,6 +8,7 @@ class Ns {
         this.args = [];
     }
 
+    getScriptRam(script);
     scp(files, source, target);
     ls(target, filetype){}
     disableLog(fn){}

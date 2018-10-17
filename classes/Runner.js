@@ -11,7 +11,7 @@ export class Runner {
 
     availThreads(script) {
         let ram = this.ns.getServerRam(this.host);
-        let need = Math.ceil(this.ns.getScriptRam());
+        let need = Math.ceil(this.ns.getScriptRam(script));
         let threads = Math.floor((ram[0] - ram[1]) / need);
         this.ns.print(`${script} needs ${need} ram, with ${ram[0] - ram[1]} ram free we get ${threads} threads`);
         return threads;
