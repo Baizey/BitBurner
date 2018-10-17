@@ -13,11 +13,14 @@ export function cmd(ns, cmd) {
 }
 
 
-export function asPercent(num) {
-    return (Math.round(num * 100) + '%').padStart(4, ' ');
+export function asPercent(num, usePadding = true) {
+
+
+
+    return (Math.round(num * 100) + '%').padStart(usePadding ? 4 : 0, ' ');
 }
 
-export function display(numbers) {
+export function display(numbers, usePadding = true) {
     let units = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp'];
     let input = numbers;
     numbers = Array.isArray(numbers) ? numbers : [numbers];
@@ -26,7 +29,9 @@ export function display(numbers) {
     for (; max >= 1000; unit++)
         max /= 1000;
     let div = Math.pow(10, unit * 3);
-    let res = numbers.map(n => ('' + Math.round(n / div)).padStart(4, ' ') + units[unit].padEnd(2, ' '));
+
+    let res = numbers.map(n => ('' + Math.round(n / div)).padStart(usePadding ? 4 : 0, ' ') + units[unit].padEnd(usePadding ? 2 : 0, ' '));
+
     return Array.isArray(input) ? res : res[0];
 }
 

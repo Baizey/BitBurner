@@ -1,7 +1,8 @@
 import {
     getServers,
     cmd,
-    display
+    display,
+    asPercent
 } from 'helper.js';
 
 let facServers = {
@@ -13,7 +14,6 @@ let facServers = {
     'w0r1d_d43m0n': 'red'
 };
 
-
 export async function main(ns) {
     let output = 'Network:';
     getServers(ns).forEach(server => {
@@ -21,15 +21,17 @@ export async function main(ns) {
         let hackColor = ns.hasRootAccess(name) ? 'lime' : 'red';
         let nameColor = facServers[name] ? facServers[name] : 'white';
 
+        let moneyCurr = ns.getServerMoneyAvailable(name);
+        let moneyMax = ns.getServerMaxMoney(name);
+        let ramMax = ns.getServerRam(name)[0];
+        let ramUsed = ns.getServerRam(name)[1];
         let hoverText = [
-            'Req Level: ', ns.getServerRequiredHackingLevel(name),
-            '&#10;Req Ports: ', ns.getServerNumPortsRequired(name),
-            '&#10;Memory: ', ns.getServerRam(name)[0], 'GB',
-            '&#10;Security: ', ns.getServerSecurityLevel(name),
-            '/', ns.getServerMinSecurityLevel(name),
-            '&#10;Money: ', display(ns.getServerMoneyAvailable(name)), ' (',
-            Math.round(100 * ns.getServerMoneyAvailable(name)/ns.getServerMaxMoney(name)), '%)'
-        ].join('');
+            `Req level: ${ns.getServerRequiredHackingLevel(name)}`,
+            `Req port: ${ns.getServerNumPortsRequired(name)}`,
+            `Memory: ${display(ramMax)} GB (${asPercent(ramUsed / ramMax)} used)`,
+            `Security: ${ns.getServerSecurityLevel(name)} / ${ns.getServerMinSecurityLevel(name)}`,
+            `Money: ${display(moneyCurr)} (${asPercent(moneyCurr / moneyMax)})`,
+        ].join('\n');
 
         output += ['<br>', ' '.repeat(server.depth),
             `<span style='color:${hackColor}'>■ </span>`,
