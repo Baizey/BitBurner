@@ -18,6 +18,7 @@ async function weaken(ns, minSecurity, runner) {
 }
 
 export async function main(ns) {
+    ns.disableLog('sleep');
 
     let args = ns.args[0].split(';');
     let target = args[0];

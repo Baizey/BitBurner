@@ -52,13 +52,13 @@ class Ns {
     purchaseTor(){};
 
     async sleep(time){}
-    async run(time){}
-    async exec(time){}
-    async kill(time){}
-    async hack(time){}
-    async grow(time){}
-    async weaken(time){}
-    async prompt(time){}
+    async run(script, numThreads=1, args){}
+    async exec(script, host, numThreads=1, args = ''){}
+    async kill(script, host, args = ''){}
+    async hack(target){}
+    async grow(target){}
+    async weaken(target){}
+    async prompt(question){}
     async wget(url, filename, ip = ''){}
 }
 

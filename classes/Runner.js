@@ -26,10 +26,12 @@ export class Runner {
     }
 
     async start(script, threads = 1, arg = this.target) {
+        let ns = this.ns;
         script = secureScript(script);
         threads = Math.min(threads, availThreads(this.ns, this.host, script[0]));
         for (let i in script)
-            await this.ns.run(script[i], threads, arg);
+            while(!(await ns.run(script[i], threads, arg)))
+                await ns.sleep(1000);
     }
 
     async finish(script, threads = 1, arg = this.target) {
