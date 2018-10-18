@@ -14,7 +14,7 @@ export function cmd(ns, cmd) {
 
 
 export function asPercent(num, usePadding = true) {
-    return (Math.round(num * 100) + '%').padStart(usePadding ? 4 : 0, ' ');
+    return (Math.round(num * 100) + '%').padStart(usePadding ? 5 : 0, ' ');
 }
 
 export function display(numbers, usePadding = true) {
