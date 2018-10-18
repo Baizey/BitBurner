@@ -175,10 +175,10 @@ function generateIpAddresses(data) {
                     let B = data.substring(a, ab);
                     let C = data.substring(ab, abc);
                     let D = data.substring(abc, abcd);
-                    let nums = [A, B, C, D].map(i => i - 0);
-                    if (Math.max(...nums) > 255)
+                    let numbers = [A, B, C, D].map(i => i - 0);
+                    if (Math.max(...numbers) > 255)
                         continue;
-                    let ip = nums.join('.');
+                    let ip = numbers.join('.');
                     if (ip.length === data.length + 3)
                         result.push(ip);
                 }
