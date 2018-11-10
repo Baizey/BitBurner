@@ -73,6 +73,7 @@ export async function main(ns) {
         .filter(s => s.type === ServerType.MoneyFarm)
         // Ignore servers we don't have root for yet
         .filter(s => s.hasRoot)
+        .filter(s => s.levelNeeded <= ns.getHackingLevel())
         // Ignore servers that has out of control security
         .filter(s => s.securityCurr <= 100)
         // Filter from blacklisted servers (never worth using)
@@ -82,5 +83,5 @@ export async function main(ns) {
 
     let taking = ns.args.length > 0 ? ns.args[0] : '';
     for(let i = 0; i < targets.length; i++)
-        await ns.run('calculator.js', 1, targets[i] + (taking ? `;${taking}` : ''));
+        await ns.run('calculator.js', 1, targets[i].name + (taking ? `;${taking}` : ''));
 }

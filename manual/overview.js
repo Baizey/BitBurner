@@ -1,6 +1,8 @@
 import {Stock} from 'stock.js';
 import {asPercent, asFormat} from 'helper.js';
 
+let asTitle = (text, length, symbol = '~') => symbol.repeat(Math.floor((length - text.length) / 2)) + text + symbol.repeat(Math.ceil((length - text.length) / 2));
+
 export async function main(ns) {
     ns.disableLog('ALL');
     let stocks = Stock.get(ns);
@@ -17,31 +19,30 @@ export async function main(ns) {
             total += stock.total;
         });
 
-        print.push(`TOTAL: Value: ${asFormat(total)} Profit: ${asFormat(profit)}`);
-        print.push(`${'~'.repeat(29)}LIQUID${'~'.repeat(29)}`);
-        print.push(`CASH.: Value: ${asFormat(cash)} Percent: ${asPercent(cash / total)}`);
-        print.push(`${'~'.repeat(29)}STOCKS${'~'.repeat(29)}`);
-
         let used = stocks
             .filter(s => s.amount > 0)
             .sort((a, b) => b.forecast - a.forecast);
+        let hasStocks = used.length > 0;
+        used.unshift({total: cash, profit: 0});
+        used.unshift({total: total, profit: profit});
 
         let values = asFormat(used.map(s => s.total));
         let profits = asFormat(used.map(s => s.profit));
         let valuesPercent = asPercent(used.map(s => s.total / total));
         let profitsPercent = asPercent(used.map(s => s.profit / profit));
 
-        for (let i = 0; i < used.length; i++)
+        for (let i = 2; i < used.length; i++)
             print.push(`${used[i].name.padEnd(5, ' ')}: Value: ${values[i]} Percent: ${valuesPercent[i]} Profit: ${profits[i]} Percent: ${profitsPercent[i]}`);
 
-        print.unshift(`CASH.: Value: ${asFormat(cash)} Percent: ${asPercent(cash / total)}`);
-        print.unshift(`${'~'.repeat(33)}STOCKS${'~'.repeat(33)}`);
-        if (used.length > 0) {
-            let valuesLength = `Percent: ${valuesPercent[0]}`.length;
-            let profitsLength = `Percent: ${profitsPercent[0]}`.length;
-            print.unshift(`TOTAL: Value: ${asFormat(total)} ${' '.repeat(valuesLength)} Profit: ${asFormat(profit)} ${' '.repeat(profitsLength)}`);
-            print.unshift(`${'~'.repeat(33)}LIQUID${'~'.repeat(33)}`);
-        }
+        let length = !hasStocks ? 20 : print[0].length;
+
+        if (hasStocks) print.unshift(asTitle('STOCKS', length));
+
+        print.unshift(`${'CASH'.padEnd(5, ' ')}: Value: ${values[1]} Percent: ${valuesPercent[1]}`);
+        print.unshift(asTitle('LIQUID', length));
+        let valuesLength = `Percent: ${valuesPercent[0]}`.length;
+        let profitsLength = `Percent: ${profitsPercent[0]}`.length;
+        print.unshift(`TOTAL: Value: ${values[0]} ${' '.repeat(valuesLength)} Profit: ${profits[0]} ${' '.repeat(profitsLength)}`);
         print.unshift('');
 
         ns.clearLog();

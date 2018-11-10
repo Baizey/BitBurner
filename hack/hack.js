@@ -1,5 +1,5 @@
 import {Runner} from "Runner.js";
-import {getArgs} from "helper";
+import {getArgs} from "helper.js";
 
 export async function main(ns) {
     let self = ns.getHostname();

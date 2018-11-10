@@ -80,7 +80,7 @@ async function awaitServerPrepared(server) {
     while (!server.hasRoot)
         await server.ns.sleep(30000);
     server.ns.print('Waiting for hacking level...');
-    while (!server.levelNeeded <= server.ns.getHackingLevel())
+    while (server.levelNeeded > server.ns.getHackingLevel())
         await server.ns.sleep(30000);
 }
 
