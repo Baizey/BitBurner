@@ -1,36 +1,46 @@
 import {
-    getServers,
+    Server,
     cmd,
-    display,
+    asFormat,
     asPercent
 } from 'helper.js';
 
-let facServers = {
-    'CSEC' : 'yellow',
-    'avmnite-02h' : 'yellow',
-    'I.I.I.I' : 'yellow',
-    'run4theh111z' : 'yellow',
-    'The-Cave' : 'orange',
-    'w0r1d_d43m0n': 'red'
+let Type = Server.types();
+
+let getColor = type => {
+    switch (type) {
+        case Type.Own:
+            return 'green';
+        case Type.Faction:
+            return 'yellow';
+        case Type.Target:
+            return 'red';
+        case Type.Shop:
+            return 'lightblue';
+        case Type.MoneyFarm:
+            return 'white';
+        default:
+            return 'white';
+    }
 };
 
 export async function main(ns) {
     let output = 'Network:';
-    getServers(ns).forEach(server => {
+    Server.get(ns).forEach(server => {
         let name = server.name;
-        let hackColor = ns.hasRootAccess(name) ? 'lime' : 'red';
-        let nameColor = facServers[name] ? facServers[name] : 'white';
+        let hackColor = server.hasRoot ? 'lime' : 'red';
+        let nameColor = getColor(server.type);
 
-        let moneyCurr = ns.getServerMoneyAvailable(name);
-        let moneyMax = ns.getServerMaxMoney(name);
+        let moneyCurr = server.moneyAvail;
+        let moneyMax = server.moneyMax;
         let ramMax = ns.getServerRam(name)[0];
         let ramUsed = ns.getServerRam(name)[1];
         let hoverText = [
-            `Req level: ${ns.getServerRequiredHackingLevel(name)}`,
+            `Req level: ${server.levelNeeded}`,
             `Req port: ${ns.getServerNumPortsRequired(name)}`,
-            `Memory: ${display(ramMax)} GB (${asPercent(ramUsed / ramMax)} used)`,
-            `Security: ${ns.getServerSecurityLevel(name)} / ${ns.getServerMinSecurityLevel(name)}`,
-            `Money: ${display(moneyCurr)} (${asPercent(moneyCurr / moneyMax)})`,
+            `Memory: ${asFormat(ramMax)} GB (${asPercent(ramUsed / ramMax)} used)`,
+            `Security: ${server.securityCurr} / ${server.securityMin}`,
+            `Money: ${asFormat(moneyCurr)} (${asPercent(moneyCurr / moneyMax)})`,
         ].join('\n');
 
         output += ['<br>', ' '.repeat(server.depth),

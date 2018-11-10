@@ -1,8 +1,9 @@
 import {Runner} from "Runner.js";
+import {getArgs} from "helper";
 
 export async function main(ns) {
     let self = ns.getHostname();
-    let args = ns.args[0].split(';');
+    let args = getArgs(ns);
     let target = args[0];
     let growThreads = args[1] - 0;
     let weakThreads = args[2] - 0;

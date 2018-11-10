@@ -8,7 +8,14 @@ class Ns {
         this.args = [];
     }
 
+    /**
+     * @returns {string[]}
+     */
+    getPurchasedServers(){
+        return []
+    };
     getScriptRam(script);
+    getServerGrowth(target);
     scp(files, source, target);
     ls(target, filetype){}
     disableLog(fn){}

@@ -1,9 +1,9 @@
-import {Stock} from 'Stock.js';
-import {asPercent, display, cmd} from 'helper.js';
+import {Stock} from 'stock.js';
+import {asPercent, asFormat} from 'helper.js';
 
 export async function main(ns) {
     ns.disableLog('ALL');
-    let stocks = Stock.getAllStocks(ns);
+    let stocks = Stock.get(ns);
     let updateRate = ns.args[0] || 5000;
 
     while (true) {
@@ -13,26 +13,26 @@ export async function main(ns) {
         let profit = 0;
         stocks.forEach(stock => {
             stock.update();
-            profit += stock.profit();
-            total += stock.total();
+            profit += stock.profit;
+            total += stock.total;
         });
 
-        print.push(`TOTAL: Value: ${display(total)} Percent: 100% Profit: ${display(profit)} Percent: 100%`);
+        print.push(`TOTAL: Value: ${asFormat(total)} Percent: 100% Profit: ${asFormat(profit)} Percent: 100%`);
         print.push(`${'~'.repeat(29)}LIQUID${'~'.repeat(29)}`);
-        print.push(`CASH.: Value: ${display(cash)} Percent: ${asPercent(cash / total)}`);
+        print.push(`CASH.: Value: ${asFormat(cash)} Percent: ${asPercent(cash / total)}`);
         print.push(`${'~'.repeat(29)}STOCKS${'~'.repeat(29)}`);
-
 
         let used = stocks
             .sort((a, b) => b.forecast - a.forecast)
             .filter(s => s.amount > 0);
-        let values = display(used.map(s => s.total()));
-        let profits = display(used.map(s => s.profit()));
 
-        for(let i = 0; i < used.length; i++) {
-            let stock = used[i];
-            print.push(`${stock.name.padEnd(5, ' ')}: Value: ${values[i]} Percent: ${asPercent(stock.total() / total)} Profit: ${profits[i]} Percent: ${asPercent(stock.profit() / profit)}`);
-        }
+        let values = asFormat(used.map(s => s.total));
+        let profits = asFormat(used.map(s => s.profit));
+        let valuesPercent = asPercent(used.map(s => s.total / total));
+        let profitsPercent = asPercent(used.map(s => s.profit / profit));
+
+        for (let i = 0; i < used.length; i++)
+            print.push(`${used[i].name.padEnd(5, ' ')}: Value: ${values[i]} Percent: ${valuesPercent[i]} Profit: ${profits[i]} Percent: ${profitsPercent[i]}`);
 
         ns.clearLog();
         ns.print(print.join('<br>'));
