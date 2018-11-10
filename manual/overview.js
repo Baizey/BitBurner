@@ -7,7 +7,7 @@ export async function main(ns) {
     let updateRate = ns.args[0] || 5000;
 
     while (true) {
-        let print = [''];
+        let print = [];
         let cash = ns.getServerMoneyAvailable("home");
         let total = cash;
         let profit = 0;
@@ -17,14 +17,14 @@ export async function main(ns) {
             total += stock.total;
         });
 
-        print.push(`TOTAL: Value: ${asFormat(total)} Percent: 100% Profit: ${asFormat(profit)} Percent: 100%`);
+        print.push(`TOTAL: Value: ${asFormat(total)} Profit: ${asFormat(profit)}`);
         print.push(`${'~'.repeat(29)}LIQUID${'~'.repeat(29)}`);
         print.push(`CASH.: Value: ${asFormat(cash)} Percent: ${asPercent(cash / total)}`);
         print.push(`${'~'.repeat(29)}STOCKS${'~'.repeat(29)}`);
 
         let used = stocks
-            .sort((a, b) => b.forecast - a.forecast)
-            .filter(s => s.amount > 0);
+            .filter(s => s.amount > 0)
+            .sort((a, b) => b.forecast - a.forecast);
 
         let values = asFormat(used.map(s => s.total));
         let profits = asFormat(used.map(s => s.profit));
@@ -33,6 +33,16 @@ export async function main(ns) {
 
         for (let i = 0; i < used.length; i++)
             print.push(`${used[i].name.padEnd(5, ' ')}: Value: ${values[i]} Percent: ${valuesPercent[i]} Profit: ${profits[i]} Percent: ${profitsPercent[i]}`);
+
+        print.unshift(`CASH.: Value: ${asFormat(cash)} Percent: ${asPercent(cash / total)}`);
+        print.unshift(`${'~'.repeat(33)}STOCKS${'~'.repeat(33)}`);
+        if (used.length > 0) {
+            let valuesLength = `Percent: ${valuesPercent[0]}`.length;
+            let profitsLength = `Percent: ${profitsPercent[0]}`.length;
+            print.unshift(`TOTAL: Value: ${asFormat(total)} ${' '.repeat(valuesLength)} Profit: ${asFormat(profit)} ${' '.repeat(profitsLength)}`);
+            print.unshift(`${'~'.repeat(33)}LIQUID${'~'.repeat(33)}`);
+        }
+        print.unshift('');
 
         ns.clearLog();
         ns.print(print.join('<br>'));

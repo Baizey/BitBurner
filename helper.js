@@ -44,16 +44,17 @@ export function getArgs(ns) {
 /**
  * Given percentage(s) in decimal format (i.e 1 => 100%)
  * @param {number|number[]} numbers
+ * @param {number} decimals
  * @param {boolean} usePadding
  * @returns {string|string[]}
  */
-export function asPercent(numbers, usePadding = true) {
+export function asPercent(numbers, decimals = 1, usePadding = true) {
     let isArray = Array.isArray(numbers);
     if (!isArray) numbers = [numbers];
-    let percents = numbers.map(n => Math.round(n * 100) + '%');
+    let percents = numbers.map(n => (n * 100).toFixed(decimals) + '%');
     if (usePadding) {
         let max = Math.max(...(percents.map(n => n.length)));
-        percents = numbers.map(n => n.padStart(max, ' '));
+        percents = percents.map(n => n.padStart(max, ' '));
     }
     return isArray ? percents : percents[0];
 }
@@ -87,7 +88,13 @@ export function asFormat(numbers, decimals = 2, usePadding = true) {
     return isArray ? formatted : formatted[0];
 }
 
-let ServerType = new ServerTypes();
+let ServerType = {
+    'Own': 'Own',
+    'Shop': 'Shop',
+    'Faction': 'Faction',
+    'MoneyFarm': 'MoneyFarm',
+    'Target': 'Target'
+};
 let getServerType = (ns, name) => {
     // Assumes all owned servers are called 'home...'
     if (name.startsWith('home'))
@@ -107,15 +114,6 @@ let getServerType = (ns, name) => {
             return ServerType.MoneyFarm;
     }
 };
-class ServerTypes {
-    constructor() {
-        this.Own = 'Own';
-        this.Shop = 'Shop';
-        this.Faction = 'Faction';
-        this.MoneyFarm = 'MoneyFarm';
-        this.Target = 'Target';
-    }
-}
 
 
 export class Server {
