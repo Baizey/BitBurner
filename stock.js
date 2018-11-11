@@ -107,6 +107,13 @@ export class Stock {
      * @returns {number}
      */
     get profit() {
-        return this.amount * (this.price - this.avgBuyPrice);
+        return this.total - this.cost;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get cost() {
+        return this.amount * this.avgBuyPrice;
     }
 }

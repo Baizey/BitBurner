@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="158469f9-d686-460d-a703-fd95086ab069" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/hack/autohack.js" beforeDir="false" afterPath="$PROJECT_DIR$/hack/autohack.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hack/calculator.js" beforeDir="false" afterPath="$PROJECT_DIR$/hack/calculator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hack/hack.js" beforeDir="false" afterPath="$PROJECT_DIR$/hack/hack.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/helper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manual/overview.js" beforeDir="false" afterPath="$PROJECT_DIR$/manual/overview.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contract.js" beforeDir="false" afterPath="$PROJECT_DIR$/contract.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stock.js" beforeDir="false" afterPath="$PROJECT_DIR$/stock.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -21,39 +19,40 @@
     <session id="-523244202">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="3" />
           <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.36" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="js" value="75" />
+          <entry key="js" value="79" />
           <entry key="script" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Git file" value="1" />
-          <entry key="JavaScript" value="75" />
+          <entry key="JavaScript" value="79" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="28720" />
+          <entry key="js" value="29006" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="28720" />
+          <entry key="JavaScript" value="29006" />
         </counts>
       </usages-collector>
     </session>
@@ -61,29 +60,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hack/calculator.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="130" column="25" selection-start-line="130" selection-start-column="25" selection-end-line="130" selection-end-column="25" />
-              <folding>
-                <element signature="e#0#33#0" expanded="true" />
-                <element signature="n#!!doc;n#soften#0" />
-                <element signature="n#!!block;n#soften#0" />
-                <element signature="n#!!doc;n#calculateGrowth#0" />
-                <element signature="n#!!block;n#calculateGrowth#0" />
-                <element signature="n#!!doc;n#calculateHack#0" />
-                <element signature="n#!!block;n#calculateHack#0" />
-                <element signature="n#!!doc;n#awaitServerPrepared#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hack/autohack.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="75" column="59" selection-start-line="75" selection-start-column="59" selection-end-line="75" selection-end-column="59" />
+            <state relative-caret-position="119">
+              <caret line="71" column="32" selection-start-line="71" selection-start-column="32" selection-end-line="71" selection-end-column="32" />
               <folding>
                 <element signature="e#139#1496#0" />
               </folding>
@@ -105,6 +85,9 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="238">
               <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -112,8 +95,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/manual/scan.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
+            <state relative-caret-position="391">
+              <caret line="28" column="12" lean-forward="true" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
               <folding>
                 <marker date="1541870533710" expanded="true" signature="1372:1378" ph="..." />
               </folding>
@@ -124,8 +107,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helper.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="893">
-              <caret line="208" column="46" selection-start-line="208" selection-start-column="42" selection-end-line="208" selection-end-column="46" />
+            <state relative-caret-position="949">
+              <caret line="106" column="23" lean-forward="true" selection-start-line="106" selection-start-column="23" selection-end-line="106" selection-end-column="23" />
               <folding>
                 <element signature="n#!!block;n#inject#0" />
                 <element signature="n#!!block;n#cmd#0" />
@@ -146,6 +129,7 @@
                 <element signature="n#!!doc;n#hasMinSecurity#0;n#Server#0" />
                 <element signature="n#!!block;n#hasMinSecurity#0;n#Server#0" />
                 <element signature="n#!!doc;n#hasRoot#0;n#Server#0" />
+                <element signature="n#!!block;n#hasRoot#0;n#Server#0" />
                 <element signature="n#!!block;n#levelNeeded#0;n#Server#0" />
                 <element signature="n#!!doc;n#canCrack#0;n#Server#0" />
                 <element signature="n#!!block;n#canCrack#0;n#Server#0" />
@@ -157,11 +141,32 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/contract.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="493">
+              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+              <folding>
+                <element signature="n#!!block;n#findLargestPrimeFactor#0" />
+                <element signature="n#!!block;n#subArrayWithBiggestSum#0" />
+                <element signature="n#!!block;n#mergeOverlappingIntervals#0" />
+                <element signature="n#!!block;n#stockTrading1#0" />
+                <element signature="n#!!block;n#stockTrading2#0" />
+                <element signature="n#!!block;n#stockTrading3#0" />
+                <element signature="n#!!block;n#arrayJumpingGame#0" />
+                <element signature="n#!!block;n#generateIpAddresses#0" />
+                <element signature="n#!!block;n#totalWaysToSum#0" />
+                <element signature="n#!!block;n#spiralingMatrix#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/manual/overview.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="24" column="40" lean-forward="true" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
+            <state relative-caret-position="374">
+              <caret line="22" column="38" lean-forward="true" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -170,9 +175,18 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/crack.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="27" lean-forward="true" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hack/hack.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
+            <state relative-caret-position="187">
               <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
@@ -281,18 +295,18 @@
         <option value="$PROJECT_DIR$/classes/Stock.js" />
         <option value="$PROJECT_DIR$/utils/helper.js" />
         <option value="$PROJECT_DIR$/crack.js" />
-        <option value="$PROJECT_DIR$/stock.js" />
-        <option value="$PROJECT_DIR$/contract.js" />
         <option value="$PROJECT_DIR$/lowram/worm.js" />
         <option value="$PROJECT_DIR$/manual/update.js" />
         <option value="$PROJECT_DIR$/manual/transfer.js" />
         <option value="$PROJECT_DIR$/Ns.js" />
         <option value="$PROJECT_DIR$/manual/scan.js" />
-        <option value="$PROJECT_DIR$/manual/overview.js" />
         <option value="$PROJECT_DIR$/helper.js" />
         <option value="$PROJECT_DIR$/hack/calculator.js" />
         <option value="$PROJECT_DIR$/hack/hack.js" />
         <option value="$PROJECT_DIR$/hack/autohack.js" />
+        <option value="$PROJECT_DIR$/manual/overview.js" />
+        <option value="$PROJECT_DIR$/stock.js" />
+        <option value="$PROJECT_DIR$/contract.js" />
       </list>
     </option>
   </component>
@@ -302,7 +316,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1358" />
     <option name="width" value="1390" />
     <option name="height" value="1756" />
@@ -399,18 +413,19 @@
       <workItem from="1540003050472" duration="1116000" />
       <workItem from="1540334254584" duration="379000" />
       <workItem from="1541857954146" duration="13078000" />
-      <workItem from="1541877675721" duration="3992000" />
+      <workItem from="1541877675721" duration="6251000" />
+      <workItem from="1541893973270" duration="2386000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96247000" />
+    <option name="totallyTimeSpent" value="100892000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1381" height="885" extended-state="7" />
+    <frame x="-6" y="-6" width="1381" height="885" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.12044609" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12044609" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="DB Browser" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -492,36 +507,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crack.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="22" lean-forward="true" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/Contract.js" />
     <entry file="file://$PROJECT_DIR$/classes/Stock.js" />
-    <entry file="file://$PROJECT_DIR$/contract.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="51" lean-forward="true" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
-          <folding>
-            <element signature="e#1#34#0" expanded="true" />
-            <element signature="n#Contract#0" />
-            <element signature="n#!!block;n#findLargestPrimeFactor#0" />
-            <element signature="n#!!block;n#subArrayWithBiggestSum#0" />
-            <element signature="n#!!block;n#mergeOverlappingIntervals#0" />
-            <element signature="n#!!block;n#stockTrading1#0" />
-            <element signature="n#!!block;n#stockTrading2#0" />
-            <element signature="n#!!block;n#stockTrading3#0" />
-            <element signature="n#!!block;n#arrayJumpingGame#0" />
-            <element signature="n#!!block;n#generateIpAddresses#0" />
-            <element signature="n#!!block;n#totalWaysToSum#0" />
-            <element signature="n#!!block;n#spiralingMatrix#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/hack/grow.script">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -537,12 +524,43 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lowram/worm.js" />
-    <entry file="file://$PROJECT_DIR$/manual/scan.js">
+    <entry file="file://$PROJECT_DIR$/primes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
+        <state>
+          <caret column="28" selection-start-column="28" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack/calculator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="130" column="25" selection-start-line="130" selection-start-column="25" selection-end-line="130" selection-end-column="25" />
           <folding>
-            <marker date="1541870533710" expanded="true" signature="1372:1378" ph="..." />
+            <element signature="e#0#33#0" expanded="true" />
+            <element signature="n#!!doc;n#soften#0" />
+            <element signature="n#!!block;n#soften#0" />
+            <element signature="n#!!doc;n#calculateGrowth#0" />
+            <element signature="n#!!block;n#calculateGrowth#0" />
+            <element signature="n#!!doc;n#calculateHack#0" />
+            <element signature="n#!!block;n#calculateHack#0" />
+            <element signature="n#!!doc;n#awaitServerPrepared#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/manual/transfer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="24" lean-forward="true" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack/hack.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -557,24 +575,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/primes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="28" selection-start-column="28" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/manual/transfer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="24" lean-forward="true" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/stock.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="5" lean-forward="true" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
+        <state relative-caret-position="425">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack/autohack.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="71" column="32" selection-start-line="71" selection-start-column="32" selection-end-line="71" selection-end-column="32" />
+          <folding>
+            <element signature="e#139#1496#0" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -582,23 +596,43 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/manual/overview.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="24" column="40" lean-forward="true" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
+        <state relative-caret-position="374">
+          <caret line="22" column="38" lean-forward="true" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/crack.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="27" lean-forward="true" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/manual/scan.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="28" column="12" lean-forward="true" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
+          <folding>
+            <marker date="1541870533710" expanded="true" signature="1372:1378" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/helper.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="893">
-          <caret line="208" column="46" selection-start-line="208" selection-start-column="42" selection-end-line="208" selection-end-column="46" />
+        <state relative-caret-position="949">
+          <caret line="106" column="23" lean-forward="true" selection-start-line="106" selection-start-column="23" selection-end-line="106" selection-end-column="23" />
           <folding>
             <element signature="n#!!block;n#inject#0" />
             <element signature="n#!!block;n#cmd#0" />
@@ -619,6 +653,7 @@
             <element signature="n#!!doc;n#hasMinSecurity#0;n#Server#0" />
             <element signature="n#!!block;n#hasMinSecurity#0;n#Server#0" />
             <element signature="n#!!doc;n#hasRoot#0;n#Server#0" />
+            <element signature="n#!!block;n#hasRoot#0;n#Server#0" />
             <element signature="n#!!block;n#levelNeeded#0;n#Server#0" />
             <element signature="n#!!doc;n#canCrack#0;n#Server#0" />
             <element signature="n#!!block;n#canCrack#0;n#Server#0" />
@@ -629,39 +664,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hack/calculator.js">
+    <entry file="file://$PROJECT_DIR$/contract.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="130" column="25" selection-start-line="130" selection-start-column="25" selection-end-line="130" selection-end-column="25" />
+        <state relative-caret-position="493">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
-            <element signature="e#0#33#0" expanded="true" />
-            <element signature="n#!!doc;n#soften#0" />
-            <element signature="n#!!block;n#soften#0" />
-            <element signature="n#!!doc;n#calculateGrowth#0" />
-            <element signature="n#!!block;n#calculateGrowth#0" />
-            <element signature="n#!!doc;n#calculateHack#0" />
-            <element signature="n#!!block;n#calculateHack#0" />
-            <element signature="n#!!doc;n#awaitServerPrepared#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/hack/hack.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/hack/autohack.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="75" column="59" selection-start-line="75" selection-start-column="59" selection-end-line="75" selection-end-column="59" />
-          <folding>
-            <element signature="e#139#1496#0" />
+            <element signature="n#!!block;n#findLargestPrimeFactor#0" />
+            <element signature="n#!!block;n#subArrayWithBiggestSum#0" />
+            <element signature="n#!!block;n#mergeOverlappingIntervals#0" />
+            <element signature="n#!!block;n#stockTrading1#0" />
+            <element signature="n#!!block;n#stockTrading2#0" />
+            <element signature="n#!!block;n#stockTrading3#0" />
+            <element signature="n#!!block;n#arrayJumpingGame#0" />
+            <element signature="n#!!block;n#generateIpAddresses#0" />
+            <element signature="n#!!block;n#totalWaysToSum#0" />
+            <element signature="n#!!block;n#spiralingMatrix#0" />
           </folding>
         </state>
       </provider>

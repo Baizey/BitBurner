@@ -28,6 +28,7 @@ class Contract {
         this.filename = filename;
 
         this.failed = false;
+        this.attempt = 'No attempt made';
 
         this.type = ns.codingcontract.getContractType(filename, server);
         this.data = ns.codingcontract.getData(filename, server);
@@ -62,8 +63,8 @@ class Contract {
     }
 
     answer() {
-        let answer = this.findAnswer();
-        let resp = this.ns.codingcontract.attempt(answer, this.filename, this.server);
+        this.attempt = this.findAnswer();
+        let resp = this.ns.codingcontract.attempt(this.attempt, this.filename, this.server);
         if (resp) this.ns.print(`Completed ${this.filename}`);
         else this.reportError('Gave wrong answer');
         return resp;
@@ -71,9 +72,11 @@ class Contract {
 
     reportError(error) {
         this.ns.print([
-            `Error : ${error}`,
-            `Server: ${this.server}`,
-            `File  : ${this.filename}`
+            `Error.: ${error}`,
+            `What..: ${this.server} (${this.filename})`,
+            `Type..: ${this.type}`,
+            `Input.: ${this.data.toString()}`,
+            `Answer: ${this.attempt.toString()}`
         ].join('<br>'));
         this.ns.tprint('Error occurred with contract');
         this.failed = true;
