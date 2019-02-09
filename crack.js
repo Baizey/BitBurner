@@ -8,10 +8,13 @@ let scripts = ['brutessh.exe', 'ftpcrack.exe', 'relaysmtp.exe', 'httpworm.exe', 
  * @returns {string[]}
  */
 let getAvail = (ns, avail = []) => {
+    return avail;
+    /*
     if (avail.length === scripts.length) return avail;
     ns.purchaseTor();
     scripts.forEach(s => ns.purchaseProgram(s));
     return scripts.filter(s => ns.fileExists(s));
+    */
 };
 
 export async function main(ns) {
