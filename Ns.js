@@ -14,6 +14,8 @@ class Ns {
     getPurchasedServers(){
         return []
     };
+    growthAnalyze(target, amount);
+    hackAnalyzeThreads(target);
     getScriptRam(script);
     getServerGrowth(target);
     scp(files, source, target);
