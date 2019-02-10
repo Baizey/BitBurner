@@ -330,8 +330,10 @@ export async function main(ns) {
     await scheduler.cleanup();
 
     while (true) {
-        for (let i = 0; i < masters.length; i++)
+        for (let i = 0; i < masters.length; i++) {
             await masters[i].run();
+            await masters[i].run();
+        }
         await ns.sleep(500);
         await scheduler.run();
         await ns.sleep(500);
@@ -343,9 +345,12 @@ export async function main(ns) {
             .set(2, `Threads waiting: ${threadsWaiting} (${asPercent(threadsWaiting / totalThreads)})`)
             .set(3, `Tickets ${Status.Running}: ${scheduler.waiting.length}`);
 
-        for (let i = 5, j = 0; j < masters.length; j++, i += 2) {
+        for (let i = 5, j = 0; j < masters.length; j++, i += 5) {
             const master = masters[j];
-            log.set(i, `${master.target.name} (${master.status}): ${master.queue.map(work => `${work.script.split('.')[0]}: ${work.status} (Progress: ${asPercent(work.status === Status.Initiating ? work.progress / work.threads : (1 - scheduler.getTicketProgress(work) / work.threads))})`).join(', ')}`);
+            log.set(i, `${master.target.name} (${master.status})`)
+                .set(i + 1, `Money: ${master.target.moneyAvail} (${asPercent(master.target.moneyAvail / master.target.moneyMax)})`)
+                .set(i + 2, `Security: ${master.target.securityCurr} (${asPercent(master.target.securityCurr / master.target.securityMin)})`)
+                .set(i + 3, `${master.queue.map(work => `${work.script.split('.')[0]}: ${work.status} (Progress: ${asPercent(work.status === Status.Initiating ? work.progress / work.threads : (1 - scheduler.getTicketProgress(work) / work.threads))})`).join(', ')}`)
         }
 
         log.display();
