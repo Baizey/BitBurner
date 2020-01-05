@@ -10,7 +10,7 @@ export function getFiles() {
 
         'contract.js',
         'stock.js',
-        'crack.js',
+        'Crack.js',
 
         'hack/autohack.js',
         'hack/hack.js',

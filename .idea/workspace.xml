@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="158469f9-d686-460d-a703-fd95086ab069" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Updater.js" beforeDir="false" afterPath="$PROJECT_DIR$/Updater.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Updater.js" beforeDir="false" afterPath="$PROJECT_DIR$/updater.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/auto.js" beforeDir="false" afterPath="$PROJECT_DIR$/old/auto.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/crack.js" beforeDir="false" afterPath="$PROJECT_DIR$/Crack.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/old/helper.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
