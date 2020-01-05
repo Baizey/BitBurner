@@ -1,23 +1,17 @@
 let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/master/';
-let url = path => `${baseUrl}${path}`;
-
-async function get(ns, path) {
-    return await ns.wget(url(path), path.split('/').pop());
-}
-
-const files = [
-    'utils.js',
-    'Inject.js',
-    'Server.js',
-    'Crack.js',
-    'grow.script',
-    'hack.script',
-    'weaken.script'
-];
 
 export async function main(ns) {
+    let files = [
+        'utils.js',
+        'Inject.js',
+        'Server.js',
+        'Crack.js',
+        'grow.script',
+        'hack.script',
+        'weaken.script'
+    ];
     for (let i in files)
-        await get(ns, files[i]);
-    await get(ns, 'updater.js');
+        await ns.wget(`${baseUrl}${files[i]}`);
+    await ns.wget(`${baseUrl}updater.js`);
     ns.tprint('<span style="color:white">Done updating!</span>');
 }
