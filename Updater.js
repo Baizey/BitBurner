@@ -7,6 +7,7 @@ async function get(ns, path) {
 
 export async function main(ns) {
     const files = [
+        'utils.js',
         'Inject.js',
         'Server.js',
         'grow.script',
