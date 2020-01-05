@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="158469f9-d686-460d-a703-fd95086ab069" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Hack.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Inject.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Updater.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/grow.script" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hack.script" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/weaken.script" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/Ns.js" beforeDir="false" afterPath="$PROJECT_DIR$/Ns.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Updater.js" beforeDir="false" afterPath="$PROJECT_DIR$/Updater.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
