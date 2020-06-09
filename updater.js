@@ -11,9 +11,8 @@ export async function main(ns) {
     ];
     for (let file of files) {
         await ns.wget(`${baseUrl}${file}`, file);
-        ns.print(`Updated ${file}`);
+        ns.tprint(`<span style="color:grey">Updated ${file}</span>`);
     }
     await ns.wget(`${baseUrl}updater.js`, 'updater.js');
-    ns.print(`Updated self`);
     ns.tprint('<span style="color:white">Done updating!</span>');
 }
