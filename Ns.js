@@ -81,9 +81,9 @@ class Ns {
 
     sqlinject(hostname);
 
-    async run();
+    async run(scriptName, threads = 1, ...args);
 
-    async exec();
+    async exec(scriptName, hostname, threads = 1, ...args);
 
     async spawn();
 

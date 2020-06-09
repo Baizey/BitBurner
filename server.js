@@ -103,6 +103,11 @@ export class Server {
         return servers;
     }
 
+    /**
+     * @param {Ns} ns
+     * @param {string} name
+     * @returns {Server}
+     */
     static create(ns, name) {
         return new Server(ns, name);
     }
@@ -174,6 +179,29 @@ export class Server {
 
     get levelNeeded() {
         return this.ns.getServerRequiredHackingLevel(this.name);
+    }
+
+    /**
+     * @returns {number}
+     */
+    get totalRam() {
+        const ram = this.ns.getServerRam(this.name);
+        return ram[0];
+    }
+
+    /**
+     * @returns {number}
+     */
+    get usedRam() {
+        const ram = this.ns.getServerRam(this.name);
+        return ram[1];
+    }
+
+    /**
+     * @returns {number}
+     */
+    get freeRam() {
+        return (this.totalRam - this.usedRam).toFixed(2) - 0;
     }
 
     /**
