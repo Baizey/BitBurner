@@ -24,7 +24,7 @@ export async function main(ns) {
     servers = servers.filter(s => !s.hasRoot);
     ns.disableLog('sleep');
 
-    print(ns, cracked, servers);
+    printStuff(ns, cracked, servers);
     while (servers.length > 0) {
         avail = getAvail(ns, avail);
         servers.forEach(s => s.crack(avail));
@@ -36,11 +36,11 @@ export async function main(ns) {
         await ns.sleep(1000);
 
         if (hasCrackedMore)
-            print(ns, cracked, servers);
+            printStuff(ns, cracked, servers);
     }
 }
 
-function print(ns, cracked, notCracked) {
+function printStuff(ns, cracked, notCracked) {
     ns.clear();
     ns.print('Cracked:');
     cracked.forEach(e => ns.print(e.name));
