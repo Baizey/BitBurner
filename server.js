@@ -82,9 +82,22 @@ let getServerType = (ns, name) => {
 export class Server {
     /**
      * @param {Ns} ns
+     * @param {boolean} log
      * @returns {Server[]}
      */
-    static get(ns) {
+    static get(ns, log = false) {
+        if (!log) {
+            ns.disableLog('hasRootAccess');
+            ns.disableLog('getServerRequiredHackingLevel');
+            ns.disableLog('getServerMoneyAvailable');
+            ns.disableLog('getServerMaxMoney');
+            ns.disableLog('getServerMinSecurityLevel');
+            ns.disableLog('getServerSecurityLevel');
+            ns.disableLog('getServerRequiredHackingLevel');
+            ns.disableLog('getServerRam');
+            ns.disableLog('getServerNumPortsRequired');
+            ns.disableLog('getHackingLevel');
+        }
         let visited = {'home': true};
         let servers = [];
         let queue = [new Server(ns, 'home')];
@@ -211,9 +224,12 @@ export class Server {
     canCrack(crackingScripts) {
         if (this.hasRoot)
             return false;
+
         let ports = this.ns.getServerNumPortsRequired(this.name);
+
         if (ports > crackingScripts)
             return false;
+
         return this.levelNeeded <= this.ns.getHackingLevel();
     }
 
