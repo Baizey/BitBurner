@@ -87,6 +87,7 @@ export class Server {
      */
     static get(ns, log = false) {
         if (!log) {
+            ns.disableLog('scan');
             ns.disableLog('getServerRequiredHackingLevel');
             ns.disableLog('getServerMoneyAvailable');
             ns.disableLog('getServerMaxMoney');

@@ -19,11 +19,32 @@ let getAvail = (ns, avail = []) => {
 
 export async function main(ns) {
     let avail = getAvail(ns);
-    let servers = Server.get(ns).filter(s => !s.hasRoot);
+    let servers = Server.get(ns);
+    const cracked = servers.filter(e => e.hasRoot && e.type !== Server.types.Own);
+    servers = servers.filter(s => !s.hasRoot);
+    ns.disableLog('sleep');
+
+    print(ns, cracked, servers);
     while (servers.length > 0) {
         avail = getAvail(ns, avail);
         servers.forEach(s => s.crack(avail));
+
+        const hasCrackedMore = servers.filter(e => e.hasRoot).length > 0;
+        servers.filter(e => e.hasRoot).forEach(e => cracked.push(e));
+
         servers = servers.filter(s => !s.hasRoot);
         await ns.sleep(1000);
+
+        if (hasCrackedMore)
+            print(ns, cracked, servers);
     }
+}
+
+function print(ns, cracked, notCracked) {
+    ns.clear();
+    ns.print('Cracked:');
+    cracked.forEach(e => ns.print(e.name));
+    ns.print('');
+    ns.print('Not cracked:');
+    notCracked.forEach(e => ns.print(e.name));
 }
