@@ -41,7 +41,7 @@ export async function main(ns) {
 }
 
 function printStuff(ns, cracked, notCracked) {
-    ns.clear();
+    ns.clearLog();
     ns.print('Cracked:');
     cracked.forEach(e => ns.print(e.name));
     ns.print('');
