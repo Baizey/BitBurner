@@ -1,4 +1,4 @@
-let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/renewal/';
+let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/master/';
 
 export async function main(ns) {
     let files = [
