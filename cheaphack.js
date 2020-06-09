@@ -10,7 +10,7 @@ export async function main(ns) {
 
     while (true) {
         for (let server of allServers) {
-            if (!server.hasRoot) continue;
+            if (!server.hasRoot || server.name === 'home') continue;
             const used = ns.getScriptRam('hack.script')
             const threads = Math.floor(server.freeRam / used);
             if (threads < 1) continue;
