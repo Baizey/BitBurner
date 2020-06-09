@@ -6,6 +6,8 @@ let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/renewal/';
  */
 export async function main(ns) {
     const host = ns.args[0] || ns.getHostname();
+    ns.tprint(`<span style="color:grey">Updating ${host}</span>`);
+    
     let files = [
         'cheaphack.js',
         'crack.js',
