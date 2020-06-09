@@ -1,6 +1,11 @@
 let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/renewal/';
 
+/**
+ * @param {Ns} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
+    const host = ns.args[0] || ns.getHostname();
     let files = [
         'crack.js',
         'utils.js',
@@ -11,9 +16,9 @@ export async function main(ns) {
         'weaken.script'
     ];
     for (let file of files) {
-        await ns.wget(`${baseUrl}${file}`, file);
+        await ns.wget(`${baseUrl}${file}`, file, host);
         ns.tprint(`<span style="color:grey">Updated ${file}</span>`);
     }
-    await ns.wget(`${baseUrl}updater.js`, 'updater.js');
+    await ns.wget(`${baseUrl}updater.js`, 'updater.js', host);
     ns.tprint('<span style="color:white">Done updating!</span>');
 }

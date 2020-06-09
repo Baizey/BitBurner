@@ -1,4 +1,8 @@
 class Ns {
+    Ns() {
+        this.args = ['args'];
+    }
+
     /**
      * Raises security by 0.002 per thread on success
      * @param {string} hostname
