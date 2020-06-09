@@ -20,7 +20,7 @@ let getAvail = (ns, avail = []) => {
 export async function main(ns) {
     let avail = getAvail(ns);
     let servers = Server.get(ns);
-    const cracked = servers.filter(e => e.hasRoot && e.type !== Server.types.Own);
+    const cracked = [];
     servers = servers.filter(s => !s.hasRoot);
     ns.disableLog('sleep');
 
@@ -44,7 +44,4 @@ function printStuff(ns, cracked, notCracked) {
     ns.clearLog();
     ns.print('Cracked:');
     cracked.forEach(e => ns.print(e.name));
-    ns.print('');
-    ns.print('Not cracked:');
-    notCracked.forEach(e => ns.print(e.name));
 }
