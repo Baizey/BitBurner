@@ -11,7 +11,8 @@ export async function main(ns) {
     while (true) {
         for (let server of allServers) {
             if (!server.hasRoot) continue;
-            const threads = Math.floor(server.freeRam / 2);
+            const used = ns.getScriptRam('hack.script')
+            const threads = Math.floor(server.freeRam / used);
             if (threads < 1) continue;
             await ns.exec('hack.script', server.name, threads, target)
         }
