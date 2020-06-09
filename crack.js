@@ -1,4 +1,4 @@
-import {Server} from 'Server.js';
+import {Server} from 'server.js';
 
 let scripts = ['brutessh.exe', 'ftpcrack.exe', 'relaysmtp.exe', 'httpworm.exe', 'sqlinject.exe'];
 

@@ -2,9 +2,10 @@ let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/master/';
 
 export async function main(ns) {
     let files = [
+        'crack.js',
         'utils.js',
-        'Inject.js',
-        'Server.js',
+        'inject.js',
+        'server.js',
         'grow.script',
         'hack.script',
         'weaken.script'

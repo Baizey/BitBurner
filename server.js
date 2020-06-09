@@ -1,5 +1,5 @@
 import {asFormat, asPercent} from "utils.js";
-import {cmd} from 'Inject.js'
+import {cmd} from 'inject.js'
 
 let getColor = type => {
     const Types = Server.types;
