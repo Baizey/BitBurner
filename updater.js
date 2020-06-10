@@ -9,6 +9,7 @@ export async function main(ns) {
     ns.tprint(`<span style="color:lightgrey">Updating ${host}</span>`);
 
     let files = [
+        'monohack.js',
         'purchaser.js',
         'script.js',
         'cheaphack.js',
