@@ -17,10 +17,10 @@ export async function main(ns) {
     while (!target.hasMaxMoney) {
         ns.clearLog();
         ns.print(`Waiting ${((readyOn - Date.now()) / 1000).toFixed(2)} seconds`);
+        ns.print(`At: ${asPercent(target.moneyAvail / target.moneyMax)}`);
         while (Date.now() < readyOn)
             await ns.sleep(1000);
         ns.clearLog();
-        ns.print(`At: ${asPercent(target.moneyAvail / target.moneyMax)}`);
 
         const growTime = ns.getGrowTime(target.name) * 1000;
         const startTime = Date.now() + 10000;
@@ -28,11 +28,11 @@ export async function main(ns) {
 
         for (let server of allServers) {
             if (!server.hasRoot || server.name === 'home') continue;
-            const used = 1.8;
+            const used = 1.75;
             const threads = Math.floor(server.freeRam / used);
             await Runner.runGrow(ns, threads, target.name, startTime, server.name);
         }
 
-        await ns.sleep(5000);
+        await ns.sleep(8000);
     }
 }
