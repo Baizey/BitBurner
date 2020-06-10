@@ -5,9 +5,10 @@ export class Script {
      * @param {string} target
      * @param {number} time
      * @param {string} hostname
+     * @returns {Promise<void>}
      */
-    async static hack(ns, threads, target, time, hostname = ns.getHostname()) {
-        await ns.exec('script.js', hostname, threads, target, 'hack', time);
+    static hack(ns, threads, target, time, hostname = ns.getHostname()) {
+        return ns.exec('script.js', hostname, threads, target, 'hack', time);
     }
 
     /**
@@ -16,9 +17,10 @@ export class Script {
      * @param {string} target
      * @param {number} time
      * @param {string} hostname
+     * @returns {Promise<void>}
      */
-    async static grow(ns, threads, target, time, hostname = ns.getHostname()) {
-        await ns.exec('script.js', hostname, threads, target, 'grow', time);
+    static grow(ns, threads, target, time, hostname = ns.getHostname()) {
+        return ns.exec('script.js', hostname, threads, target, 'grow', time);
     }
 
     /**
@@ -27,9 +29,10 @@ export class Script {
      * @param {string} target
      * @param {number} time
      * @param {string} hostname
+     * @returns {Promise<void>}
      */
-    async static weaken(ns, threads, target, time, hostname = ns.getHostname()) {
-        await ns.exec('script.js', hostname, threads, target, 'weaken', time);
+    static weaken(ns, threads, target, time, hostname = ns.getHostname()) {
+        return ns.exec('script.js', hostname, threads, target, 'weaken', time);
     }
 }
 
