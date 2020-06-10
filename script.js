@@ -43,5 +43,5 @@ export async function main(ns) {
     if (time < Date.now())
         return;
     await ns.sleep(time - Date.now())
-    ns[func](target);
+    await ns[func](target);
 }
