@@ -11,6 +11,7 @@ export async function main(ns) {
     let files = [
         'purchaser.js',
         'script.js',
+        'cheapgrow.js',
         'cheaphack.js',
         'crack.js',
         'utils.js',
