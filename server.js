@@ -82,10 +82,11 @@ let getServerType = (ns, name) => {
 export class Server {
     /**
      * @param {Ns} ns
+     * @param {function(Server):boolean} filter
      * @param {boolean} log
      * @returns {Server[]}
      */
-    static get(ns, log = false) {
+    static get(ns, filter = () => true, log = false) {
         if (!log) {
             ns.disableLog('scan');
             ns.disableLog('getServerRequiredHackingLevel');
@@ -113,7 +114,7 @@ export class Server {
                 }
             });
         }
-        return servers;
+        return servers.filter(filter);
     }
 
     /**
