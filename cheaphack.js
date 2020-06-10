@@ -8,7 +8,7 @@ import {Server} from 'server.js'
  */
 export async function main(ns) {
     const targetName = ns.args[0];
-    const type = ns.args[1];
+    const type = ns.args[1] || 'weaken';
     const allServers = Server.get(ns);
     const target = allServers.filter(e => e.name === targetName)[0];
     ns.disableLog('sleep');
@@ -34,7 +34,9 @@ export async function main(ns) {
         await ns.sleep(8000);
         ns.clearLog();
         ns.print(`Waiting ${((readyOn - Date.now()) / 1000).toFixed(2)} seconds`);
-        ns.print(`At: ${asPercent(target.moneyAvail / target.moneyMax)}`);
+        ns.print(`Type: ${type}`);
+        ns.print(`Money: ${asPercent(target.moneyAvail / target.moneyMax)}`);
+        ns.print(`Security: ${target.securityCurr.toFixed(2)} with limit at ${target.securityMin}`);
         while (Date.now() < readyOn)
             await ns.sleep(1000);
         ns.clearLog();
