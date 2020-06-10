@@ -135,7 +135,7 @@ class Ns {
 
     getPurchasedServerCost();
 
-    purchaseServer();
+    purchaseServer(hostname, ram);
 
     deleteServer();
 
@@ -170,11 +170,29 @@ class Ns {
 
     getScriptRam();
 
-    getHackTime();
+    /**
+     * @param hostname
+     * @param hacklevel
+     * @param intLevel
+     * @returns number, time in seconds
+     */
+    getHackTime(hostname, hacklevel = 0, intLevel = 0);
 
-    getGrowTime();
+    /**
+     * @param hostname
+     * @param hacklevel
+     * @param intLevel
+     * @returns number, time in seconds
+     */
+    getGrowTime(hostname, hacklevel = 0, intLevel = 0);
 
-    getWeakenTime();
+    /**
+     * @param hostname
+     * @param hacklevel
+     * @param intLevel
+     * @returns number, time in seconds
+     */
+    getWeakenTime(hostname, hacklevel = 0, intLevel = 0);
 
     getScriptIncome();
 
@@ -193,4 +211,15 @@ class Ns {
     async wget(url, filename, toHost = '');
 
     getFavorToDonate();
+
+    getFavorToDonate();
+
+    getFavorToDonate();
+
+    getFavorToDonate();
+
+    /**
+     * @returns {{HackExpGain: number, ServerMaxMoney: number}}
+     */
+    getBitNodeMultipliers();
 }
