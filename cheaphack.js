@@ -20,9 +20,9 @@ export async function main(ns) {
     const runner = findRunnerFunc(type, target, ns);
 
     while (condition()) {
-        const growTime = ns[time](target.name) * 1000;
+        const usedTime = time() * 1000;
         const startTime = Date.now() + 10000;
-        readyOn = startTime + growTime + 1000;
+        readyOn = startTime + usedTime + 1000;
 
         for (let server of allServers) {
             if (!server.hasRoot || server.name === 'home') continue;
