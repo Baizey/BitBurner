@@ -32,15 +32,21 @@ export async function main(ns) {
         }
 
         await ns.sleep(8000);
-        ns.clearLog();
-        ns.print(`Waiting ${((readyOn - Date.now()) / 1000).toFixed(2)} seconds`);
-        ns.print(`Type: ${type}`);
-        ns.print(`Money: ${asPercent(target.moneyAvail / target.moneyMax)}`);
-        ns.print(`Security: ${target.securityCurr.toFixed(2)} with limit at ${target.securityMin}`);
-        while (Date.now() < readyOn)
+        while (Date.now() < readyOn) {
+            display(ns, target, type, readyOn);
             await ns.sleep(1000);
-        ns.clearLog();
+        }
+        display(ns, target, type, readyOn);
+        await ns.sleep(1000);
     }
+}
+
+function display(ns, target, type, readyOn) {
+    ns.clearLog();
+    ns.print(`Waiting ${((readyOn - Date.now()) / 1000).toFixed(2)} seconds`);
+    ns.print(`Type: ${type}`);
+    ns.print(`Money: ${asPercent(target.moneyAvail / target.moneyMax)}`);
+    ns.print(`Security: ${target.securityCurr.toFixed(2)} with limit at ${target.securityMin}`);
 }
 
 function findRunnerFunc(type) {
