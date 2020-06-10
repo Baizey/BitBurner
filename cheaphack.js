@@ -43,9 +43,9 @@ export async function main(ns) {
 
 function display(ns, target, type, readyOn) {
     ns.clearLog();
-    ns.print(`Waiting ${((readyOn - Date.now()) / 1000).toFixed(2)} seconds`);
+    ns.print(`Waiting ${Math.round((readyOn - Date.now()) / 1000)} seconds`);
     ns.print(`Type: ${type}`);
-    ns.print(`Money: ${asPercent(target.moneyAvail / target.moneyMax)}`);
+    ns.print(`Money: ${asPercent(target.moneyAvail / target.moneyMax, 2)}`);
     ns.print(`Security: ${target.securityCurr.toFixed(2)} with limit at ${target.securityMin}`);
 }
 
