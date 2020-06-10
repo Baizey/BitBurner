@@ -6,63 +6,83 @@ import {Server} from 'server.js'
  * @param {Ns} ns
  * @returns {Promise<void>}
  */
+let _ns;
+
 export async function main(ns) {
+    _ns = ns;
     const targetName = ns.args[0];
-    const type = ns.args[1] || 'weaken';
     const allServers = Server.get(ns);
     const target = allServers.filter(e => e.name === targetName)[0];
     ns.disableLog('sleep');
+    ns.clearLog();
+    await growFull(target);
+}
 
-    let readyOn = Date.now();
+/**
+ * @returns {Server[]}
+ */
+function workerServers() {
+    return Server.get(_ns).filter(e => e.hasRoot || e.name !== 'home');
+}
 
-    const condition = findCondtionFunc(type, target, ns);
-    const time = findTimeFunc(type, target, ns);
-    const runner = findRunnerFunc(type, target, ns);
+/**
+ * @param {Server} target
+ * @returns {Promise<void>}
+ */
+async function growFull(target) {
+    const servers = workerServers();
+    while (!target.hasMaxMoney) {
+        const totalThreads = servers.reduce((a, b) => a + b.availThreads, 0);
+        let growThreads = 0;
+        let weakenThreads = (target.securityCurr - target.securityMin) / 0.05;
+        while (growThreads + Math.ceil(weakenThreads) < totalThreads) {
+            growThreads += 1;
+            weakenThreads += 0.08;
+        }
+        growThreads--;
 
-    while (condition()) {
-        const usedTime = time() * 1000;
-        const startTime = Date.now() + 10000;
-        readyOn = startTime + usedTime + 1000;
-
-        for (let server of allServers) {
-            if (!server.hasRoot || server.name === 'home') continue;
-            const used = 1.75;
-            const threads = Math.floor(server.freeRam / used);
-            await Runner[runner](ns, threads, target.name, startTime, server.name);
+        const allThreads = {
+            grow: growThreads,
+            weaken: weakenThreads,
+            hack: 0
         }
 
-        await ns.sleep(8000);
-        while (Date.now() < readyOn) {
-            display(ns, target, type, readyOn);
-            await ns.sleep(1000);
+        const weakTime = _ns.getWeakenTime(target.name);
+        const startTime = Date.now() + 1000;
+        for (let server of servers) {
+            let threads = server.availThreads;
+            if (weakenThreads >= threads) {
+                await Runner.runWeaken(_ns, threads, target.name, startTime, server.name);
+                weakenThreads -= threads;
+            } else if (weakenThreads > 0) {
+                await Runner.runWeaken(_ns, weakenThreads, target.name, startTime, server.name);
+                threads -= weakenThreads;
+            }
+            if (threads > 0 && growThreads > 0) {
+                await Runner.runWeaken(_ns, Math.min(threads, growThreads), target.name, startTime, server.name);
+                growThreads -= threads;
+            }
         }
-        display(ns, target, type, readyOn);
-        await ns.sleep(1000);
+
+        const endTime = startTime + weakTime + 500;
+        while (Date.now() < endTime) {
+            display(target, 'Full grow', endTime, allThreads);
+            await _ns.sleep(1000);
+        }
+        _ns.clearLog();
     }
 }
 
-function display(ns, target, type, readyOn) {
-    ns.clearLog();
-    ns.print(`Waiting ${Math.round((readyOn - Date.now()) / 1000)} seconds`);
-    ns.print(`Type: ${type}`);
-    ns.print(`Money: ${asPercent(target.moneyAvail / target.moneyMax, 2)}`);
-    ns.print(`Security: ${target.securityCurr.toFixed(2)} with limit at ${target.securityMin}`);
-}
-
-function findRunnerFunc(type) {
-    if (type === 'grow') return 'runGrow';
-    if (type === 'hack') return 'runHack';
-    return 'runWeaken';
-}
-
-function findCondtionFunc(type, target) {
-    if (type === 'grow') return () => !target.hasMaxMoney;
-    if (type === 'hack') return () => target.moneyAvail > 1000000;
-    return () => !target.hasMinSecurity
-}
-
-function findTimeFunc(type, target, ns) {
-    if (type === 'grow') return () => ns.getGrowTime(target.name);
-    if (type === 'hack') return () => ns.getHackTime(target.name);
-    return () => ns.getWeakenTime(target.name);
+/**
+ * @param {Server} target
+ * @param {string} stage
+ * @param {number} readyOn
+ * @param {{grow: number, weaken: number, hack: number}} threads
+ */
+function display(target, stage, readyOn, threads) {
+    _ns.print(`Waiting ${Math.round((readyOn - Date.now()) / 1000)} seconds`);
+    _ns.print(`Type: ${stage}`);
+    _ns.print(`Target: ${target.name}`);
+    _ns.print(`Money: ${asPercent(target.moneyAvail / target.moneyMax, 2)}`);
+    _ns.print(`Security: ${target.securityCurr.toFixed(2)} with limit at ${target.securityMin}`);
 }

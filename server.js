@@ -210,6 +210,10 @@ export class Server {
         return ram[1];
     }
 
+    get availThreads() {
+        return Math.floor(this.freeRam / 1.75);
+    }
+
     /**
      * @returns {number}
      */
