@@ -15,6 +15,9 @@ export async function main(ns) {
     let readyOn = Date.now();
 
     while (!target.hasMaxMoney) {
+        ns.clearLog();
+        ns.print(`Waiting ${((readyOn - Date.now()) / 1000).toFixed(2)} seconds`);
+        ns.clearLog();
         while (Date.now() < readyOn)
             await ns.sleep(1000);
         ns.print(`At: ${asPercent(target.moneyAvail / target.moneyMax)}`);
