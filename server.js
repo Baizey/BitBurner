@@ -157,6 +157,13 @@ export class Server {
     }
 
     /**
+     * @returns {number} between 0 and 1
+     */
+    get moneyRatio() {
+        return this.moneyAvail / this.moneyMax;
+    }
+
+    /**
      * @returns {boolean}
      */
     get hasMaxMoney() {
@@ -175,6 +182,13 @@ export class Server {
      */
     get securityCurr() {
         return this.ns.getServerSecurityLevel(this.name);
+    }
+
+    /**
+     * @returns {number}
+     */
+    get securityExcess() {
+        return this.securityCurr - this.securityMin;
     }
 
     /**
