@@ -1,6 +1,6 @@
 import {Server} from 'util-server.js'
 import {asFormat, asPercent} from 'util-utils.js';
-import {Runner} from 'util-runner.js';
+import {Runner, Hacker} from 'util-runner.js';
 
 let _ns;
 let _target;
@@ -30,7 +30,7 @@ export async function main(ns) {
 async function hackCycle(ns, target, self, taking) {
     const takingPercent = taking / 100;
     while (true) {
-        await growCycle(ns, target, self);
+        await Hacker.growServer(ns, target, self);
         const maxThreads = self.availThreads;
         const weakenTime = ns.getWeakenTime(target.name) * 1000;
         const growTime = ns.getGrowTime(target.name) * 1000;
@@ -73,71 +73,6 @@ async function hackCycle(ns, target, self, taking) {
         }
     }
 }
-
-/**
- * @param {Ns} ns
- * @param {Server} target
- * @param {Server} self
- * @returns {Promise<void>}
- */
-async function growCycle(ns, target, self) {
-    if (!target.hasMinSecurity)
-        await weakenCycle(ns, target, self);
-
-    const maxThreads = self.availThreads;
-    const time = ns.getWeakenTime(target.name) * 1000;
-    while (!target.hasMaxMoney) {
-        // We need 1 weaken thread for each 12.5 grow thread
-        const weakenThreads = Math.ceil((1.1 / 13.5) * maxThreads);
-        const growThreads = maxThreads - weakenThreads;
-
-        // Run threads
-        const start = Date.now() + 500;
-        await Runner.runWeaken(ns, weakenThreads, target.name, start);
-        await Runner.runGrow(ns, growThreads, target.name, start);
-
-        const end = start + time + 500;
-        await display({
-            stage: 'Grow',
-            endtime: end,
-            threads: {grow: growThreads, growWeaken: weakenThreads}
-        });
-    }
-
-    if (!target.hasMinSecurity)
-        await weakenCycle(ns, target, self);
-}
-
-/**
- * @param {Ns} ns
- * @param {Server} target
- * @param {Server} self
- * @returns {Promise<void>}
- */
-async function weakenCycle(ns, target, self) {
-    const maxThreads = self.availThreads;
-    while (!target.hasMinSecurity) {
-        const time = ns.getWeakenTime(target.name) * 1000;
-
-        // Figure optimal thread usage
-        const neededThreads = Math.ceil(target.securityExcess / 0.05);
-        const using = Math.min(maxThreads, neededThreads);
-
-        // Run threads
-        const start = Date.now() + 500;
-        await Runner.runWeaken(ns, using, target.name, start);
-
-        const end = start + time + 500;
-        const result = Math.max(0, target.securityExcess - using * 0.05);
-        await display({
-            stage: 'Weaken',
-            result: `${result.toFixed(2)} security excess`,
-            endtime: end,
-            threads: {weaken: using}
-        });
-    }
-}
-
 
 /**
  * @param {{
