@@ -11,6 +11,11 @@ let _ns, _hackTime, _growTime, _weakTime, _executionSafety, _target, _self, _tak
 export async function main(ns) {
     ns.disableLog('ALL');
     _ns = ns;
+    // Parameters
+    _executionSafety = (ns.args[1] - 0) || 100;
+    _taking = (ns.args[2] - 0) || .05 // percent;
+    if (_taking >= 1) _taking /= 100;
+
     const targetName = ns.args[0];
     const target = Server.create(ns, targetName);
     _target = target;
@@ -18,8 +23,8 @@ export async function main(ns) {
     _self = self;
 
     // Parameters
-    _executionSafety = 20;
-    _taking = .05 // percent;
+    _executionSafety = (ns.args[1] - 0) || 100;
+    _taking = (ns.args[2] - 0) || .05 // percent;
 
 
     // Execution
@@ -69,6 +74,8 @@ export async function main(ns) {
         ns.print(`Target: ${target.name}`);
         ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio)})`);
         ns.print(`Security: ${asFormat(target.securityExcess)}`);
+        ns.print(`Safety: ${_executionSafety} ms`);
+        ns.print(`Taking: $${asFormat(_taking * target.moneyMax)} (${asPercent(_taking)}) per cycle`);
         ns.print(`Cycles: ${scheduler.cycles.length}`);
     }
 }
