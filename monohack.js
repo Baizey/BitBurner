@@ -38,7 +38,8 @@ async function hackCycle(ns, target, self, taking) {
         const hackTakes = ns.hackAnalyzePercent(target.name);
         const hackThreads = Math.floor(taking / hackTakes);
         const hackWeakenThreads = Math.ceil(hackThreads / 25 + 1);
-        const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - takingPercent)));
+        // Always calculate as if we're taking 1 more percent than we are
+        const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - takingPercent - 0.01)));
         const growWeakenThreads = Math.ceil(growThreads / 12.5 + 1);
 
         const safety = 1000;
