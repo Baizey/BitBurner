@@ -11,8 +11,8 @@ export async function main(ns) {
     _host = ns.args.filter(e => e[0] !== '-')[0] || ns.getHostname();
 
     const args = ns.args.filter(e => e[0] === '-');
-    if (args.indexOf('-v') >= 0)
-        _verbose = true;
+    
+    _verbose = args.indexOf('-v') >= 0;
 
     if (args.indexOf('-r') >= 0) {
         ns.tprint(`<span style="color:lightgrey">Removing old files</span>`);
@@ -44,7 +44,8 @@ export async function main(ns) {
 }
 
 async function update(name, files) {
-    _ns.tprint(`<span style="color:lightgrey">Updating ${name}</span>`);
+    if (_verbose)
+        _ns.tprint(`<span style="color:lightgrey">Updating ${name}</span>`);
     for (let file of files) {
         await _ns.wget(`${baseUrl}${file}`, file, _host);
         if (_verbose) _ns.tprint(`<span style="color:grey">\> ${file}</span>`);
