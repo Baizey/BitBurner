@@ -2,7 +2,7 @@ import {asFormat, asPercent} from "utils.js";
 import {cmd} from 'util-inject.js'
 
 let getColor = type => {
-    const Types = UtilServer.types;
+    const Types = Server.types;
     switch (type) {
         case Types.Own:
             return 'green';
@@ -24,9 +24,9 @@ let getColor = type => {
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-    const servers = UtilServer.get(ns);
+    const servers = Server.get(ns);
     let output = 'Network:';
-    UtilServer.get(ns).forEach(server => {
+    Server.get(ns).forEach(server => {
         let name = server.name;
         let hackColor = server.hasRoot ? 'lime' : 'red';
         let nameColor = getColor(server.type);
@@ -79,12 +79,12 @@ let getServerType = (ns, name) => {
     }
 };
 
-export class UtilServer {
+export class Server {
     /**
      * @param {Ns} ns
-     * @param {function(UtilServer):boolean} filter
+     * @param {function(Server):boolean} filter
      * @param {boolean} log
-     * @returns {UtilServer[]}
+     * @returns {Server[]}
      */
     static get(ns, filter = () => true, log = false) {
         if (!log) {
@@ -101,14 +101,14 @@ export class UtilServer {
         }
         let visited = {'home': true};
         let servers = [];
-        let queue = [new UtilServer(ns, 'home')];
+        let queue = [new Server(ns, 'home')];
         while (queue.length > 0) {
             let curr = queue.pop();
             servers.push(curr);
             let depth = curr.depth + 1;
             ns.scan(curr.name).forEach(name => {
                 if (!visited[name]) {
-                    let server = new UtilServer(ns, name, depth);
+                    let server = new Server(ns, name, depth);
                     queue.push(server);
                     visited[name] = true;
                 }
@@ -120,10 +120,10 @@ export class UtilServer {
     /**
      * @param {Ns} ns
      * @param {string} name
-     * @returns {UtilServer}
+     * @returns {Server}
      */
     static create(ns, name) {
-        return new UtilServer(ns, name);
+        return new Server(ns, name);
     }
 
     static get types() {

@@ -1,4 +1,4 @@
-import {UtilServer} from "util-server.js";
+import {Server} from 'util-server.js'
 import {asFormat, asPercent} from 'utils.js';
 import {Runner} from 'util-runner.js';
 
@@ -13,17 +13,17 @@ export async function main(ns) {
     _ns = ns;
     const targetName = ns.args[0];
     const taking = (ns.args[1] - 0) || 10;
-    const target = UtilServer.create(ns, targetName);
+    const target = Server.create(ns, targetName);
     _target = target;
-    const self = UtilServer.create(ns, ns.getHostname());
+    const self = Server.create(ns, ns.getHostname());
     ns.disableLog('sleep');
     await hackCycle(ns, target, self, taking);
 }
 
 /**
  * @param {Ns} ns
- * @param {UtilServer} target
- * @param {UtilServer} self
+ * @param {Server} target
+ * @param {Server} self
  * @param {number} taking
  * @returns {Promise<void>}
  */
@@ -76,8 +76,8 @@ async function hackCycle(ns, target, self, taking) {
 
 /**
  * @param {Ns} ns
- * @param {UtilServer} target
- * @param {UtilServer} self
+ * @param {Server} target
+ * @param {Server} self
  * @returns {Promise<void>}
  */
 async function growCycle(ns, target, self) {
@@ -110,8 +110,8 @@ async function growCycle(ns, target, self) {
 
 /**
  * @param {Ns} ns
- * @param {UtilServer} target
- * @param {UtilServer} self
+ * @param {Server} target
+ * @param {Server} self
  * @returns {Promise<void>}
  */
 async function weakenCycle(ns, target, self) {

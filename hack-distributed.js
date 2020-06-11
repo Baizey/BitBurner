@@ -1,6 +1,6 @@
 import {Runner} from 'util-runner.js'
 import {asPercent, asFormat} from 'utils.js'
-import {UtilServer} from 'util-server.js'
+import {Server} from 'util-server.js'
 
 let _ns;
 
@@ -11,7 +11,7 @@ let _ns;
 export async function main(ns) {
     _ns = ns;
     const targetName = ns.args[0];
-    const target = UtilServer.create(_ns, targetName);
+    const target = Server.create(_ns, targetName);
     ns.disableLog('sleep');
     ns.clearLog();
     await growFull(target);
@@ -19,14 +19,14 @@ export async function main(ns) {
 }
 
 /**
- * @returns {UtilServer[]}
+ * @returns {Server[]}
  */
 function workerServers() {
-    return UtilServer.get(_ns).filter(s => s.hasRoot && s.name !== 'home');
+    return Server.get(_ns).filter(s => s.hasRoot && s.name !== 'home');
 }
 
 /**
- * @param {UtilServer} target
+ * @param {Server} target
  * @returns {Promise<void>}
  */
 async function hackCycle(target) {
@@ -125,7 +125,7 @@ function calcHackThreads(servers, target) {
 }
 
 /**
- * @param {UtilServer} target
+ * @param {Server} target
  * @returns {Promise<void>}
  */
 async function growFull(target) {
@@ -194,7 +194,7 @@ function calcGrowthWeakenThreads(target, servers) {
 }
 
 /**
- * @param {UtilServer} target
+ * @param {Server} target
  * @param {string} stage
  * @param {number} readyOn
  * @param {number} startTime
