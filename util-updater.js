@@ -14,10 +14,12 @@ export async function main(ns) {
     if (args.indexOf('-v') >= 0)
         _verbose = true;
 
-    if (args.indexOf('-r') >= 0)
+    if (args.indexOf('-r') >= 0) {
+        ns.tprint(`<span style="color:lightgrey">Removing old files</span>`);
         ns.ls(_host)
             .filter(e => e.endsWith('.js') || e.endsWith('.script'))
-            .forEach(e => ns.rm(e, _host))
+            .forEach(e => ns.rm(e, _host));
+    }
 
     ns.tprint(`<span style="color:lightgrey">Updating ${_host}</span>`);
 
