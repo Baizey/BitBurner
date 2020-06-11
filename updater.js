@@ -1,30 +1,39 @@
 let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/renewal/';
+let _ns, _host, _verbose;
 
 /**
  * @param {Ns} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-    const host = ns.args[0] || ns.getHostname();
-    ns.tprint(`<span style="color:lightgrey">Updating ${host}</span>`);
+    _ns = ns;
+    _host = ns.args[0] || ns.getHostname();
+    _verbose = ns.args[1] || false;
 
-    let files = [
-        'monohack.js',
-        'purchaser.js',
-        'script.js',
-        'cheaphack.js',
-        'crack.js',
+    ns.tprint(`<span style="color:lightgrey">Updating ${_host}</span>`);
+
+    await update('Utils', [
+        'updater.js',
         'utils.js',
         'inject.js',
+        'crack.js',
+        'purchaser.js',
         'server.js',
-        'grow.script',
-        'hack.script',
-        'weaken.script'
-    ];
-    for (let file of files) {
-        await ns.wget(`${baseUrl}${file}`, file, host);
-        ns.tprint(`<span style="color:grey">Updated ${file}</span>`);
-    }
-    await ns.wget(`${baseUrl}updater.js`, 'updater.js', host);
+        'script.js',
+    ])
+
+    await update('Hacks', [
+        'mono-hack.js',
+        'distributed-hack.js'
+    ])
+
     ns.tprint('<span style="color:white">Done updating!</span>');
+}
+
+async function update(name, files) {
+    _ns.tprint(`<span style="color:lightgrey">Updating ${name}</span>`);
+    for (let file of files) {
+        await _ns.wget(`${baseUrl}${file}`, file, _host);
+        if (_verbose) _ns.tprint(`<span style="color:grey">\> ${file}</span>`);
+    }
 }
