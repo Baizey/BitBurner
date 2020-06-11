@@ -1,5 +1,5 @@
 let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/renewal/';
-let _ns, _host, _verbose = false;
+let _ns, _host, _verbose;
 
 
 /**
@@ -11,7 +11,7 @@ export async function main(ns) {
     _host = ns.args.filter(e => e[0] !== '-')[0] || ns.getHostname();
 
     const args = ns.args.filter(e => e[0] === '-');
-    
+
     _verbose = args.indexOf('-v') >= 0;
 
     if (args.indexOf('-r') >= 0) {
