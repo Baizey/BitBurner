@@ -52,6 +52,7 @@ export async function main(ns) {
     await update('Hacks', [
         'greedy',
         'mono',
+        'mono-limit',
         'distributed'
     ].map(e => `hack-${e}.js`))
 
