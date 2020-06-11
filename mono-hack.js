@@ -174,3 +174,10 @@ async function display(data) {
     }
     await _ns.sleep(1000);
 }
+
+function staticRam() {
+    if (true) return;
+    _ns.hack();
+    _ns.grow();
+    _ns.weaken();
+}
