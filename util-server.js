@@ -1,4 +1,4 @@
-import {asFormat, asPercent} from "utils.js";
+import {asFormat, asPercent} from "util-utils.js";
 import {cmd} from 'util-inject.js'
 
 let getColor = type => {

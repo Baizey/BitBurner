@@ -1,4 +1,4 @@
-import {asFormat} from "utils.js";
+import {asFormat} from "util-utils.js";
 
 /**
  * @param {Ns} ns
