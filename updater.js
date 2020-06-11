@@ -23,8 +23,8 @@ export async function main(ns) {
     ])
 
     await update('Hacks', [
-        'mono-hack.js',
-        'distributed-hack.js'
+        'hack-mono.js',
+        'hack-distributed.js'
     ])
 
     ns.tprint('<span style="color:white">Done updating!</span>');
