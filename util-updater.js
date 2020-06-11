@@ -1,5 +1,3 @@
-import {cmd} from './util-inject'
-
 let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/renewal/';
 let _ns, _host, _verbose = false;
 
