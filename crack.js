@@ -4,11 +4,10 @@ let scripts = ['brutessh.exe', 'ftpcrack.exe', 'relaysmtp.exe', 'httpworm.exe', 
 
 /**
  * @param {Ns} ns
- * @param {string[]} avail
  * @returns {string[]}
  */
-let getAvail = (ns, avail = []) => {
-    return avail;
+let getAvail = (ns) => {
+    return scripts.filter(e => ns.fileExists(e));
     /*
     if (avail.length === scripts.length) return avail;
     ns.purchaseTor();
@@ -17,8 +16,10 @@ let getAvail = (ns, avail = []) => {
     */
 };
 
+/**
+ * @param {Ns} ns
+ */
 export async function main(ns) {
-    let avail = getAvail(ns);
     let servers = Server.get(ns);
     const cracked = [];
     servers = servers.filter(s => !s.hasRoot);
@@ -26,7 +27,7 @@ export async function main(ns) {
 
     printStuff(ns, cracked, servers);
     while (servers.length > 0) {
-        avail = getAvail(ns, avail);
+        const avail = getAvail(ns);
         servers.forEach(s => s.crack(avail));
 
         const hasCrackedMore = servers.filter(e => e.hasRoot).length > 0;

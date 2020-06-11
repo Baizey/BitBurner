@@ -11,20 +11,23 @@ let _target;
 export async function main(ns) {
     _ns = ns;
     const targetName = ns.args[0];
+    const taking = (ns.args[1] - 0) || 10;
     const target = Server.create(ns, targetName);
     _target = target;
     const self = Server.create(ns, ns.getHostname());
     ns.disableLog('sleep');
-    await hackCycle(ns, target, self);
+    await hackCycle(ns, target, self, taking);
 }
 
 /**
  * @param {Ns} ns
  * @param {Server} target
  * @param {Server} self
+ * @param {number} taking
  * @returns {Promise<void>}
  */
-async function hackCycle(ns, target, self) {
+async function hackCycle(ns, target, self, taking) {
+    const takingPercent = taking / 100;
     while (true) {
         await growCycle(ns, target, self);
         const maxThreads = self.availThreads;
@@ -32,12 +35,10 @@ async function hackCycle(ns, target, self) {
         const growTime = ns.getGrowTime(target.name) * 1000;
         const hackTime = ns.getHackTime(target.name) * 1000;
 
-        const taking = 10;
-
         const hackTakes = ns.hackAnalyzePercent(target.name);
         const hackThreads = Math.floor(taking / hackTakes);
         const hackWeakenThreads = Math.ceil(hackThreads / 25 + 1);
-        const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / 0.6));
+        const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - takingPercent)));
         const growWeakenThreads = Math.ceil(growThreads / 12.5 + 1);
 
         const safety = 1000;
