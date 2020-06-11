@@ -95,7 +95,7 @@ class Ns {
 
     scp();
 
-    ls();
+    ls(hostname);
 
     ps();
 

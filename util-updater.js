@@ -1,5 +1,8 @@
+import {cmd} from './util-inject'
+
 let baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/renewal/';
-let _ns, _host, _verbose;
+let _ns, _host, _verbose = false;
+
 
 /**
  * @param {Ns} ns
@@ -7,14 +10,16 @@ let _ns, _host, _verbose;
  */
 export async function main(ns) {
     _ns = ns;
+    _host = ns.args.filter(e => e[0] !== '-')[0] || ns.getHostname();
 
-    if (ns.args[0] !== '-v') {
-        _host = ns.args[0] || ns.getHostname();
-        _verbose = ns.args[1] === '-v';
-    } else {
-        _host = ns.args[1] || ns.getHostname();
+    const args = ns.args.filter(e => e[0] === '-');
+    if (args.indexOf('-v') >= 0)
         _verbose = true;
-    }
+
+    if (args.indexOf('-r') >= 0)
+        ns.ls(_host)
+            .filter(e => e.endsWith('.js') || e.endsWith('.script'))
+            .forEach(e => ns.rm(e, _host))
 
     ns.tprint(`<span style="color:lightgrey">Updating ${_host}</span>`);
 
