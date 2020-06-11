@@ -46,6 +46,7 @@ export async function main(ns) {
         'crack',
         'purchaser',
         'server',
+        'monitor',
         'script',
     ].map(e => `util-${e}.js`))
 
