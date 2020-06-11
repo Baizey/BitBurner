@@ -1,7 +1,6 @@
-import {Runner} from 'utils.js'
-import {asPercent} from 'utils.js'
-import {Server} from 'server.js'
-import {asFormat} from "utils.js";
+import {Runner} from 'util-runner.js'
+import {asPercent, asFormat} from 'utils.js'
+import {UtilServer} from 'util-server.js'
 
 let _ns;
 
@@ -12,7 +11,7 @@ let _ns;
 export async function main(ns) {
     _ns = ns;
     const targetName = ns.args[0];
-    const target = Server.create(_ns, targetName);
+    const target = UtilServer.create(_ns, targetName);
     ns.disableLog('sleep');
     ns.clearLog();
     await growFull(target);
@@ -20,14 +19,14 @@ export async function main(ns) {
 }
 
 /**
- * @returns {Server[]}
+ * @returns {UtilServer[]}
  */
 function workerServers() {
-    return Server.get(_ns).filter(s => s.hasRoot && s.name !== 'home');
+    return UtilServer.get(_ns).filter(s => s.hasRoot && s.name !== 'home');
 }
 
 /**
- * @param {Server} target
+ * @param {UtilServer} target
  * @returns {Promise<void>}
  */
 async function hackCycle(target) {
@@ -126,7 +125,7 @@ function calcHackThreads(servers, target) {
 }
 
 /**
- * @param {Server} target
+ * @param {UtilServer} target
  * @returns {Promise<void>}
  */
 async function growFull(target) {
@@ -195,7 +194,7 @@ function calcGrowthWeakenThreads(target, servers) {
 }
 
 /**
- * @param {Server} target
+ * @param {UtilServer} target
  * @param {string} stage
  * @param {number} readyOn
  * @param {number} startTime

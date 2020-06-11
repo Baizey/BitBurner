@@ -13,13 +13,14 @@ export async function main(ns) {
     ns.tprint(`<span style="color:lightgrey">Updating ${_host}</span>`);
 
     await update('Utils', [
-        'updater.js',
+        'util-runner.js',
+        'util-updater.js',
         'utils.js',
-        'inject.js',
-        'crack.js',
-        'purchaser.js',
-        'server.js',
-        'script.js',
+        'util-inject.js',
+        'util-crack.js',
+        'util-purchaser.js',
+        'util-server.js',
+        'util-script.js',
     ])
 
     await update('Hacks', [

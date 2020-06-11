@@ -1,4 +1,4 @@
-import {Server} from 'server.js';
+import {UtilServer} from 'util-server.js';
 
 let scripts = ['brutessh.exe', 'ftpcrack.exe', 'relaysmtp.exe', 'httpworm.exe', 'sqlinject.exe'];
 
@@ -20,7 +20,7 @@ let getAvail = (ns) => {
  * @param {Ns} ns
  */
 export async function main(ns) {
-    let servers = Server.get(ns);
+    let servers = UtilServer.get(ns);
     const cracked = [];
     servers = servers.filter(s => !s.hasRoot);
     ns.disableLog('sleep');

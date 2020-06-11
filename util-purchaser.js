@@ -14,7 +14,7 @@ export async function main(ns) {
             ns.tprint(`<span style="color:grey">Delete needs arg for hostname or 'all' to delete all</span>`);
     else if (ns.args[0] === 'buy') {
         if (ns.args[1] && ns.args[1] > 0) {
-            ns.purchaseServer('s', Math.pow(2, ns.args[1] - 0));
+            ns.purchaseServer(ns.args[2] || 's', Math.pow(2, ns.args[1] - 0));
         } else {
             const money = ns.getServerMoneyAvailable('home')
             let result = 1;
