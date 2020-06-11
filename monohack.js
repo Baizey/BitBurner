@@ -32,32 +32,34 @@ async function hackCycle(ns, target, self) {
         const growTime = ns.getGrowTime(target.name) * 1000;
         const hackTime = ns.getHackTime(target.name) * 1000;
 
+        const taking = 10;
+
         const hackTakes = ns.hackAnalyzePercent(target.name);
-        const hackThreads = Math.floor(40 / hackTakes);
+        const hackThreads = Math.floor(taking / hackTakes);
         const hackWeakenThreads = Math.ceil(hackThreads / 25 + 1);
         const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / 0.6));
-        const growWeakenThreads = Math.ceil(hackThreads / 12.5 + 1);
+        const growWeakenThreads = Math.ceil(growThreads / 12.5 + 1);
 
         const safety = 1000;
         while (target.hasMaxMoney && target.hasMinSecurity) {
-            const start = Date.now() + safety;
-            const hackStart = start + weakenTime - hackTime - safety;
-            const growStart = start + weakenTime - growTime + safety;
+            const now = Date.now();
+            const firstEnd = now + safety + weakenTime;
 
-            await Runner.runHack(ns, hackThreads, target.name,
-                hackStart);
-            await Runner.runWeaken(ns, hackWeakenThreads, target.name,
-                start);
-            await Runner.runGrow(ns, growThreads, target.name,
-                growStart);
-            await Runner.runWeaken(ns, growWeakenThreads, target.name,
-                start + 2 * safety);
+            const hackStart = firstEnd - hackTime + 0 * safety;
+            const hackWeakenStart = firstEnd - weakenTime + 1 * safety;
+            const growStart = firstEnd - growTime + 2 * safety;
+            const growWeakenStart = firstEnd - weakenTime + 3 * safety;
 
-            const end = start + weakenTime + 2 * safety;
+            await Runner.runHack(ns, hackThreads, target.name, hackStart);
+            await Runner.runWeaken(ns, hackWeakenThreads, target.name, hackWeakenStart);
+            await Runner.runGrow(ns, growThreads, target.name, growStart);
+            await Runner.runWeaken(ns, growWeakenThreads, target.name, growWeakenStart);
+
+            const end = now + weakenTime + 4 * safety;
             await display({
                 stage: 'Hack',
                 endtime: end,
-                taking: 0.4,
+                taking: taking / 100,
                 threads: {
                     hack: hackThreads,
                     hackWeaken: hackWeakenThreads,
@@ -123,8 +125,10 @@ async function weakenCycle(ns, target, self) {
         await Runner.runWeaken(ns, using, target.name, start);
 
         const end = start + time + 500;
+        const result = Math.max(0, target.securityExcess - using * 0.05);
         await display({
             stage: 'Weaken',
+            result: `${result.toFixed(2)} security excess`,
             endtime: end,
             threads: {weaken: using}
         });
@@ -137,6 +141,7 @@ async function weakenCycle(ns, target, self) {
  *          stage: string,
  *          endtime: number,
  *          taking: number,
+ *          result: string,
  *          threads: {
  *              grow: number,
  *              growWeaken: number,
@@ -157,6 +162,7 @@ async function display(data) {
         _ns.print(`Waiting ${Math.round((data.endtime - Date.now()) / 1000)} seconds`);
         _ns.print(`State: ${data.stage}`);
         _ns.print(`Target: ${target.name}`);
+        if (data.result) _ns.print(`Result: ${data.result}`)
         if (threads.weaken) _ns.print(`Weaken: ${threads.weaken}`);
         if (threads.grow) _ns.print(`GrowWeaken: ${threads.growWeaken}, Grow: ${threads.grow}`);
         if (threads.hack) _ns.print(`HackWeaken: ${threads.hackWeaken}, Hack: ${threads.hack}, Taking: ${asPercent(data.taking)}`);
