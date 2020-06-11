@@ -150,6 +150,7 @@ async function display(data) {
     const target = _target;
     const threads = data.threads || {};
     const end = data.endtime;
+    _ns.disableLog('ALL');
     while (Date.now() < end) {
         const excess = target.securityExcess === 0 ? target.securityExcess : target.securityExcess.toFixed(2);
         _ns.clearLog();
