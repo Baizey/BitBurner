@@ -17,11 +17,14 @@ export async function main(ns) {
     _verbose = args.indexOf('-v') >= 0;
 
     if (args.indexOf('-a') >= 0) {
-        ns.tprint(`<span style="color:lightgrey">Adding aliases</span>`);
         cmd(ns, 'alias -g update="run util-updater.js"');
+        await ns.sleep(500);
         cmd(ns, 'alias -g crack="run util-crack.js"');
+        await ns.sleep(500);
         cmd(ns, 'alias -g server="run util-purchaser.js"');
+        await ns.sleep(500);
         cmd(ns, 'alias -g scan="run util-server.js"');
+        await ns.sleep(500);
         ns.tprint(`<span style="color:lightgrey">Adding aliases</span>`);
     }
 
