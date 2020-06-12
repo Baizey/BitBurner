@@ -40,8 +40,9 @@ export async function main(ns) {
     const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - _taking - 0.05)) * 2);
     const growWeakenThreads = Math.ceil(growThreads / 12.5 * 2);
 
+    const hackChance = ns.hackChance(target.name);
     let completed = 0;
-    const earns = _taking * target.moneyMax;
+    const earns = _taking * target.moneyMax * hackChance;
     let startTime = 0;
 
     while (true) {
@@ -91,7 +92,7 @@ export async function main(ns) {
         const timespan = (Date.now() - startTime) / 1000;
         if (timespan > 0 && startTime > 0) {
             ns.print(`Completion interval: ${asFormat(completed / timespan)} per second`);
-            ns.print(`Earning: ${asFormat(earned / timespan)} per second`);
+            ns.print(`Earning: ${asFormat(earned / timespan)} per second (${asPercent((earned / timespan) / earned)})`);
         }
     }
 }
