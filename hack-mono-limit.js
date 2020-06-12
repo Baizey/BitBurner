@@ -90,8 +90,8 @@ export async function main(ns) {
 
         const earned = completed * earns;
         const timespan = (Date.now() - startTime) / 1000;
-        if (timespan > 0 && startTime > 0) {
-            ns.print(`Completion interval: ${asFormat(completed / timespan)} per second`);
+        if (timespan > 0 && startTime > 0 && completed > 0) {
+            ns.print(`Completion interval: ${(timespan / completed).toFixed(2)}`);
             ns.print(`Earning: ${asFormat(earned / timespan)} per second (${asPercent((earned / timespan) / earned)})`);
         }
     }
