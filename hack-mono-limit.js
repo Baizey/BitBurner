@@ -76,6 +76,9 @@ async function init(ns) {
 
 async function update() {
     await _ns.killall(target.name);
+    _ns.clearLog();
+    _ns.print(`Waiting ${((delay + weakTime) / 1000).toFixed()} seconds for scripts to clear up`);
+    await _ns.sleep(delay + weakTime);
     await Hacker.growServer(_ns, target, host);
 
     updateTimers();

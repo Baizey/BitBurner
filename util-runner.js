@@ -89,8 +89,8 @@ export class Hacker {
 
             // Run threads
             const start = Date.now() + 500;
-            if (weakenThreads > 0) await Runner.runWeaken(ns, weakenThreads, target.name, start);
-            if (growThreads > 0) await Runner.runGrow(ns, growThreads, target.name, start);
+            if (weakenThreads > 0) await Runner.runWeaken(ns, weakenThreads, target.name, start, self.name);
+            if (growThreads > 0) await Runner.runGrow(ns, growThreads, target.name, start, self.name);
 
             const end = start + time + 500;
             await this.display({
@@ -119,7 +119,7 @@ export class Hacker {
 
             // Run threads
             const start = Date.now() + 500;
-            await Runner.runWeaken(ns, using, target.name, start);
+            await Runner.runWeaken(ns, using, target.name, start, self.name);
 
             const end = start + time + 500;
             const result = Math.max(0, target.securityExcess - using * 0.05);
