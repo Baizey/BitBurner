@@ -76,11 +76,11 @@ async function init(ns) {
 
 async function update() {
     await _ns.killall(target.name);
+    await Hacker.growServer(_ns, target, host);
 
     updateTimers();
     updateThreads();
-
-    await Hacker.growServer(_ns, target, host);
+    hackChance = _ns.hackChance(target.name);
 }
 
 function updateTimers() {
