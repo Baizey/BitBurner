@@ -78,15 +78,14 @@ export class Hacker {
         const target = this._target;
         const self = this._self;
 
-        if (!target.hasMinSecurity)
-            await this.weakenServer();
-
         const maxThreads = self.availThreads;
         const time = ns.getWeakenTime(target.name) * 1000;
-        while (!target.hasMaxMoney) {
+        while (!target.hasMaxMoney || !target.hasMinSecurity) {
+            const neededGrowThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / target.moneyRatio))
+
             // We need 1 weaken thread for each 12.5 grow thread
-            const weakenThreads = Math.ceil((1.1 / 13.5) * maxThreads);
-            const growThreads = maxThreads - weakenThreads;
+            const weakenThreads = Math.ceil(1.1 / 13.5 * neededGrowThreads) + Math.ceil(0.05 * target.securityExcess) + 1;
+            const growThreads = Math.min(neededGrowThreads, maxThreads - weakenThreads);
 
             // Run threads
             const start = Date.now() + 500;
@@ -100,9 +99,6 @@ export class Hacker {
                 threads: {grow: growThreads, growWeaken: weakenThreads}
             });
         }
-
-        if (!target.hasMinSecurity)
-            await this.weakenServer();
     }
 
     /**
