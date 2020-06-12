@@ -84,13 +84,13 @@ export class Hacker {
             const neededGrowThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / target.moneyRatio))
 
             // We need 1 weaken thread for each 12.5 grow thread
-            const weakenThreads = Math.ceil(1.1 / 13.5 * neededGrowThreads) + Math.ceil(0.05 * target.securityExcess) + 1;
+            const weakenThreads = Math.ceil(1.1 / 13.5 * maxThreads) + Math.ceil(0.05 * target.securityExcess + 1);
             const growThreads = Math.min(neededGrowThreads, maxThreads - weakenThreads);
 
             // Run threads
             const start = Date.now() + 500;
-            await Runner.runWeaken(ns, weakenThreads, target.name, start);
-            await Runner.runGrow(ns, growThreads, target.name, start);
+            if (weakenThreads > 0) await Runner.runWeaken(ns, weakenThreads, target.name, start);
+            if (growThreads > 0) await Runner.runGrow(ns, growThreads, target.name, start);
 
             const end = start + time + 500;
             await this.display({
