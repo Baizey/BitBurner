@@ -1,5 +1,5 @@
 import {Server} from "util-server.js";
-import {asFormat, asPercent} from "./util-utils";
+import {asFormat, asPercent} from "util-utils.js";
 
 /**
  * @param {Ns} ns

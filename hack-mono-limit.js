@@ -33,12 +33,16 @@ export async function main(ns) {
     const scheduler = new Scheduler(_executionSafety);
     updateTimers();
 
-    // Always WAY overdo growth and weakening
+    // Overdo everything but hacking to auto-correct problems
     const hackTakes = ns.hackAnalyzePercent(target.name);
     const hackThreads = Math.floor(_taking * 100 / hackTakes);
-    const hackWeakenThreads = Math.ceil(hackThreads / 20);
-    const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - _taking - 0.05)));
-    const growWeakenThreads = Math.ceil(growThreads / 10);
+    const hackWeakenThreads = Math.ceil(hackThreads / 25 * 2);
+    const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - _taking - 0.05)) * 2);
+    const growWeakenThreads = Math.ceil(growThreads / 12.5 * 2);
+
+    let completed = 0;
+    const earns = _taking * target.moneyMax;
+    let startTime = 0;
 
     while (true) {
         const now = Date.now();
@@ -70,13 +74,21 @@ export async function main(ns) {
 
         await ns.sleep(5);
         ns.clearLog();
-        scheduler.cleanup();
+        const removed = scheduler.cleanup();
+        if (removed && !completed)
+            startTime = Date.now();
+        completed += removed;
+
         ns.print(`Target: ${target.name}`);
         ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio)})`);
         ns.print(`Security: ${asFormat(target.securityExcess)}`);
         ns.print(`Safety: ${_executionSafety} ms`);
         ns.print(`Taking: $${asFormat(_taking * target.moneyMax)} (${asPercent(_taking)}) per cycle`);
         ns.print(`Cycles: ${scheduler.cycles.length}`);
+
+        const earned = completed * earns;
+        const timespan = (Date.now() - startTime) / 1000;
+        ns.print(`Earning: ${asFormat(earned / timespan)} per second`);
     }
 }
 
@@ -104,6 +116,7 @@ class Scheduler {
 
     /**
      * @param {number} time
+     * @returns i, number of cycles cleaned up
      */
     cleanup(time = Date.now()) {
         let i = 0;
@@ -111,6 +124,7 @@ class Scheduler {
             if (this.cycles[i].end > time)
                 break;
         this._cycles = this.cycles.slice(i);
+        return i;
     }
 
     /**
