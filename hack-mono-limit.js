@@ -12,15 +12,15 @@ export async function main(ns) {
     ns.disableLog('ALL');
     _ns = ns;
     // Parameters
-    _executionSafety = (ns.args[1] - 0) || 100;
-    _taking = (ns.args[2] - 0) || .05 // percent;
+    _executionSafety = (ns.args[2] - 0) || 100;
+    _taking = (ns.args[3] - 0) || .05 // percent;
     if (_taking >= 1) _taking /= 100;
 
     const targetName = ns.args[0];
     const target = Server.create(ns, targetName);
     _target = target;
-    const self = Server.create(ns, ns.getHostname());
-    _self = self;
+    const host = Server.create(ns, ns.args[1] || ns.getHostname());
+    _self = host;
 
     // Parameters
     _executionSafety = (ns.args[1] - 0) || 100;
@@ -28,7 +28,7 @@ export async function main(ns) {
 
 
     // Execution
-    await Hacker.growServer(ns, target, self);
+    await Hacker.growServer(ns, target, host);
 
     const scheduler = new Scheduler(_executionSafety);
     updateTimers();
@@ -47,6 +47,7 @@ export async function main(ns) {
     let startTime = 0;
 
     while (true) {
+        await ns.killall(host.name);
         const now = Date.now();
         const delay = 5000;
 
@@ -65,12 +66,12 @@ export async function main(ns) {
         const starts = [startHack, startHackWeak, startGrow, startGrowWeak];
         const cycle = new HackCycle(endMiddle, ends, starts);
 
-        if (hackThreads + hackWeakenThreads + growThreads + growWeakenThreads < self.availThreads) {
+        if (hackThreads + hackWeakenThreads + growThreads + growWeakenThreads < host.availThreads) {
             if (scheduler.tryAdd(cycle)) {
-                await Runner.runHack(ns, hackThreads, target.name, startHack, self.name);
-                await Runner.runWeaken(ns, hackWeakenThreads, target.name, startHackWeak, self.name);
-                await Runner.runGrow(ns, growThreads, target.name, startGrow, self.name);
-                await Runner.runWeaken(ns, growWeakenThreads, target.name, startGrowWeak, self.name);
+                await Runner.runHack(ns, hackThreads, target.name, startHack, host.name);
+                await Runner.runWeaken(ns, hackWeakenThreads, target.name, startHackWeak, host.name);
+                await Runner.runGrow(ns, growThreads, target.name, startGrow, host.name);
+                await Runner.runWeaken(ns, growWeakenThreads, target.name, startGrowWeak, host.name);
             }
         }
 

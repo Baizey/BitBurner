@@ -39,6 +39,7 @@ export async function main(ns) {
     ns.tprint(`<span style="color:lightgrey">Hostname ${_host}</span>`);
 
     await update('Utils', [
+        'kill',
         'runner',
         'utils',
         'updater',
