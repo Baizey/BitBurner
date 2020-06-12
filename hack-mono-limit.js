@@ -72,7 +72,7 @@ export async function main(ns) {
             }
         }
 
-        await ns.sleep(5);
+        await ns.sleep(10);
         ns.clearLog();
         const removed = scheduler.cleanup();
         if (removed && !completed)
@@ -84,11 +84,15 @@ export async function main(ns) {
         ns.print(`Security: ${asFormat(target.securityExcess)}`);
         ns.print(`Safety: ${_executionSafety} ms`);
         ns.print(`Taking: $${asFormat(_taking * target.moneyMax)} (${asPercent(_taking)}) per cycle`);
-        ns.print(`Cycles: ${scheduler.cycles.length}`);
+        ns.print(`Active cycles: ${scheduler.cycles.length}`);
+        ns.print(`Completed cycles: ${completed}`);
 
         const earned = completed * earns;
         const timespan = (Date.now() - startTime) / 1000;
-        ns.print(`Earning: ${asFormat(earned / timespan)} per second`);
+        if (timespan > 0 && startTime > 0) {
+            ns.print(`Completion interval: ${asFormat(completed / timespan)} per second`);
+            ns.print(`Earning: ${asFormat(earned / timespan)} per second`);
+        }
     }
 }
 
