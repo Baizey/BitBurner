@@ -41,6 +41,7 @@ export async function main(ns) {
     const growWeakenThreads = Math.ceil(growThreads / 12.5 * 2);
 
     const hackChance = ns.hackChance(target.name);
+    let maxActive = 0;
     let completed = 0;
     const earns = _taking * target.moneyMax * hackChance;
     let startTime = 0;
@@ -85,14 +86,16 @@ export async function main(ns) {
         ns.print(`Security: ${asFormat(target.securityExcess)}`);
         ns.print(`Safety: ${_executionSafety} ms`);
         ns.print(`Taking: $${asFormat(_taking * target.moneyMax)} (${asPercent(_taking)}) per cycle`);
-        ns.print(`Active cycles: ${scheduler.cycles.length}`);
-        ns.print(`Completed cycles: ${completed}`);
+        ns.print(`Hack chance: ${asPercent(hackChance)}`);
+        maxActive = Math.max(maxActive, scheduler.cycles.length);
+        ns.print(`Active cycles: ${scheduler.cycles.length} (${maxActive} max)`);
+        ns.print(`Completed cycles: ${asFormat(completed)}`);
 
         const earned = completed * earns;
-        const timespan = (Date.now() - startTime) / 1000;
+        const timespan = (Date.now() - startTime);
         if (timespan > 0 && startTime > 0 && completed > 0) {
-            ns.print(`Completion interval: ${(timespan / completed).toFixed(2)}`);
-            ns.print(`Earning: ${asFormat(earned / timespan)} per second (${asPercent((earned / timespan) / earned)})`);
+            ns.print(`Completion interval: ${Math.round(timespan / completed)} ms`);
+            ns.print(`Earning: $${asFormat(earned / timespan * 1000)} per second`);
         }
     }
 }
@@ -109,7 +112,7 @@ class Scheduler {
      */
     constructor(distance) {
         this._cycles = [];
-        this._safety = 3 * distance;
+        this._safety = 2.5 * distance;
     }
 
     /**
