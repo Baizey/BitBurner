@@ -2,109 +2,120 @@ import {Server} from 'util-server.js'
 import {asFormat, asPercent} from 'util-utils.js';
 import {Runner, Hacker} from 'util-runner.js';
 
-let _ns, _hackTime, _growTime, _weakTime, _executionSafety, _target, _self, _taking;
+let _ns, hackTime, growTime, weakTime, executionSafety, target, host, taking;
+let hackThreads, growThreads, hackWeakenThreads, growWeakenThreads;
+let hackTakes, hackChance, hackingLevel;
+let scheduler;
+
+const delay = 5000;
+
+const statistics = {
+    maxActive: 0,
+    completed: 0,
+    startTime: 0
+}
 
 /**
  * @param {Ns} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-    ns.disableLog('ALL');
-    _ns = ns;
-    // Parameters
-    _executionSafety = (ns.args[2] - 0) || 100;
-    _taking = (ns.args[3] - 0) || .05 // percent;
-    if (_taking >= 1) _taking /= 100;
-
-    const targetName = ns.args[0];
-    const target = Server.create(ns, targetName);
-    _target = target;
-    const host = Server.create(ns, ns.args[1] || ns.getHostname());
-    _self = host;
-
-    // Parameters
-    _executionSafety = (ns.args[1] - 0) || 100;
-    _taking = (ns.args[2] - 0) || .05 // percent;
-
-
-    // Execution
-    await Hacker.growServer(ns, target, host);
-
-    const scheduler = new Scheduler(_executionSafety);
-    updateTimers();
-
-    // Overdo everything but hacking to auto-correct problems
-    const hackTakes = ns.hackAnalyzePercent(target.name);
-    const hackThreads = Math.floor(_taking * 100 / hackTakes);
-    const hackWeakenThreads = Math.ceil(hackThreads / 25 * 2);
-    const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - _taking - 0.05)) * 2);
-    const growWeakenThreads = Math.ceil(growThreads / 12.5 * 2);
-
-    const hackChance = ns.hackChance(target.name);
-    let maxActive = 0;
-    let completed = 0;
-    const earns = _taking * target.moneyMax * hackChance;
-    let startTime = 0;
-
+    await init(ns);
     while (true) {
-        await ns.killall(host.name);
-        const now = Date.now();
-        const delay = 5000;
+        hackingLevel = ns.getHackingLevel();
+        await update();
+        scheduler = new Scheduler(executionSafety);
 
-        const endHack = now + _weakTime + delay;
-        const endHackWeak = endHack + _executionSafety;
-        const endGrow = endHack + 2 * _executionSafety;
-        const endGrowWeak = endHack + 3 * _executionSafety;
+        while (hackingLevel === ns.getHackingLevel()) {
+            const now = Date.now();
 
-        const startHack = endHack - _hackTime;
-        const startHackWeak = endHackWeak - _weakTime;
-        const startGrow = endGrow - _growTime;
-        const startGrowWeak = endGrowWeak - _weakTime;
+            const endHack = now + weakTime + delay;
+            const endHackWeak = endHack + executionSafety;
+            const endGrow = endHack + 2 * executionSafety;
+            const endGrowWeak = endHack + 3 * executionSafety;
 
-        const endMiddle = endGrow - _executionSafety / 2;
-        const ends = [endHack, endHackWeak, endGrow, endGrowWeak];
-        const starts = [startHack, startHackWeak, startGrow, startGrowWeak];
-        const cycle = new HackCycle(endMiddle, ends, starts);
+            const startHack = endHack - hackTime;
+            const startHackWeak = endHackWeak - weakTime;
+            const startGrow = endGrow - growTime;
+            const startGrowWeak = endGrowWeak - weakTime;
 
-        if (hackThreads + hackWeakenThreads + growThreads + growWeakenThreads < host.availThreads) {
-            if (scheduler.tryAdd(cycle)) {
-                await Runner.runHack(ns, hackThreads, target.name, startHack, host.name);
-                await Runner.runWeaken(ns, hackWeakenThreads, target.name, startHackWeak, host.name);
-                await Runner.runGrow(ns, growThreads, target.name, startGrow, host.name);
-                await Runner.runWeaken(ns, growWeakenThreads, target.name, startGrowWeak, host.name);
+            const endMiddle = endGrow - executionSafety / 2;
+            const ends = [endHack, endHackWeak, endGrow, endGrowWeak];
+            const starts = [startHack, startHackWeak, startGrow, startGrowWeak];
+            const cycle = new HackCycle(endMiddle, ends, starts);
+
+            if (hackThreads + hackWeakenThreads + growThreads + growWeakenThreads < host.availThreads) {
+                if (scheduler.tryAdd(cycle)) {
+                    await Runner.runHack(ns, hackThreads, target.name, startHack, host.name);
+                    await Runner.runWeaken(ns, hackWeakenThreads, target.name, startHackWeak, host.name);
+                    await Runner.runGrow(ns, growThreads, target.name, startGrow, host.name);
+                    await Runner.runWeaken(ns, growWeakenThreads, target.name, startGrowWeak, host.name);
+                }
             }
-        }
 
-        await ns.sleep(10);
-        ns.clearLog();
-        const removed = scheduler.cleanup();
-        if (removed && !completed)
-            startTime = Date.now();
-        completed += removed;
+            await ns.sleep(10);
+            const removed = scheduler.cleanup();
+            if (removed && !statistics.completed)
+                statistics.startTime = Date.now();
+            statistics.completed += removed;
 
-        ns.print(`Target: ${target.name}`);
-        ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio)})`);
-        ns.print(`Security: ${asFormat(target.securityExcess)}`);
-        ns.print(`Safety: ${_executionSafety} ms`);
-        ns.print(`Taking: $${asFormat(_taking * target.moneyMax)} (${asPercent(_taking)}) per cycle`);
-        ns.print(`Hack chance: ${asPercent(hackChance)}`);
-        maxActive = Math.max(maxActive, scheduler.cycles.length);
-        ns.print(`Active cycles: ${scheduler.cycles.length} (${maxActive} max)`);
-        ns.print(`Completed cycles: ${asFormat(completed)}`);
-
-        const earned = completed * earns;
-        const timespan = (Date.now() - startTime);
-        if (timespan > 0 && startTime > 0 && completed > 0) {
-            ns.print(`Completion interval: ${Math.round(timespan / completed)} ms`);
-            ns.print(`Earning: $${asFormat(earned / timespan * 1000)} per second`);
+            await display();
         }
     }
 }
 
+async function init(ns) {
+    _ns = ns;
+    _ns.disableLog('ALL');
+    host = Server.create(_ns, _ns.args[0] || _ns.getHostname());
+    target = Server.create(_ns, _ns.args[1]);
+    executionSafety = (_ns.args[2] - 0) || 100;
+    taking = (_ns.args[3] - 0) || .05;
+    if (taking >= 1) taking /= 100;
+}
+
+async function update() {
+    await _ns.killall(target.name);
+
+    updateTimers();
+    updateThreads();
+
+    await Hacker.growServer(_ns, target, host);
+}
+
 function updateTimers() {
-    _hackTime = _ns.getHackTime(_target.name) * 1000;
-    _growTime = _ns.getGrowTime(_target.name) * 1000;
-    _weakTime = _ns.getWeakenTime(_target.name) * 1000;
+    hackTime = _ns.getHackTime(target.name) * 1000;
+    growTime = _ns.getGrowTime(target.name) * 1000;
+    weakTime = _ns.getWeakenTime(target.name) * 1000;
+}
+
+function updateThreads() {
+    hackTakes = _ns.hackAnalyzePercent(target.name);
+    hackThreads = Math.floor(taking * 100 / hackTakes);
+    hackWeakenThreads = Math.ceil(hackThreads / 25 * 2);
+    growThreads = Math.ceil(_ns.growthAnalyze(target.name, 1 / (1 - taking - 0.05)) * 2);
+    growWeakenThreads = Math.ceil(growThreads / 12.5 * 2);
+}
+
+async function display() {
+    const earns = taking * target.moneyMax * hackChance;
+    const earned = statistics.completed * earns;
+    const timespan = (Date.now() - statistics.startTime);
+    statistics.maxActive = Math.max(statistics.maxActive, scheduler.cycles.length);
+
+    _ns.clearLog();
+    _ns.print(`Target: ${target.name}`);
+    _ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio)})`);
+    _ns.print(`Security: ${asFormat(target.securityExcess)}`);
+    _ns.print(`Safety: ${executionSafety} ms`);
+    _ns.print(`Taking: $${asFormat(taking * target.moneyMax)} (${asPercent(taking)}) per cycle`);
+    _ns.print(`Hack chance: ${asPercent(hackChance)}`);
+    _ns.print(`Active cycles: ${scheduler.cycles.length} (${statistics.maxActive} max)`);
+    _ns.print(`Completed cycles: ${asFormat(statistics.completed)}`);
+    if (timespan > 0 && statistics.startTime > 0 && statistics.completed > 0) {
+        _ns.print(`Completion interval: ${Math.round(timespan / statistics.completed)} ms`);
+        _ns.print(`Earning: $${asFormat(earned / timespan * 1000)} per second`);
+    }
 }
 
 class Scheduler {
