@@ -65,19 +65,25 @@ async function init(ns) {
     scheduler = new Scheduler(executionSafety);
 }
 
-async function update() {
-    await _ns.killall(target.name);
-    if (scheduler.active > 0) {
-        while (scheduler.active > 0) {
-            scheduler.cleanup();
+async function cleanup() {
+    if (scheduler.active === 0)
+        return;
+
+    while (scheduler.active > 0) {
+        if (scheduler.length > 0) {
             _ns.clearLog();
-            if (scheduler.length > 0)
-                _ns.print(`Waiting for ${scheduler.active} cycles to end (${((scheduler.cycles[scheduler.active - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
+            _ns.print(`Waiting for ${scheduler.active} cycles to end (${((scheduler.cycles[scheduler.active - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
             await _ns.sleep(5000);
         }
-        await _ns.sleep(delay + weakTime);
+        scheduler.cleanup();
     }
+    _ns.clearLog();
+    _ns.print(`Done cleaning up... rebooting`);
+    await _ns.sleep(delay);
+}
 
+async function update() {
+    await cleanup();
     await Hacker.growServer(_ns, target, host);
 
     hackingLevel = _ns.getHackingLevel();
@@ -181,8 +187,8 @@ class Scheduler {
             if (!old.isSafe(cycle, this._safety))
                 return false;
 
-        this._maxActive = Math.max(this._maxActive, this.cycles.length);
         this.cycles.push(cycle);
+        this._maxActive = Math.max(this._maxActive, this.cycles.length);
         return true;
     }
 }
