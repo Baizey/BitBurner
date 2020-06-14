@@ -21,7 +21,7 @@ export async function main(ns) {
             while (Math.pow(2, result) * 55000 < money && result <= 20)
                 result++;
             result--;
-            ns.tprint(`<span style="color:grey">Highest amount to buy with ${Math.pow(2, result)} (2^${result}) GB arm and $${asFormat(55000 * Math.pow(2, result))}</span>`);
+            ns.tprint(`<span style="color:grey">Highest amount to buy with ${Math.pow(2, result)} (2^${result}) GB ram and price of $${asFormat(55000 * Math.pow(2, result))}</span>`);
         }
     } else
         ns.tprint(`<span style="color:grey">First arg needs to be buy or delete</span>`);
