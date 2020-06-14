@@ -21,11 +21,9 @@ const statistics = {
  */
 export async function main(ns) {
     await init(ns);
-    scheduler = new Scheduler(executionSafety);
     while (true) {
-        hackingLevel = ns.getHackingLevel();
+
         await update();
-        scheduler = new Scheduler(executionSafety);
 
         while (hackingLevel === ns.getHackingLevel()) {
             const now = Date.now();
@@ -73,6 +71,7 @@ async function init(ns) {
     executionSafety = (_ns.args[2] - 0) || 100;
     taking = (_ns.args[3] - 0) || .05;
     if (taking >= 1) taking /= 100;
+    scheduler = new Scheduler(executionSafety);
 }
 
 async function update() {
@@ -90,6 +89,7 @@ async function update() {
 
     await Hacker.growServer(_ns, target, host);
 
+    hackingLevel = _ns.getHackingLevel();
     updateTimers();
     updateThreads();
     hackChance = _ns.hackChance(target.name);
