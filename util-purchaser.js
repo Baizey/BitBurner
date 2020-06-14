@@ -18,7 +18,7 @@ export async function main(ns) {
         } else {
             const money = ns.getServerMoneyAvailable('home')
             let result = 1;
-            while (Math.pow(2, result) * 55000 < money && Math.pow(2, result) <= ns.getPurchasedServerMaxRam())
+            while (Math.pow(2, result) * 55000 < money && result <= 20)
                 result++;
             result--;
             ns.tprint(`<span style="color:grey">Highest amount to buy with ${Math.pow(2, result)} (2^${result}) GB arm and $${asFormat(55000 * Math.pow(2, result))}</span>`);
