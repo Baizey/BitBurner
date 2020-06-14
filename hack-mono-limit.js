@@ -6,14 +6,8 @@ let _ns, hackTime, growTime, weakTime, executionSafety, target, host, taking, li
 let hackThreads, growThreads, hackWeakenThreads, growWeakenThreads;
 let hackTakes, hackChance, hackingLevel;
 let scheduler;
-
+const startTime = Date.now();
 const delay = 5000;
-
-const statistics = {
-    maxActive: 0,
-    completed: 0,
-    startTime: 0
-}
 
 /**
  * @param {Ns} ns
@@ -53,11 +47,7 @@ export async function main(ns) {
             }
 
             await ns.sleep(10);
-            const removed = scheduler.cleanup();
-            if (removed && !statistics.completed)
-                statistics.startTime = Date.now();
-            statistics.completed += removed;
-
+            scheduler.cleanup();
             await display();
         }
     }
@@ -77,12 +67,12 @@ async function init(ns) {
 
 async function update() {
     await _ns.killall(target.name);
-    if (scheduler.cycles.length > 0) {
-        while (scheduler.cycles.length > 0) {
+    if (scheduler.active > 0) {
+        while (scheduler.active > 0) {
             scheduler.cleanup();
             _ns.clearLog();
             if (scheduler.length > 0)
-                _ns.print(`Waiting for ${scheduler.cycles.length} cycles to end (${((scheduler.cycles[scheduler.cycles.length - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
+                _ns.print(`Waiting for ${scheduler.active} cycles to end (${((scheduler.cycles[scheduler.active - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
             await _ns.sleep(5000);
         }
         await _ns.sleep(delay + weakTime);
@@ -112,9 +102,8 @@ function updateThreads() {
 
 async function display() {
     const earns = taking * target.moneyMax * hackChance;
-    const earned = statistics.completed * earns;
-    const timespan = (Date.now() - statistics.startTime);
-    statistics.maxActive = Math.max(statistics.maxActive, scheduler.cycles.length);
+    const earned = scheduler.completed * earns;
+    const timespan = (Date.now() - startTime);
 
     _ns.clearLog();
     _ns.print(`Target: ${target.name}`);
@@ -123,10 +112,10 @@ async function display() {
     _ns.print(`Safety: ${executionSafety} ms`);
     _ns.print(`Taking: $${asFormat(taking * target.moneyMax)} (${asPercent(taking)}) per cycle`);
     _ns.print(`Hack chance: ${asPercent(hackChance)}`);
-    _ns.print(`Active cycles: ${scheduler.cycles.length} (${statistics.maxActive} max)`);
-    _ns.print(`Completed cycles: ${asFormat(statistics.completed)}`);
-    if (timespan > 0 && statistics.startTime > 0 && statistics.completed > 0) {
-        _ns.print(`Completion interval: ${Math.round(timespan / statistics.completed)} ms`);
+    _ns.print(`Active cycles: ${scheduler.active} (${scheduler.maxActive} max)`);
+    _ns.print(`Completed cycles: ${asFormat(scheduler.completed)}`);
+    if (timespan > 0 && startTime > 0 && scheduler.completed > 0) {
+        _ns.print(`Completion interval: ${Math.round(timespan / scheduler.completed)} ms`);
         _ns.print(`Earning: $${asFormat(earned / timespan * 1000)} per second`);
     }
 }
@@ -138,6 +127,29 @@ class Scheduler {
     constructor(distance) {
         this._cycles = [];
         this._safety = 2.5 * distance;
+        this._completed = 0;
+        this._maxActive = 0;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get active() {
+        return this._cycles.length;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get maxActive() {
+        return this._maxActive;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get completed() {
+        return this._completed;
     }
 
     /**
@@ -149,7 +161,6 @@ class Scheduler {
 
     /**
      * @param {number} time
-     * @returns i, number of cycles cleaned up
      */
     cleanup(time = Date.now()) {
         let i = 0;
@@ -157,7 +168,7 @@ class Scheduler {
             if (this.cycles[i].end > time)
                 break;
         this._cycles = this.cycles.slice(i);
-        return i;
+        this._completed += i;
     }
 
     /**
@@ -170,6 +181,7 @@ class Scheduler {
             if (!old.isSafe(cycle, this._safety))
                 return false;
 
+        this._maxActive = Math.max(this._maxActive, this.cycles.length);
         this.cycles.push(cycle);
         return true;
     }
