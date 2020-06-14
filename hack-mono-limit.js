@@ -21,6 +21,7 @@ const statistics = {
  */
 export async function main(ns) {
     await init(ns);
+    scheduler = new Scheduler(executionSafety);
     while (true) {
         hackingLevel = ns.getHackingLevel();
         await update();
@@ -76,9 +77,14 @@ async function init(ns) {
 
 async function update() {
     await _ns.killall(target.name);
-    _ns.clearLog();
-    _ns.print(`Waiting ${((delay + weakTime) / 1000).toFixed()} seconds for scripts to clear up`);
+    while (scheduler.cycles.length > 0) {
+        scheduler.cleanup();
+        _ns.clearLog();
+        _ns.print(`Waiting for ${scheduler.cycles.length} cycles to end (${((scheduler.cycles[scheduler.cycles.length - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
+        await _ns.sleep(5000);
+    }
     await _ns.sleep(delay + weakTime);
+
     await Hacker.growServer(_ns, target, host);
 
     updateTimers();
