@@ -81,7 +81,8 @@ async function update() {
         while (scheduler.cycles.length > 0) {
             scheduler.cleanup();
             _ns.clearLog();
-            _ns.print(`Waiting for ${scheduler.cycles.length} cycles to end (${((scheduler.cycles[scheduler.cycles.length - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
+            if (scheduler.length > 0)
+                _ns.print(`Waiting for ${scheduler.cycles.length} cycles to end (${((scheduler.cycles[scheduler.cycles.length - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
             await _ns.sleep(5000);
         }
         await _ns.sleep(delay + weakTime);
