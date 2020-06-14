@@ -2,7 +2,7 @@ import {Server} from 'util-server.js'
 import {asFormat, asPercent} from 'util-utils.js';
 import {Runner, Hacker} from 'util-runner.js';
 
-let _ns, hackTime, growTime, weakTime, executionSafety, target, host, taking;
+let _ns, hackTime, growTime, weakTime, executionSafety, target, host, taking, limit;
 let hackThreads, growThreads, hackWeakenThreads, growWeakenThreads;
 let hackTakes, hackChance, hackingLevel;
 let scheduler;
@@ -69,7 +69,8 @@ async function init(ns) {
     host = Server.create(_ns, _ns.args[0] || _ns.getHostname());
     target = Server.create(_ns, _ns.args[1]);
     executionSafety = (_ns.args[2] - 0) || 100;
-    taking = (_ns.args[3] - 0) || .05;
+    taking = (_ns.args[3] - 0) || .9;
+    limit = (_ns.args[4] - 0) || 20;
     if (taking >= 1) taking /= 100;
     scheduler = new Scheduler(executionSafety);
 }
@@ -164,6 +165,7 @@ class Scheduler {
      * @returns {boolean}
      */
     tryAdd(cycle) {
+        if (this.cycles.length > limit) return false;
         for (let old of this.cycles)
             if (!old.isSafe(cycle, this._safety))
                 return false;
