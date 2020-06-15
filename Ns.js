@@ -212,14 +212,49 @@ class Ns {
 
     getFavorToDonate();
 
-    getFavorToDonate();
-
-    getFavorToDonate();
-
-    getFavorToDonate();
-
     /**
      * @returns {{HackExpGain: number, ServerMaxMoney: number}}
      */
     getBitNodeMultipliers();
+
+
+    /**
+     * @returns {number}
+     */
+    getStockForecast(symbol);
+
+    /**
+     * @returns {string[]}
+     */
+    getStockSymbols();
+
+    /**
+     * @returns {number[]}
+     */
+    getStockPosition(symbol);
+
+    /**
+     * @returns {number}
+     */
+    getStockPurchaseCost(symbol, amount, type);
+
+    /**
+     * @returns {number}
+     */
+    getStockMaxShares(symbol);
+
+    getStockPrice(symbol);
+
+    /**
+     * @param  {string} symbol
+     * @param {number} amount
+     */
+    buyStock(symbol, amount);
+
+    /**
+     * @param  {string} symbol
+     * @param {number} amount
+     */
+    sellStock(symbol, amount);
+
 }

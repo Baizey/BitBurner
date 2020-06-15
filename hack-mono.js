@@ -2,118 +2,232 @@ import {Server} from 'util-server.js'
 import {asFormat, asPercent} from 'util-utils.js';
 import {Runner, HackRunner} from 'util-runner.js';
 
-let _ns;
-let _target;
+let _ns, hackTime, growTime, weakTime, executionSafety, target, host, taking, limit;
+let hackThreads, growThreads, hackWeakenThreads, growWeakenThreads;
+let hackTakes, hackChance, hackingLevel;
+let scheduler, runner;
+const startTime = Date.now();
+const delay = 5000;
 
 /**
  * @param {Ns} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-    _ns = ns;
-    const targetName = ns.args[0];
-    const taking = (ns.args[1] - 0) || 10;
-    const target = Server.create(ns, targetName);
-    _target = target;
-    const self = Server.create(ns, ns.getHostname());
-    ns.disableLog('sleep');
-    await hackCycle(ns, target, self, taking);
-}
-
-/**
- * @param {Ns} ns
- * @param {Server} target
- * @param {Server} self
- * @param {number} taking
- * @returns {Promise<void>}
- */
-async function hackCycle(ns, target, self, taking) {
-    const takingPercent = taking / 100;
+    await init(ns);
     while (true) {
-        await HackRunner.growServer(ns, target, self);
-        const maxThreads = self.availThreads;
-        const weakenTime = ns.getWeakenTime(target.name) * 1000;
-        const growTime = ns.getGrowTime(target.name) * 1000;
-        const hackTime = ns.getHackTime(target.name) * 1000;
 
-        const hackTakes = ns.hackAnalyzePercent(target.name);
-        const hackThreads = Math.floor(taking / hackTakes);
-        const hackWeakenThreads = Math.ceil(hackThreads / 25 + 1);
-        // Always calculate as if we're taking 1 more percent than we are
-        const growThreads = Math.ceil(ns.growthAnalyze(target.name, 1 / (1 - takingPercent - 0.01)));
-        const growWeakenThreads = Math.ceil(growThreads / 12.5 + 1);
+        await update();
 
-        const safety = 1000;
-        while (target.hasMaxMoney && target.hasMinSecurity) {
+        while (hackingLevel === ns.getHackingLevel()) {
             const now = Date.now();
-            const firstEnd = now + safety + weakenTime;
 
-            const hackStart = firstEnd - hackTime + 0 * safety;
-            const hackWeakenStart = firstEnd - weakenTime + 1 * safety;
-            const growStart = firstEnd - growTime + 2 * safety;
-            const growWeakenStart = firstEnd - weakenTime + 3 * safety;
+            const endHack = now + weakTime + delay;
+            const endHackWeak = endHack + executionSafety;
+            const endGrow = endHack + 2 * executionSafety;
+            const endGrowWeak = endHack + 3 * executionSafety;
 
-            await Runner.runHack(ns, hackThreads, target.name, hackStart);
-            await Runner.runWeaken(ns, hackWeakenThreads, target.name, hackWeakenStart);
-            await Runner.runGrow(ns, growThreads, target.name, growStart);
-            await Runner.runWeaken(ns, growWeakenThreads, target.name, growWeakenStart);
+            const startHack = endHack - hackTime;
+            const startHackWeak = endHackWeak - weakTime;
+            const startGrow = endGrow - growTime;
+            const startGrowWeak = endGrowWeak - weakTime;
 
-            const end = now + weakenTime + 4 * safety;
-            await display({
-                stage: 'Hack',
-                endtime: end,
-                taking: taking / 100,
-                threads: {
-                    hack: hackThreads,
-                    hackWeaken: hackWeakenThreads,
-                    grow: growThreads,
-                    growWeaken: growWeakenThreads
+            const endMiddle = endGrow - executionSafety / 2;
+            const ends = [endHack, endHackWeak, endGrow, endGrowWeak];
+            const starts = [startHack, startHackWeak, startGrow, startGrowWeak];
+            const cycle = new HackCycle(endMiddle, ends, starts);
+
+            if (hackThreads + hackWeakenThreads + growThreads + growWeakenThreads < host.availThreads) {
+                if (scheduler.tryAdd(cycle)) {
+                    await runner.runHack(hackThreads, startHack);
+                    await runner.runWeaken(hackWeakenThreads, startHackWeak);
+                    await runner.runGrow(growThreads, startGrow);
+                    await runner.runWeaken(growWeakenThreads, startGrowWeak);
                 }
-            });
+            }
+
+            await ns.sleep(10);
+            scheduler.cleanup();
+            await display();
         }
     }
 }
 
-/**
- * @param {{
- *          stage: string,
- *          endtime: number,
- *          taking: number,
- *          result: string,
- *          threads: {
- *              grow: number,
- *              growWeaken: number,
- *              hack: number
- *              hackWeaken: number,
- *              weaken: number,
- *           }
- *      }} data
- */
-async function display(data) {
-    const target = _target;
-    const threads = data.threads || {};
-    const end = data.endtime;
+async function init(ns) {
+    _ns = ns;
     _ns.disableLog('ALL');
-    while (Date.now() < end) {
-        const excess = target.securityExcess === 0 ? target.securityExcess : target.securityExcess.toFixed(2);
-        _ns.clearLog();
-        _ns.print(`Waiting ${Math.round((data.endtime - Date.now()) / 1000)} seconds`);
-        _ns.print(`State: ${data.stage}`);
-        _ns.print(`Target: ${target.name}`);
-        if (data.result) _ns.print(`Result: ${data.result}`)
-        if (threads.weaken) _ns.print(`Weaken: ${threads.weaken}`);
-        if (threads.grow) _ns.print(`GrowWeaken: ${threads.growWeaken}, Grow: ${threads.grow}`);
-        if (threads.hack) _ns.print(`HackWeaken: ${threads.hackWeaken}, Hack: ${threads.hack}, Taking: ${asPercent(data.taking)}`);
-        _ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio, 2)})`);
-        _ns.print(`Security excess: ${excess}`);
-        await _ns.sleep(200);
-    }
-    await _ns.sleep(1000);
+    host = Server.create(_ns, _ns.args[0] || _ns.getHostname());
+    target = Server.create(_ns, _ns.args[1]);
+    executionSafety = (_ns.args[2] - 0) || 100;
+    taking = (_ns.args[3] - 0) || .9;
+    limit = (_ns.args[4] - 0) || 20;
+    if (taking >= 1) taking /= 100;
+    scheduler = new Scheduler(executionSafety);
+    runner = new Runner(_ns, target, host);
 }
 
-function staticRam() {
-    if (true) return;
-    _ns.hack();
-    _ns.grow();
-    _ns.weaken();
+async function cleanup() {
+    if (scheduler.active === 0)
+        return;
+
+    while (scheduler.active > 0) {
+        _ns.clearLog();
+        _ns.print(`Waiting for ${scheduler.active} cycles to end (${((scheduler.cycles[scheduler.active - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
+        await _ns.sleep(1000);
+        scheduler.cleanup();
+    }
+
+    _ns.clearLog();
+    _ns.print(`Done cleaning up... rebooting`);
+    await _ns.sleep(delay);
+}
+
+async function update() {
+    await cleanup();
+    await HackRunner.growServer(_ns, target, host);
+
+    hackingLevel = _ns.getHackingLevel();
+    updateTimers();
+    updateThreads();
+    hackChance = _ns.hackChance(target.name);
+}
+
+function updateTimers() {
+    hackTime = _ns.getHackTime(target.name) * 1000;
+    growTime = _ns.getGrowTime(target.name) * 1000;
+    weakTime = _ns.getWeakenTime(target.name) * 1000;
+}
+
+function updateThreads() {
+    hackTakes = _ns.hackAnalyzePercent(target.name);
+    hackThreads = Math.floor(taking * 100 / hackTakes);
+    hackWeakenThreads = Math.ceil(hackThreads / 25 * 2);
+    growThreads = Math.ceil(_ns.growthAnalyze(target.name, 1 / (1 - taking - 0.05)) * 2);
+    growWeakenThreads = Math.ceil(growThreads / 12.5 * 2);
+}
+
+async function display() {
+    const earns = taking * target.moneyMax * hackChance;
+    const earned = scheduler.completed * earns;
+    const timespan = (Date.now() - startTime);
+
+    _ns.clearLog();
+    if (scheduler.active > 0)
+        _ns.print(`Next cycle ends in: ${((scheduler.cycles[0].end - Date.now()) / 1000).toFixed(2)} seconds`);
+    _ns.print(`Host: ${host.name}`);
+    _ns.print(`Target: ${target.name}`);
+    _ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio)})`);
+    _ns.print(`Security: ${asFormat(target.securityExcess)}`);
+    _ns.print(`Safety: ${executionSafety} ms`);
+    _ns.print(`Taking: $${asFormat(taking * target.moneyMax)} (${asPercent(taking)}) per cycle`);
+    _ns.print(`Hack chance: ${asPercent(hackChance)}`);
+    _ns.print(`Active cycles: ${scheduler.active} (${scheduler.maxActive} max)`);
+    _ns.print(`Completed cycles: ${asFormat(scheduler.completed)}`);
+    if (timespan > 0 && startTime > 0 && scheduler.completed > 0) {
+        _ns.print(`Completion interval: ${Math.round(timespan / scheduler.completed)} ms`);
+        _ns.print(`Earning: $${asFormat(earned / timespan * 1000)} per second`);
+    }
+}
+
+class Scheduler {
+    /**
+     * @param {number} distance
+     */
+    constructor(distance) {
+        this._cycles = [];
+        this._safety = 2.5 * distance;
+        this._completed = 0;
+        this._maxActive = 0;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get active() {
+        return this._cycles.length;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get maxActive() {
+        return this._maxActive;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get completed() {
+        return this._completed;
+    }
+
+    /**
+     * @returns {HackCycle[]}
+     */
+    get cycles() {
+        return this._cycles;
+    }
+
+    /**
+     * @param {number} time
+     */
+    cleanup(time = Date.now()) {
+        let i = 0;
+        for (; i < this.cycles.length; i++)
+            if (this.cycles[i].end > time)
+                break;
+        this._cycles = this.cycles.slice(i);
+        this._completed += i;
+    }
+
+    /**
+     * @param {HackCycle} cycle
+     * @returns {boolean}
+     */
+    tryAdd(cycle) {
+        if (this.cycles.length > limit) return false;
+        for (let old of this.cycles)
+            if (!old.isSafe(cycle, this._safety))
+                return false;
+
+        this.cycles.push(cycle);
+        this._maxActive = Math.max(this._maxActive, this.cycles.length);
+        return true;
+    }
+}
+
+class HackCycle {
+    /**
+     * @param {number} end
+     * @param {number[]} ends
+     * @param {number[]} starts
+     */
+    constructor(end, ends, starts) {
+        this.end = end;
+        this.ends = ends;
+        this.starts = starts;
+    }
+
+    /**
+     * Ensure no execution overlapping
+     * @param {HackCycle} other
+     * @param {number} minimum
+     * @returns {boolean}
+     */
+    isSafe(other, minimum) {
+        const myMin = this.end - minimum;
+        const myMax = this.end + minimum;
+        const otherMin = other.end - minimum;
+        const otherMax = other.end + minimum;
+
+        if (otherMin <= myMin && myMin <= otherMax) return false;
+        if (otherMin <= myMax && myMax <= otherMax) return false;
+        if (myMin <= otherMin && otherMin <= myMax) return false;
+        if (myMin <= otherMax && otherMax <= myMax) return false;
+
+        for (let start of this.starts) if (otherMin <= start && start <= otherMax) return false;
+        for (let start of other.starts) if (myMin <= start && start <= myMax) return false;
+
+        return true;
+    }
 }
