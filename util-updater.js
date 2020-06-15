@@ -55,7 +55,12 @@ export async function main(ns) {
         'greedy',
         'mono',
         'distributed'
-    ].map(e => `hack-${e}.js`))
+    ].map(e => `hack-${e}.js`));
+
+    await update('Stocks', [
+        'stock',
+        'stock-monitor'
+    ].map(e => `${e}.js`))
 
     ns.tprint('<span style="color:white">Done updating!</span>');
 }
