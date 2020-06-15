@@ -8,8 +8,8 @@ export async function main(ns) {
     while (true) {
         stocks.sort((a, b) => b.forecast - a.forecast);
 
-        stocks.filter(e => e.forecast < 0.51).forEach(s => s.sellAll());
-        stocks.filter(e => e.forecast > 0.55).forEach(s => s.buyAll());
+        stocks.filter(e => e.forecast <= 0.55).forEach(s => s.sellAll());
+        stocks.filter(e => e.forecast >= 0.60).forEach(s => s.buyAll());
 
         await ns.sleep(5000);
     }
