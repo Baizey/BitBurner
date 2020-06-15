@@ -111,6 +111,8 @@ async function display() {
     const timespan = (Date.now() - startTime);
 
     _ns.clearLog();
+    if (scheduler.active > 0)
+        _ns.print(`Next cycle ends in: ${((scheduler.cycles[0].end - Date.now()) / 1000).toFixed(2)} seconds`);
     _ns.print(`Host: ${host.name}`);
     _ns.print(`Target: ${target.name}`);
     _ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio)})`);
