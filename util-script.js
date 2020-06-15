@@ -8,6 +8,6 @@ export async function main(ns) {
     await ns[func](target);
 }
 
-async function weaken(ns) {
+async function staticMemoryCalc(ns) {
     await ns.weaken('');
 }

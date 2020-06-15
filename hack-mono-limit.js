@@ -70,13 +70,12 @@ async function cleanup() {
         return;
 
     while (scheduler.active > 0) {
-        if (scheduler.length > 0) {
-            _ns.clearLog();
-            _ns.print(`Waiting for ${scheduler.active} cycles to end (${((scheduler.cycles[scheduler.active - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
-            await _ns.sleep(5000);
-        }
+        _ns.clearLog();
+        _ns.print(`Waiting for ${scheduler.active} cycles to end (${((scheduler.cycles[scheduler.active - 1].end - Date.now()) / 1000).toFixed(2)} seconds)`);
+        await _ns.sleep(1000);
         scheduler.cleanup();
     }
+
     _ns.clearLog();
     _ns.print(`Done cleaning up... rebooting`);
     await _ns.sleep(delay);
@@ -112,6 +111,7 @@ async function display() {
     const timespan = (Date.now() - startTime);
 
     _ns.clearLog();
+    _ns.print(`Host: ${host.name}`);
     _ns.print(`Target: ${target.name}`);
     _ns.print(`Money: ${asFormat(target.moneyAvail)} (${asPercent(target.moneyRatio)})`);
     _ns.print(`Security: ${asFormat(target.securityExcess)}`);
