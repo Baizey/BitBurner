@@ -1,6 +1,6 @@
 import {Server} from 'util-server.js'
 import {asFormat, asPercent} from 'util-utils.js';
-import {Runner, Hacker} from 'util-runner.js';
+import {Runner, HackRunner} from 'util-runner.js';
 
 let _ns;
 let _target;
@@ -30,7 +30,7 @@ export async function main(ns) {
 async function hackCycle(ns, target, self, taking) {
     const takingPercent = taking / 100;
     while (true) {
-        await Hacker.growServer(ns, target, self);
+        await HackRunner.growServer(ns, target, self);
         const maxThreads = self.availThreads;
         const weakenTime = ns.getWeakenTime(target.name) * 1000;
         const growTime = ns.getGrowTime(target.name) * 1000;

@@ -30,6 +30,7 @@ function workerServers() {
  * @returns {Promise<void>}
  */
 async function hackCycle(target) {
+    const runner = new Runner(_ns, target, null);
     while (target.hasMaxMoney && target.hasMinSecurity) {
         const servers = workerServers();
         const threads = calcHackThreads(servers, target);

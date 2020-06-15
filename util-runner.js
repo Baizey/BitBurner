@@ -1,44 +1,62 @@
 import {asFormat, asPercent} from "util-utils.js";
 
 export class Runner {
-    /**
+
+    /*
      * @param {Ns} ns
-     * @param {number} threads
-     * @param {string} target
-     * @param {number} time
-     * @param {string} hostname
-     * @returns {Promise<void>}
+     * @param {string|Server} target
+     * @param {string|Server} host
      */
-    static runHack(ns, threads, target, time = Date.now() + 100, hostname = ns.getHostname()) {
-        return ns.exec('util-script.js', hostname, threads, target, 'hack', time);
+    constructor(ns, target, host) {
+        this._ns = ns;
+        this._host = typeof (host) === 'string' ? host : host.name;
+        this._target = typeof (target) === 'string' ? target : target.name;
     }
 
     /**
-     * @param {Ns} ns
-     * @param {number} threads
-     * @param {string} target
-     * @param {number} time
-     * @param {string} hostname
      * @returns {Promise<void>}
      */
-    static runGrow(ns, threads, target, time = Date.now() + 100, hostname = ns.getHostname()) {
-        return ns.exec('util-script.js', hostname, threads, target, 'grow', time);
+    async update() {
+        await this._ns.exec('util-update.js', this._host, 1, this._target);
     }
 
     /**
-     * @param {Ns} ns
-     * @param {number} threads
-     * @param {string} target
-     * @param {number} time
-     * @param {string} hostname
      * @returns {Promise<void>}
      */
-    static runWeaken(ns, threads, target, time = Date.now() + 100, hostname = ns.getHostname()) {
-        return ns.exec('util-script.js', hostname, threads, target, 'weaken', time);
+    async killAll() {
+        await this._ns.exec('util-kill.js', this._host, 1, this._target);
+    }
+
+    /**
+     * @param {number} threads
+     * @param {number} startTime
+     * @returns {Promise<void>}
+     */
+    async runHack(threads, startTime = undefined) {
+        await this._ns.exec('util-script.js', this._host, threads, this._target, 'hack', startTime);
+    }
+
+
+    /**
+     * @param {number} threads
+     * @param {number} startTime
+     * @returns {Promise<void>}
+     */
+    async runWeaken(threads, startTime = undefined) {
+        await this._ns.exec('util-script.js', this._host, threads, this._target, 'weaken', startTime);
+    }
+
+    /**
+     * @param {number} threads
+     * @param {number} startTime
+     * @returns {Promise<void>}
+     */
+    async runGrow(threads, startTime = undefined) {
+        await this._ns.exec('util-script.js', this._host, threads, this._target, 'grow', startTime);
     }
 }
 
-export class Hacker {
+export class HackRunner {
     /**
      * @param {Ns} ns
      * @param {Server} target
@@ -46,7 +64,7 @@ export class Hacker {
      * @returns {Promise<void>}
      */
     static growServer(ns, target, self) {
-        return new Hacker(ns, target, self).growServer();
+        return new HackRunner(ns, target, self).growServer();
     }
 
     /**
@@ -56,7 +74,7 @@ export class Hacker {
      * @returns {Promise<void>}
      */
     static weakenServer(ns, target, self) {
-        return new Hacker(ns, target, self).weakenServer();
+        return new HackRunner(ns, target, self).weakenServer();
     }
 
     /**
@@ -68,6 +86,7 @@ export class Hacker {
         this._ns = ns;
         this._target = target;
         this._self = self;
+        this._runner = new Runner(ns, target, self);
     }
 
     /**
@@ -89,8 +108,8 @@ export class Hacker {
 
             // Run threads
             const start = Date.now() + 500;
-            if (weakenThreads > 0) await Runner.runWeaken(ns, weakenThreads, target.name, start, self.name);
-            if (growThreads > 0) await Runner.runGrow(ns, growThreads, target.name, start, self.name);
+            if (weakenThreads > 0) await this._runner.runWeaken(weakenThreads, start);
+            if (growThreads > 0) await this._runner.runGrow(growThreads, start);
 
             const end = start + time + 500;
             await this.display({
@@ -119,7 +138,7 @@ export class Hacker {
 
             // Run threads
             const start = Date.now() + 500;
-            await Runner.runWeaken(ns, using, target.name, start, self.name);
+            await this._runner.runWeaken(using, start);
 
             const end = start + time + 500;
             const result = Math.max(0, target.securityExcess - using * 0.05);

@@ -1,11 +1,11 @@
 import {Server} from 'util-server.js'
 import {asFormat, asPercent} from 'util-utils.js';
-import {Runner, Hacker} from 'util-runner.js';
+import {Runner, HackRunner} from 'util-runner.js';
 
 let _ns, hackTime, growTime, weakTime, executionSafety, target, host, taking, limit;
 let hackThreads, growThreads, hackWeakenThreads, growWeakenThreads;
 let hackTakes, hackChance, hackingLevel;
-let scheduler;
+let scheduler, runner;
 const startTime = Date.now();
 const delay = 5000;
 
@@ -39,10 +39,10 @@ export async function main(ns) {
 
             if (hackThreads + hackWeakenThreads + growThreads + growWeakenThreads < host.availThreads) {
                 if (scheduler.tryAdd(cycle)) {
-                    await Runner.runHack(ns, hackThreads, target.name, startHack, host.name);
-                    await Runner.runWeaken(ns, hackWeakenThreads, target.name, startHackWeak, host.name);
-                    await Runner.runGrow(ns, growThreads, target.name, startGrow, host.name);
-                    await Runner.runWeaken(ns, growWeakenThreads, target.name, startGrowWeak, host.name);
+                    await runner.runHack(hackThreads, startHack);
+                    await runner.runWeaken(hackWeakenThreads, startHackWeak);
+                    await runner.runGrow(growThreads, startGrow);
+                    await runner.runWeaken(growWeakenThreads, startGrowWeak);
                 }
             }
 
@@ -63,9 +63,15 @@ async function init(ns) {
     limit = (_ns.args[4] - 0) || 20;
     if (taking >= 1) taking /= 100;
     scheduler = new Scheduler(executionSafety);
+    runner = new Runner(_ns, target, host);
 }
 
 async function cleanup() {
+    await runner.killAll();
+
+    if (target.usedRam === 0)
+        scheduler._cycles = [];
+
     if (scheduler.active === 0)
         return;
 
@@ -83,7 +89,7 @@ async function cleanup() {
 
 async function update() {
     await cleanup();
-    await Hacker.growServer(_ns, target, host);
+    await HackRunner.growServer(_ns, target, host);
 
     hackingLevel = _ns.getHackingLevel();
     updateTimers();
