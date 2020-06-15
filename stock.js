@@ -59,7 +59,7 @@ export class Stock {
     }
 
     get gains() {
-        return this.currentPrice * this.purchasedAmount - this.purchasedTotalPrice;
+        return this.currentTotalPrice - this.purchasedTotalPrice;
     }
 
     get gainsPercent() {
