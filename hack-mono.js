@@ -61,7 +61,6 @@ async function init(ns) {
     executionSafety = (_ns.args[2] - 0) || 100;
     taking = (_ns.args[3] - 0) || .9;
     limit = (_ns.args[4] - 0) || 20;
-    if (taking >= 1) taking /= 100;
     scheduler = new Scheduler(executionSafety);
     runner = new Runner(_ns, target, host);
 }
@@ -185,13 +184,13 @@ class Scheduler {
      * @returns {boolean}
      */
     tryAdd(cycle) {
-        if (this.cycles.length > limit) return false;
+        if (this.cycles.length >= limit) return false;
         for (let old of this.cycles)
             if (!old.isSafe(cycle, this._safety))
                 return false;
 
         this.cycles.push(cycle);
-        this._maxActive = Math.max(this._maxActive, this.cycles.length);
+        this._maxActive = Math.max(this._maxActive, this.active);
         return true;
     }
 }

@@ -19,8 +19,8 @@ export async function main(ns) {
 
         ns.clearLog();
         ns.print(`TOTAL`)
-        ns.print(`Total money: $${asFormat(totalCurrentValue)}`)
-        ns.print(`Total Gains: $${asFormat(totalGain)} (${asPercent(totalGain / totalPurchasedValue)})`)
+        ns.print(`Money: $${asFormat(totalCurrentValue)}`)
+        ns.print(`Potential Gains: $${asFormat(totalGain)} (${asPercent(totalGain / totalPurchasedValue)})`)
         ns.print('');
 
         for (let stock of stocks) {

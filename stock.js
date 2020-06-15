@@ -3,7 +3,7 @@
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-    const stocks = ns.getStockSymbols().map(e => new Stock(ns, e));
+    const stocks = ns.getStockSymbols().map(symbol => new Stock(ns, symbol));
 
     while (true) {
         stocks.sort((a, b) => b.forecast - a.forecast);
@@ -30,8 +30,7 @@ export class Stock {
     getMaxPurchaseAmount() {
         const type = 'Long';
         for (let buying = 1; buying > 0; buying -= 0.01) {
-            const price =
-                this._ns.getStockPurchaseCost(this.symbol, Math.floor(this.maxShares * buying), type);
+            const price = this._ns.getStockPurchaseCost(this.symbol, Math.floor(this.maxShares * buying), type);
             if (price < 1000 + this._ns.getServerMoneyAvailable('home'))
                 return Math.floor(this.maxShares * buying);
         }
@@ -39,7 +38,7 @@ export class Stock {
     }
 
     buyAll() {
-        const amount = this.getMaxPurchaseAmount();
+        const amount = Math.min(this.maxShares - this.purchasedAmount, this.getMaxPurchaseAmount());
         if (amount > 0) this._ns.buyStock(this.symbol, amount);
     }
 
