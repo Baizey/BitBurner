@@ -1,192 +1,80 @@
+/**
+ * Just here to let the IDE know how the ns argument in all subarray functions look
+ */
 class Ns {
-    /**
-     * Raises security by 0.002 per thread on success
-     * @param {string} hostname
-     * @param {{threads:number, stock:boolean}} options
-     */
-    async hack(hostname, options = {});
 
-    /**
-     * Raises security by 0.004 per thread on success
-     * @param {string} hostname
-     * @param {{threads:number, stock:boolean}} options
-     */
-    async grow(hostname, options = {});
-
-    /**
-     * Lowers security by 0.05 per thread on success
-     * @param {string} hostname
-     * @param {{threads:number}} options
-     */
-    async weaken(hostname, options = {});
-
-    /**
-     * @param {string} hostname
-     * @param {number} amount of money to take
-     * @returns {number} number of threads needed
-     */
-    hackAnalyzeThreads(hostname, amount);
-
-    /**
-     * @param {string} hostname
-     * @returns {number} percent of money a single thread can hack
-     */
-    hackAnalyzePercent(hostname);
-
-    hackChance(hostname);
-
-    /**
-     * @param {string} hostname
-     * @param {number} factor
-     * @returns {number} number of threads needed
-     */
-    growthAnalyze(hostname, factor);
-
-    /**
-     * @param {number} milliseconds
-     */
-    async sleep(milliseconds);
-
-    print();
-
-    tprint();
-
-    clearLog();
-
-    disableLog();
-
-    enableLog();
-
-    isLogEnabled();
-
-    getScriptLogs();
-
-    tail();
-
-    scan();
-
-    nuke(hostname);
-
-    brutessh(hostname);
-
-    ftpcrack(hostname);
-
-    relaysmtp(hostname);
-
-    httpworm(hostname);
-
-    sqlinject(hostname);
-
-    async run();
-
-    async exec();
-
-    async spawn();
-
-    async kill();
-
-    async killall();
-
-    exit();
-
-    scp();
-
-    ls();
-
-    ps();
-
-    hasRootAccess(hostname);
-
-    getHostname();
-
-    getHackingLevel();
-
-    getHackingMultipliers();
-
-    getHacknetMultipliers();
-
-    getServerMoneyAvailable(hostname);
-
-    getServerMaxMoney(hostname);
-
-    getServerGrowth(hostname);
-
-    getServerSecurityLevel(hostname);
-
-    getServerBaseSecurityLevel(hostname);
-
-    getServerMinSecurityLevel(hostname);
-
-    getServerRequiredHackingLevel(hostname);
-
-    getServerNumPortsRequired(hostname);
-
-    getServerRam(hostname);
-
-    serverExists(hostname);
-
-    fileExists(filename, hostname = '');
-
-    isRunning(script, host, ...args);
-
-    getPurchasedServerCost();
-
-    purchaseServer();
-
-    deleteServer();
+    Ns() {
+        this.codingcontract = new Codingcontract();
+        this.args = [];
+    }
 
     /**
      * @returns {string[]}
      */
-    getPurchasedServers();
+    getPurchasedServers(){
+        return []
+    };
+    growthAnalyze(target, amount);
+    hackAnalyzeThreads(target);
+    getScriptRam(script);
+    getServerGrowth(target);
+    scp(files, source, target);
+    ls(target, filetype){}
+    disableLog(fn){}
+    enableLog(fn){}
+    clearLog(){}
+    getServerMoneyAvailable(target){}
+    getServerRequiredHackingLevel(target){}
+    print(stuff){}
+    tprint(stuff){}
+    getServerMaxMoney(target){}
+    getServerMinSecurityLevel(target){}
+    getServerSecurityLevel(target){}
+    scan(target){}
+    getServerRam(target){}
+    hasRootAccess(target){}
+    fileExists(filename){}
+    getServerNumPortsRequired(target){}
 
-    getPurchasedServerLimit();
+    getStockSymbols();
+    sellStock(symbol);
+    buyStock(symbol);
+    getStockForecast(symbol);
+    getStockPosition(symbol);
+    getStockPrice(symbol);
 
-    getPurchasedServerMaxRam();
+    getHostname(){}
+    getHackingLevel(){}
 
-    write();
+    isRunning(script, host, ...args){}
 
-    tryWrite();
+    nuke(target){}
+    brutessh(target){}
+    ftpcrack(target){}
+    relaysmtp(target){}
+    httpworm(target){}
+    sqlinject(target){}
 
-    read();
+    /**
+     * Bitnode-4 functions
+     */
+    purchaseProgram(program){};
+    purchaseTor(){};
 
-    peek();
+    async sleep(time){}
+    async run(script, numThreads=1, args){}
+    async exec(script, host, numThreads=1, args = ''){}
+    async kill(script, host, args = ''){}
+    async hack(target){}
+    async grow(target){}
+    async weaken(target){}
+    async prompt(question){}
+    async wget(url, filename, ip = ''){}
+}
 
-    clear();
-
-    getPortHandle();
-
-    rm(filename, hostname = '');
-
-    scriptRunning(scriptName, hostname);
-
-    scriptKill(scriptName, hostname);
-
-    getScriptName();
-
-    getScriptRam();
-
-    getHackTime();
-
-    getGrowTime();
-
-    getWeakenTime();
-
-    getScriptIncome();
-
-    getScriptExpGain();
-
-    getTimeSinceLastAug();
-
-    sprintf();
-
-    vsprintf();
-
-    nFormat();
-
-    prompt(question);
-
-    async wget(url, filename, toHost = '');
-
-    getFavorToDonate();
+class Codingcontract {
+    getContractType(filename, server){}
+    getDescription(filename, server){}
+    getData(fn, server){}
+    attempt(answer, filename, server){}
 }
