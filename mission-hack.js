@@ -15,7 +15,6 @@ export async function main(ns) {
         await ns.sleep(500);
 
         // Collect level layout
-        const buttons = getButtons();
         const grid = [];
         for (let i = 0; i < 8; i++) grid.push([]);
         for (let y = 0; y < grid.length; y++)

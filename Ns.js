@@ -1,7 +1,9 @@
 class Ns {
-    Ns() {
-        this.args = ['args'];
-    }
+
+    /**
+     * @returns {string[]}
+     */
+    get args();
 
     /**
      * Raises security by 0.002 per thread on success
@@ -51,15 +53,15 @@ class Ns {
      */
     async sleep(milliseconds);
 
-    print();
+    print(text);
 
-    tprint();
+    tprint(text);
 
     clearLog();
 
-    disableLog();
+    disableLog(type);
 
-    enableLog();
+    enableLog(type);
 
     isLogEnabled();
 
