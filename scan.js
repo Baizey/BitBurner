@@ -41,8 +41,7 @@ export function getServers(ns) {
     const queue = Object.keys(visited);
     while (queue.length > 0) {
         const current = queue.pop();
-        result.push(new Server(current, depth))
-        result.push({name: current, depth: visited[current]});
+        result.push(new Server(current, visited[current]))
         ns.scan(current)
             .reverse()
             .filter(e => !visited[e])

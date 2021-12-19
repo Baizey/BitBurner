@@ -1,8 +1,8 @@
 ﻿/** @param {import("Ns").NS } ns */
-import {getServers} from "./scan";
+import {getServers} from "./scan.js";
 
 export async function main(ns) {
-    const [target] = `${ns.args}`;
+    const [target] = ns.args;
 
     const minSec = ns.getServerMinSecurityLevel(target);
     const maxCash = ns.getServerMaxMoney(target);
@@ -26,7 +26,7 @@ export async function main(ns) {
                 ns.getScriptRam('grow.js'),
                 ns.getScriptRam('weak.js'));
             const threads = Math.floor(free / cost);
-            
+
             if (threads < 1) return;
 
             if (ns.getServerSecurityLevel(target) > minSec)
