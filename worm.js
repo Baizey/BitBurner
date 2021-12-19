@@ -1,6 +1,4 @@
-﻿import {getServers} from "./scan";
-
-/** @param {import("Ns").NS } ns */
+﻿/** @param {import("Ns").NS } ns */
 export async function main(ns) {
     const servers = getServers(ns);
     for (const server of servers.map(e => e.name)) {
