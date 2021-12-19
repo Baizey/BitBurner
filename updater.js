@@ -5,5 +5,5 @@ export async function main(ns) {
     let files = ['scan.js'];
     for (let i in files) await ns.wget(`${baseUrl}${files[i]}`, files[i]);
     await ns.wget(`${baseUrl}updater.js`, 'updater.js');
-    ns.tprint('<span style="color:white">Done updating!</span>');
+    ns.tprint('Done updating!');
 }
