@@ -7,7 +7,8 @@
     "w0r1d_d43m0n": "red"
 };
 
-/** @param {import("Ns").NS } ns
+/**
+ * @param {import("Ns").NS } ns
  * @returns {{ name: string, depth: number }[]} depth is 1-indexed
  */
 export function getServers(ns) {
