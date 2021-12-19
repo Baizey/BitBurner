@@ -1,4 +1,4 @@
-﻿let facServers = {
+﻿const facServers = {
     "CSEC": "yellow",
     "avmnite-02h": "yellow",
     "I.I.I.I": "yellow",
@@ -7,24 +7,23 @@
     "w0r1d_d43m0n": "red"
 };
 
-let svObj = (name = 'home', depth = 0) => ({name: name, depth: depth});
-
-/** @param {import("Ns").NS } ns */
+/** @param {import("Ns").NS } ns
+ * @returns {{ name: string, depth: number }[]} depth is 1-indexed
+ */
 export function getServers(ns) {
-    let result = [];
-    let visited = {'home': 0};
-    let queue = Object.keys(visited);
-    let name;
-    while ((name = queue.pop())) {
-        let depth = visited[name];
-        result.push(svObj(name, depth));
-        let scanRes = ns.scan(name);
-        for (let i = scanRes.length; i >= 0; i--) {
-            if (visited[scanRes[i]] === undefined) {
-                queue.push(scanRes[i]);
-                visited[scanRes[i]] = depth + 1;
-            }
-        }
+    const result = [];
+    const visited = {'home': 1};
+    const queue = Object.keys(visited);
+    while (queue.length > 0) {
+        const current = queue.pop();
+        result.push({name: current, depth: visited[current]});
+        ns.scan(current)
+            .reverse()
+            .filter(e => !visited[e])
+            .forEach(server => {
+                queue.push(server);
+                visited[server] = visited[current] + 1;
+            })
     }
     return result;
 }
@@ -34,9 +33,9 @@ export async function main(ns) {
     let output = "Network:";
 
     getServers(ns).forEach(server => {
-        let name = server.name;
-        let hackColor = ns.hasRootAccess(name) ? "lime" : "red";
-        let nameColor = facServers[name] ? facServers[name] : "white";
+        const name = server.name;
+        const hackColor = ns.hasRootAccess(name) ? "lime" : "red";
+        const nameColor = facServers[name] || "white";
 
         let hoverText = ["Req Level: ", ns.getServerRequiredHackingLevel(name),
             "&#10;Req Ports: ", ns.getServerNumPortsRequired(name),
@@ -55,7 +54,7 @@ export async function main(ns) {
                 "'>©</a>"].join("");
         });
 
-        output += ["<br>", "---".repeat(server.depth),
+        output += ["<br>", "---".repeat(server.depth - 1),
             `<font color=${hackColor}>■ </font>`,
             `<a class='scan-analyze-link' title='${hoverText}''
 
