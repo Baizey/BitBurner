@@ -8,7 +8,7 @@ export async function main(ns) {
         const file = files[i];
         ns.rm(file);
         await ns.wget(`${baseUrl}${file}`, file);
-        ns.tprint(`Got ${file} (${i + 1} / ${files.length})`)
+        ns.print(`Got ${file} (${i + 1} / ${files.length})`)
     }
     ns.tprint('Done updating!');
 }
