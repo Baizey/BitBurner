@@ -7,9 +7,33 @@
     "w0r1d_d43m0n": "red"
 };
 
+const ServerType = {
+    home: 'home',
+    own: 'own',
+    foreign: 'foreign'
+}
+
+class Server {
+    /**
+     * @param {string} name
+     * @param {number} depth
+     */
+    constructor(name, depth) {
+        this.name = name;
+        this.depth = depth;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    isHome() {
+        return this.name === 'home';
+    }
+}
+
 /**
  * @param {import("Ns").NS } ns
- * @returns {{ name: string, depth: number }[]} depth is 1-indexed
+ * @returns {Server[]} depth is 1-indexed
  */
 export function getServers(ns) {
     const result = [];
@@ -17,6 +41,7 @@ export function getServers(ns) {
     const queue = Object.keys(visited);
     while (queue.length > 0) {
         const current = queue.pop();
+        result.push(new Server(current, depth))
         result.push({name: current, depth: visited[current]});
         ns.scan(current)
             .reverse()
