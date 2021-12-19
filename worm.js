@@ -1,4 +1,4 @@
-﻿import {getServers} from "./scan";
+﻿import {getServers} from "./scan.js";
 
 /** @param {import("Ns").NS } ns */
 export async function main(ns) {
@@ -9,6 +9,7 @@ export async function main(ns) {
         await tryCatchIgnore(() => ns.httpworm(server))
         await tryCatchIgnore(() => ns.ftpcrack(server))
         await tryCatchIgnore(() => ns.sqlinject(server))
+        await tryCatchIgnore(() => ns.nuke(server))
     }
 }
 
