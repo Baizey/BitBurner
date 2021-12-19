@@ -1,5 +1,6 @@
 ﻿/** @param {import("Ns").NS } ns */
 import {getServers} from "./scan.js";
+import {files} from "./updater.js";
 
 export async function main(ns) {
     const [target] = ns.args;
@@ -12,8 +13,7 @@ export async function main(ns) {
         .filter(e => ns.hasRootAccess(e.name));
 
     for (const server of slaves) {
-        await ns.scp('updater.js', ns.getCurrentServer(), server.name);
-        ns.exec('updater.js', server.name);
+        await ns.scp(files.map(e => `${e}.js`), ns.getHostname(), server.name);
     }
 
     while (true) {

@@ -1,6 +1,6 @@
 const baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/1.2.0/';
 
-const files = [
+export const files = [
     'grow', 'weak', 'hack', // Basic
     'worm', 'automater', 'scan', 'connect', 'updater', // Utility
     'stupid_hack' // Temp
