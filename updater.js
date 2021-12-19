@@ -1,6 +1,10 @@
 const baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/1.2.0/';
 
-const files = ['worm', 'automater', 'scan', 'connect', 'updater'];
+const files = [
+    'grow', 'weak', 'hack', // Basic
+    'worm', 'automater', 'scan', 'connect', 'updater', // Utility
+    'stupid_hack' // Temp
+];
 
 /** @param {import("Ns").NS } ns */
 export async function main(ns) {
