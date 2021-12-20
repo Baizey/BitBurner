@@ -93,10 +93,12 @@ async function primeTarget(ns, target) {
  * @param {number} timestamp
  */
 async function _weaken(ns, target, threads, timestamp = undefined) {
-    timestamp ||= Date.now() + 5000;
-    const runtime = ns.getWeakenTime(target);
+    timestamp ||= Date.now() + 1000;
+
     ns.exec('worker.js', ns.getHostname(), threads, target, 'weaken', timestamp);
-    await ns.sleep((timestamp + runtime) - Date.now());
+
+    while (ns.isRunning('worker.js', ns.getHostname(), target, 'weaken', timestamp))
+        await ns.sleep(1000);
 }
 
 /**
@@ -106,10 +108,12 @@ async function _weaken(ns, target, threads, timestamp = undefined) {
  * @param {number} timestamp
  */
 async function _hack(ns, target, threads, timestamp = undefined) {
-    timestamp ||= Date.now() + 5000;
-    const runtime = ns.getHackTime(target);
+    timestamp ||= Date.now() + 1000;
+
     ns.exec('worker.js', ns.getHostname(), threads, target, 'hack', timestamp);
-    await ns.sleep((timestamp + runtime) - Date.now());
+
+    while (ns.isRunning('worker.js', ns.getHostname(), target, 'hack', timestamp))
+        await ns.sleep(1000);
 }
 
 /**
@@ -119,10 +123,12 @@ async function _hack(ns, target, threads, timestamp = undefined) {
  * @param {number} timestamp
  */
 async function _grow(ns, target, threads, timestamp = undefined) {
-    timestamp ||= Date.now() + 5000;
-    const runtime = ns.getGrowTime(target);
+    timestamp ||= Date.now() + 1000;
+
     ns.exec('worker.js', ns.getHostname(), threads, target, 'grow', timestamp);
-    await ns.sleep((timestamp + runtime) - Date.now() + 1000);
+
+    while (ns.isRunning('worker.js', ns.getHostname(), target, 'grow', timestamp))
+        await ns.sleep(1000);
 }
 
 
