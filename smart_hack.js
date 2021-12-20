@@ -11,7 +11,7 @@ export function findBestServer(_ns) {
         .filter(e => e.name !== 'home')
         .filter(e => ns.getServerMaxMoney(e.name))
         .filter(e => ns.hasRootAccess(e.name));
-    
+
     servers.forEach(server => {
         server.cycleTime = ns.getWeakenTime(server.name);
         server.maxMoney = ns.getServerMaxMoney(server.name);
@@ -27,8 +27,6 @@ export function findBestServer(_ns) {
         let growThreads = calculateGrowThreads(target, ratio);
         let weakHackThreads = calculateWeakThreads(0, hackThreads);
         let weakGrowThreads = calculateWeakThreads(growThreads, 0);
-
-        programPrint(`Hack: ${taking}, ${ratio}, ${hackThreads}, ${growThreads}, ${weakHackThreads}, ${weakGrowThreads}`)
 
         while (hackThreads + growThreads + weakHackThreads + weakGrowThreads > maxThreads) {
             taking -= 0.01;
@@ -53,7 +51,7 @@ export async function main(_ns) {
     ns = _ns;
     // noinspection InfiniteLoopJS
     while (true) {
-        const target = findBestServer(ns)[0].name;
+        const target = ns.args[0] || findBestServer(ns)[0].name;
 
         programPrint(`Target: ${target}`)
 
@@ -75,7 +73,7 @@ export async function main(_ns) {
         let weakHackThreads = calculateWeakThreads(0, hackThreads);
         let weakGrowThreads = calculateWeakThreads(growThreads, 0);
 
-        programPrint(`Hack: ${taking}, ${ratio}, ${hackThreads}, ${growThreads}, ${weakHackThreads}, ${weakGrowThreads}`)
+        programPrint(`Ideal Hack: ${taking}, ${ratio}, ${hackThreads}, ${weakHackThreads}, ${growThreads}, ${weakGrowThreads}`)
 
         while (hackThreads + growThreads + weakHackThreads + weakGrowThreads > maxThreads) {
             taking -= 0.01;
@@ -86,7 +84,7 @@ export async function main(_ns) {
             weakGrowThreads = calculateWeakThreads(growThreads, 0);
         }
 
-        programPrint(`Hack: ${taking}, ${ratio}, ${hackThreads}, ${growThreads}, ${weakHackThreads}, ${weakGrowThreads}`)
+        programPrint(`Actual Hack: ${taking}, ${ratio}, ${hackThreads}, ${weakHackThreads}, ${growThreads}, ${weakGrowThreads}`)
 
         const timestamp = Date.now() + 5000;
 
@@ -136,7 +134,7 @@ async function primeTarget(target) {
 
         let growThreads = calculateGrowThreads(target, ratio);
         let weakThreads = calculateWeakThreads(growThreads);
-        programPrint(`Grow threads: ${ratio}, ${growThreads}, ${weakThreads}`)
+        programPrint(`Ideal Grow threads: ${ratio}, ${growThreads}, ${weakThreads}`)
 
         while (growThreads + weakThreads > maxThreads) {
             ratio -= 0.01;
@@ -144,7 +142,7 @@ async function primeTarget(target) {
             weakThreads = calculateWeakThreads(growThreads);
         }
 
-        programPrint(`Grow threads: ${ratio}, ${growThreads}, ${weakThreads}`)
+        programPrint(`Actual Grow threads: ${ratio}, ${growThreads}, ${weakThreads}`)
 
         const stamp = Date.now() + 5000;
         _grow(target, growThreads, stamp);
