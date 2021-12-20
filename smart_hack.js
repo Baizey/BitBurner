@@ -21,6 +21,7 @@ export async function main(ns) {
         let hackThreads = ns.hackAnalyzeThreads(target, taking * maxCash);
         let growThreads = ns.growthAnalyze(target, ratio);
         let weakThreads = ns.growthAnalyzeSecurity(growThreads) + ns.hackAnalyzeSecurity(hackThreads);
+        ns.tprint(`Hack: ${taking}, ${ratio}, ${hackThreads}, ${growThreads}, ${weakThreads}`)
 
         while (hackThreads + growThreads + weakThreads > maxThreads) {
             taking -= 0.01;
@@ -29,6 +30,8 @@ export async function main(ns) {
             growThreads = ns.growthAnalyze(target, ratio);
             weakThreads = ns.growthAnalyzeSecurity(growThreads) + ns.hackAnalyzeSecurity(hackThreads);
         }
+
+        ns.tprint(`Hack: ${taking}, ${ratio}, ${hackThreads}, ${growThreads}, ${weakThreads}`)
 
         const timestamp = Date.now() + 5000;
 
@@ -53,14 +56,18 @@ async function primeTarget(ns, target) {
 
     const maxThreads = Math.floor((maxRam - thisScriptCost) / threadCost);
 
+    ns.tprint(`Security: ${ns.getServerSecurityLevel(target)} > ${minSec}`)
     while (ns.getServerSecurityLevel(target) > minSec) {
         const security = ns.getServerSecurityLevel(target) - minSec;
         const threads = Math.min(
             Math.ceil(security / weakenProgress),
             maxThreads);
+        ns.tprint(`Security threads: ${threads}`)
         await weaken(ns, target, threads);
+        ns.tprint(`Security: ${ns.getServerSecurityLevel(target)} > ${minSec}`)
     }
 
+    ns.tprint(`Money: ${ns.getServerMoneyAvailable(target)} < ${maxCash}`)
     while (ns.getServerMoneyAvailable(target) < maxCash) {
         let ratio = maxCash / ns.getServerMoneyAvailable(target);
         let growThreads = ns.growthAnalyze(target, ratio);
@@ -72,8 +79,10 @@ async function primeTarget(ns, target) {
         }
 
         const stamp = Date.now() + 5000;
+        ns.tprint(`Grow threads: ${growThreads}, ${weakThreads}`)
         grow(ns, target, growThreads, stamp);
         await weaken(ns, target, weakThreads, stamp);
+        ns.tprint(`Money: ${ns.getServerMoneyAvailable(target)} < ${maxCash}`)
     }
 }
 
