@@ -19,16 +19,16 @@ export async function main(ns) {
         let taking = 0.99;
         let ratio = 1 / taking + 0.01;
         let hackThreads = ns.hackAnalyzeThreads(target, taking * maxCash);
-        let growThreads = ns.growthAnalyze(target, ratio);
-        let weakThreads = ns.growthAnalyzeSecurity(growThreads) + ns.hackAnalyzeSecurity(hackThreads);
+        let growThreads = calculateGrowThreads(ns, target, ratio);
+        let weakThreads = calculateWeakThreads(ns, growThreads, hackThreads);
         ns.tprint(`Hack: ${taking}, ${ratio}, ${hackThreads}, ${growThreads}, ${weakThreads}`)
 
         while (hackThreads + growThreads + weakThreads > maxThreads) {
             taking -= 0.01;
             ratio = 1 / taking + 0.01;
             hackThreads = Math.floor(ns.hackAnalyzeThreads(target, taking * maxCash));
-            growThreads = Math.ceil(ns.growthAnalyze(target, ratio));
-            weakThreads = Math.ceil(ns.growthAnalyzeSecurity(growThreads) + ns.hackAnalyzeSecurity(hackThreads));
+            growThreads = calculateGrowThreads(ns, target, ratio);
+            weakThreads = calculateWeakThreads(ns, growThreads, hackThreads);
         }
 
         ns.tprint(`Hack: ${taking}, ${ratio}, ${hackThreads}, ${growThreads}, ${weakThreads}`)
@@ -37,7 +37,8 @@ export async function main(ns) {
 
         _hack(ns, target, hackThreads, timestamp);
         _grow(ns, target, hackThreads, timestamp);
-        await _weaken(ns, target, hackThreads, timestamp);
+        const isRunning = _weaken(ns, target, hackThreads, timestamp);
+        while (isRunning()) await ns.sleep(100);
     }
 }
 
@@ -59,29 +60,32 @@ async function primeTarget(ns, target) {
     ns.tprint(`Security: ${ns.getServerSecurityLevel(target)} > ${minSec}`)
     while (ns.getServerSecurityLevel(target) > minSec) {
         const security = ns.getServerSecurityLevel(target) - minSec;
-        const threads = Math.min(
-            Math.ceil(security / weakenProgress),
-            maxThreads);
+        const threads = Math.min(Math.ceil(security / weakenProgress), maxThreads);
         ns.tprint(`Security threads: ${threads}`)
-        await _weaken(ns, target, threads);
+        const isRunning = _weaken(ns, target, threads);
+        while (isRunning()) await ns.sleep(100);
         ns.tprint(`Security: ${ns.getServerSecurityLevel(target)} > ${minSec}`)
     }
 
     ns.tprint(`Money: ${ns.getServerMoneyAvailable(target)} < ${maxCash}`)
     while (ns.getServerMoneyAvailable(target) < maxCash) {
         let ratio = maxCash / ns.getServerMoneyAvailable(target);
-        let growThreads = ns.growthAnalyze(target, ratio);
-        let weakThreads = ns.growthAnalyzeSecurity(growThreads);
+
+        let growThreads = calculateGrowThreads(ns, target, ratio);
+        let weakThreads = calculateWeakThreads(ns, growThreads);
+        ns.tprint(`Grow threads: ${ratio}, ${growThreads}, ${weakThreads}`)
+
         while (growThreads + weakThreads > maxThreads) {
             ratio -= 0.01;
-            growThreads = Math.ceil(ns.growthAnalyze(target, ratio));
-            weakThreads = Math.ceil(ns.growthAnalyzeSecurity(growThreads));
+            growThreads = calculateGrowThreads(ns, target, ratio);
+            weakThreads = calculateWeakThreads(ns, growThreads);
+            ns.tprint(`Grow threads: ${ratio}, ${growThreads}, ${weakThreads}`)
         }
 
         const stamp = Date.now() + 5000;
-        ns.tprint(`Grow threads: ${growThreads}, ${weakThreads}`)
         _grow(ns, target, growThreads, stamp);
-        await _weaken(ns, target, weakThreads, stamp);
+        const isRunning = _weaken(ns, target, weakThreads, stamp);
+        while (isRunning()) await ns.sleep(100);
         ns.tprint(`Money: ${ns.getServerMoneyAvailable(target)} < ${maxCash}`)
     }
 }
@@ -89,17 +93,39 @@ async function primeTarget(ns, target) {
 /**
  * @param {import("Ns").NS } ns
  * @param {string} target
+ * @param {number} ratio
+ * @returns {number}
+ */
+function calculateGrowThreads(ns, target, ratio) {
+    return Math.ceil(ns.growthAnalyze(target, ratio));
+}
+
+/**
+ * @param {import("Ns").NS } ns
+ * @param {number} growThreads
+ * @param {number} hackThreads
+ * @returns {number}
+ */
+function calculateWeakThreads(ns, growThreads, hackThreads = 0) {
+    const security = Math.ceil(ns.growthAnalyzeSecurity(growThreads) + ns.hackAnalyzeSecurity(hackThreads));
+    const threads = Math.ceil(security / weakenProgress);
+    return threads;
+}
+
+/**
+ * @param {import("Ns").NS } ns
+ * @param {string} target
  * @param {number} threads
  * @param {number} timestamp
+ * @returns {function(): boolean}
  */
-async function _weaken(ns, target, threads, timestamp = undefined) {
+function _weaken(ns, target, threads, timestamp = undefined) {
     timestamp ||= Date.now() + 1000;
     const host = ns.getHostname();
 
     ns.exec('worker.js', host, threads, target, 'weaken', timestamp);
 
-    while (ns.isRunning('worker.js', host, target, 'weaken', timestamp))
-        await ns.sleep(1000);
+    return () => ns.isRunning('worker.js', host, target, 'weaken', timestamp);
 }
 
 /**
@@ -107,15 +133,15 @@ async function _weaken(ns, target, threads, timestamp = undefined) {
  * @param {string} target
  * @param {number} threads
  * @param {number} timestamp
+ * @returns {function(): boolean}
  */
-async function _hack(ns, target, threads, timestamp = undefined) {
+function _hack(ns, target, threads, timestamp = undefined) {
     timestamp ||= Date.now() + 1000;
     const host = ns.getHostname();
 
     ns.exec('worker.js', host, threads, target, 'hack', timestamp);
 
-    while (ns.isRunning('worker.js', host, target, 'hack', timestamp))
-        await ns.sleep(1000);
+    return () => ns.isRunning('worker.js', host, target, 'hack', timestamp);
 }
 
 /**
@@ -123,15 +149,16 @@ async function _hack(ns, target, threads, timestamp = undefined) {
  * @param {string} target
  * @param {number} threads
  * @param {number} timestamp
+ * @returns {function(): boolean}
+ * @private
  */
-async function _grow(ns, target, threads, timestamp = undefined) {
+function _grow(ns, target, threads, timestamp = undefined) {
     timestamp ||= Date.now() + 1000;
     const host = ns.getHostname();
 
     ns.exec('worker.js', host, threads, target, 'grow', timestamp);
 
-    while (ns.isRunning('worker.js', host, target, 'grow', timestamp))
-        await ns.sleep(1000);
+    return () => ns.isRunning('worker.js', host, target, 'grow', timestamp);
 }
 
 
