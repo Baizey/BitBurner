@@ -53,7 +53,7 @@ export async function main(_ns) {
     while (true) {
         const target = ns.args[0] || findBestServer(ns)[0].name;
 
-        if (!!(+target)) {
+        if (/^\d+$/.test(target)) {
             const servers = findBestServer(ns);
             const max = +target;
             for (let i = 0; i < max; i++)
