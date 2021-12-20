@@ -53,6 +53,14 @@ export async function main(_ns) {
     while (true) {
         const target = ns.args[0] || findBestServer(ns)[0].name;
 
+        if (!!(+target)) {
+            const servers = findBestServer(ns);
+            const max = +target;
+            for (let i = 0; i < max; i++)
+                ns.run('smart_hack.js', 1, servers[i].name);
+            return;
+        }
+
         programPrint(`Target: ${target}`)
 
         const hostname = ns.getHostname();
