@@ -1,5 +1,5 @@
 ﻿import {getServers} from "./scan.js";
-import {files} from "./updater";
+import {files} from "./updater.js";
 
 /** @param {import("Ns").NS } ns */
 export async function main(ns) {
