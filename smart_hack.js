@@ -49,19 +49,19 @@ export function findBestServer(_ns) {
 /** @param {import("Ns").NS } _ns */
 export async function main(_ns) {
     ns = _ns;
-    const target = findBestServer(ns)[0].name;
-
-    const hostname = ns.getHostname();
-    const maxCash = ns.getServerMaxMoney(target);
-    const maxRam = ns.getServerMaxRam(hostname);
-
-    const threadCost = ns.getScriptRam('worker.js');
-    const thisScriptCost = ns.getScriptRam('smart_hack.js');
-
-    const maxThreads = Math.floor((maxRam - thisScriptCost) / threadCost);
-
     // noinspection InfiniteLoopJS
     while (true) {
+        const target = findBestServer(ns)[0].name;
+
+        const hostname = ns.getHostname();
+        const maxCash = ns.getServerMaxMoney(target);
+        const maxRam = ns.getServerMaxRam(hostname);
+
+        const threadCost = ns.getScriptRam('worker.js');
+        const thisScriptCost = ns.getScriptRam('smart_hack.js');
+
+        const maxThreads = Math.floor((maxRam - thisScriptCost) / threadCost);
+
         await primeTarget(target);
 
         let taking = 0.99;
