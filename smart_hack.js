@@ -5,7 +5,6 @@ export async function main(ns) {
     const [target] = ns.args.map(e => `${e}`);
 
     const hostname = ns.getHostname();
-    const minSec = ns.getServerMinSecurityLevel(target);
     const maxCash = ns.getServerMaxMoney(target);
     const maxRam = ns.getServerMaxRam(hostname);
 
