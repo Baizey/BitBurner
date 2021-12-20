@@ -17,19 +17,22 @@ export async function main(_ns) {
             if (!ns.getServerMaxMoney(server)) continue;
             const minSec = ns.getServerMinSecurityLevel(server);
             const security = ns.getServerSecurityLevel(server) - minSec;
-            const currMax = Math.floor((ns.getServerMaxRam(ns.getHostname()) - ns.getServerUsedRam(ns.getHostname())) / ns.getScriptRam('worker.js'));
 
-            ns.print(`Current max: ${currMax}`)
+            ns.print(`Current max: ${currentMaxThreads()}`)
 
-            while (currMax === 0) {
-                await ns.sleep(10000);}
+            while (currentMaxThreads() === 0)
+                await ns.sleep(10000);
 
-            const threads = Math.min(Math.ceil(security / weakenProgress), currMax);
+            const threads = Math.min(Math.ceil(security / weakenProgress), currentMaxThreads());
             if (threads > 0) _weaken(server, threads);
         }
 
         await ns.sleep(10000);
     }
+}
+
+function currentMaxThreads() {
+    return Math.floor((ns.getServerMaxRam(ns.getHostname()) - ns.getServerUsedRam(ns.getHostname())) / ns.getScriptRam('worker.js'));
 }
 
 
