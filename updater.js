@@ -2,7 +2,7 @@ const baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/1.2.0/';
 
 export const files = [
     'grow', 'weak', 'hack', 'worker', 'constants', // Basic
-    'worm', 'automater', 'scan', 'connect', 'updater', // Utility
+    'worm', 'buy_server', 'automater', 'scan', 'connect', 'updater', // Utility
     'stupid_hack', 'distributed_hack' // Hacking stages
 ];
 
