@@ -1,0 +1,1 @@
+﻿export const weakenProgress = 0.05;

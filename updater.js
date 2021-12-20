@@ -1,9 +1,9 @@
 const baseUrl = 'https://raw.githubusercontent.com/Baizey/BitBurner/1.2.0/';
 
 export const files = [
-    'grow', 'weak', 'hack', // Basic
+    'grow', 'weak', 'hack', 'worker', 'constants', // Basic
     'worm', 'automater', 'scan', 'connect', 'updater', // Utility
-    'stupid_hack' // Temp
+    'stupid_hack', 'distributed_hack' // Hacking stages
 ];
 
 /** @param {import("Ns").NS } ns */
@@ -12,7 +12,6 @@ export async function main(ns) {
     await update(ns);
     ns.tprint('Done updating!');
 }
-
 
 /** @param {import("Ns").NS } ns */
 async function update(ns) {

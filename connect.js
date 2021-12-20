@@ -12,7 +12,7 @@ export function autocomplete(data, args) {
  * @returns {void}
  */
 export async function main(ns) {
-    const [target] = ns.args[0];
+    const [target] = ns.args;
     const paths = {'home': []};
     const queue = Object.keys(paths);
     
