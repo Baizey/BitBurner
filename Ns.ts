@@ -4842,7 +4842,7 @@ export interface NS extends Singularity {
      * @param args - Arguments to specify/identify which scripts to search for.
      * @returns True if specified script is running on the target server, and false otherwise.
      */
-    isRunning(script: string, host: string, ...args: string[]): boolean;
+    isRunning(script: string, host: string, ...args: (string | number | boolean)[]): boolean;
 
     /**
      * Get general info about a running script.
