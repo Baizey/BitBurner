@@ -5,7 +5,7 @@
 export async function main(ns) {
     const [target, method, time] = ns.args;
 
-    if (time) await ns.sleep(time - Date.now);
+    if (time) await ns.sleep(time - Date.now());
 
     await ns[method](`${target}`);
 }
