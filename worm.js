@@ -1,5 +1,5 @@
 ﻿import {getServers} from "./scan.js";
-import {files} from "./updater.js";
+import {files} from "./constants.js";
 
 /** @param {import("Ns").NS } ns */
 export async function main(ns) {
@@ -13,9 +13,10 @@ export async function main(ns) {
         await tryCatchIgnore(() => ns.sqlinject(server))
         await tryCatchIgnore(() => ns.nuke(server))
     }
-    
+
     for (const server of servers) {
-        await ns.scp(files.map(e => `${e}.js`), ns.getHostname(), server.name);
+        await tryCatchIgnore(async () => await ns.scp(files.map(e => `${e}.js`), ns.getHostname(), server.name));
+        await tryCatchIgnore(() => ns.exec('backdoor.js', server.name));
     }
 }
 

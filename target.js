@@ -57,7 +57,7 @@ export class Target {
     /**
      * @param {number} ratio
      * @param maxThreads
-     * @returns {{total: number, grow: number, growWeak: number}}
+     * @returns {{total: number, grow: number, growWeak: number, ratio: number}}
      */
     calculateGrowth(ratio = undefined, maxThreads = undefined) {
         ratio ||= this.ratio;
@@ -66,15 +66,16 @@ export class Target {
         const security = this.ns.growthAnalyzeSecurity(growThreads)
         const growWeakThreads = this.calculateWeaken(security)
 
-        let threads = {
+        const threads = {
             grow: growThreads,
             growWeak: growWeakThreads,
-            total: growThreads + growWeakThreads
+            total: growThreads + growWeakThreads,
+            ratio: ratio
         }
 
         while (maxThreads && threads.total > maxThreads) {
-            ratio -= 0.01;
-            threads.grow = Math.ceil(this.ns.growthAnalyze(this.name, ratio));
+            threads.ratio -= 0.01;
+            threads.grow = Math.ceil(this.ns.growthAnalyze(this.name, threads.ratio));
             const security = this.ns.growthAnalyzeSecurity(growThreads)
             threads.growWeak = this.calculateWeaken(security)
             threads.total = threads.grow + threads.growWeak;
@@ -86,7 +87,7 @@ export class Target {
     /**
      * @param {number} taking
      * @param {number} maxThreads
-     * @returns {{hack: number, grow: number, growWeak: number, hackWeak: number, total: number}}
+     * @returns {{hack: number, grow: number, growWeak: number, hackWeak: number, total: number, taking: number, ratio: number}}
      */
     calculateHack(taking, maxThreads = undefined) {
         const maxCash = this.ns.getServerMaxMoney(this.name);
@@ -103,19 +104,21 @@ export class Target {
             hackWeak: hackWeakThreads,
             grow: growth.grow,
             growWeak: growth.growWeak,
-            total: hackThreads + hackWeakThreads + growth.total
+            total: hackThreads + hackWeakThreads + growth.total,
+            taking: taking,
+            ratio: ratio
         }
 
         if (maxThreads) {
             while (threads.total > maxThreads) {
-                taking -= 0.01;
-                threads.hack = Math.floor(this.ns.hackAnalyzeThreads(this.name, taking * maxCash))
+                threads.taking -= 0.01;
+                threads.hack = Math.floor(this.ns.hackAnalyzeThreads(this.name, threads.taking * maxCash))
 
                 const security = this.ns.hackAnalyzeSecurity(hackThreads)
                 threads.hackWeak = this.calculateWeaken(security)
 
-                const ratio = 1 / (1 - taking) + 0.01;
-                const growth = this.calculateGrowth(ratio);
+                threads.ratio = 1 / (1 - taking) + 0.01;
+                const growth = this.calculateGrowth(threads.ratio);
                 threads.grow = growth.grow;
                 threads.growWeak = growth.growWeak;
                 threads.total = threads.hack + threads.hackWeak + growth.total

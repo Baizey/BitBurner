@@ -1,6 +1,6 @@
 ﻿/** @param {import("Ns").NS } ns */
 import {getServers} from "./scan.js";
-import {files} from "./updater.js";
+import {files} from "./constants.js";
 
 export async function main(ns) {
     const [target] = ns.args;

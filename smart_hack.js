@@ -20,16 +20,10 @@ function findBestServer(ns) {
         const maxCash = ns.getServerMaxMoney(server.name);
         const maxThreads = Math.floor(ns.getServerMaxRam(ns.getHostname()) / ns.getScriptRam('worker.js'));
 
-        let taking = 0.99;
-        let threads = server.calculateHack(taking);
-
-        while (threads.total > maxThreads) {
-            taking -= 0.01;
-            threads = server.calculateHack(taking);
-        }
+        const threads = server.calculateHack(0.99, maxThreads);
 
         server.cycleTime = ns.getWeakenTime(server.name);
-        server.cycleEarning = maxCash * hackChance * taking;
+        server.cycleEarning = maxCash * hackChance * threads.taking;
         server.score = server.cycleEarning / server.cycleTime;
     })
 

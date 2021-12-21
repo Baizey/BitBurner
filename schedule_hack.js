@@ -1,63 +1,14 @@
 ﻿import {weakenProgress} from "./constants.js";
 
-/** {import("Ns").NS } ns */
-let ns;
-
 const gap = 500;
 const maxCycles = 10;
 
-/** @param {import("Ns").NS } _ns */
-export async function main(_ns) {
-    ns = _ns;
-
-    const target = `${ns.args[0]}`;
-    programPrint(`Target: ${target}`)
-
-    const hostname = ns.getHostname();
-    const maxCash = ns.getServerMaxMoney(target);
-    const maxRam = ns.getServerMaxRam(hostname);
-    const threadCost = ns.getScriptRam('worker.js');
-    const thisScriptCost = ns.getScriptRam('schedule_hack.js');
-
+/** @param {import("Ns").NS } ns */
+export async function main(ns) {
+    const [target] = ns.args;
+    
     // noinspection InfiniteLoopJS
     while (true) {
-        await prepareTarget(target);
-
-        let taking = 0.99;
-        let ratio = 1 / (1 - taking) + 0.01;
-        let hackThreads = calculateHackThreads(target, taking, maxCash);
-        let growThreads = calculateGrowThreads(target, ratio);
-        let weakHackThreads = calculateWeakThreads(0, hackThreads);
-        let weakGrowThreads = calculateWeakThreads(growThreads, 0);
-
-        programPrint(`Ideal Hack: ${taking}, ${ratio}, ${hackThreads}, ${weakHackThreads}, ${growThreads}, ${weakGrowThreads}`)
-
-        while (hackThreads + growThreads + weakHackThreads + weakGrowThreads > maxThreads) {
-            taking -= 0.01;
-            ratio = 1 / (1 - taking) + 0.01;
-            hackThreads = calculateHackThreads(target, taking, maxCash);
-            weakHackThreads = calculateWeakThreads(0, hackThreads);
-            growThreads = calculateGrowThreads(target, ratio);
-            weakGrowThreads = calculateWeakThreads(growThreads, 0);
-        }
-
-        programPrint(`Actual Hack: ${taking}, ${ratio}, ${hackThreads}, ${weakHackThreads}, ${growThreads}, ${weakGrowThreads}`)
-
-        const timestamp = Date.now() + 5000;
-
-        const growTime = ns.getGrowTime(target);
-        const hackTime = ns.getHackTime(target);
-        const weakTime = ns.getWeakenTime(target);
-
-        _hack(target, hackThreads, timestamp + weakTime + 500 - hackTime);
-
-        _weaken(target, weakHackThreads, timestamp + weakTime + 1000 - weakTime);
-
-        _grow(target, growThreads, timestamp + weakTime + 1500 - growTime);
-
-        const isRunning = _weaken(target, weakGrowThreads, timestamp + weakTime + 2000 - weakTime);
-
-        while (isRunning()) await ns.sleep(100);
     }
 }
 
