@@ -16,7 +16,8 @@ export async function main(ns) {
 
     for (const server of servers) {
         await tryCatchIgnore(async () => await ns.scp(files.map(e => `${e}.js`), ns.getHostname(), server.name));
-        await tryCatchIgnore(() => ns.exec('backdoor.js', server.name));
+        // Needs singularity :/
+        // await tryCatchIgnore(() => ns.exec('backdoor.js', server.name));
     }
 }
 

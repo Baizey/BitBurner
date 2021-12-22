@@ -128,10 +128,26 @@ export class Target {
         return threads;
     }
 
+    async prepare() {
+        const maxRam = this.ns.getServerMaxRam(this.host);
+        const threadCost = this.ns.getScriptRam('worker.js');
+        const maxThreads = maxRam / threadCost;
+
+        while (this.isSecurityHigh) await this.weaken(this.calculateWeaken(this.security, maxThreads));
+
+        while (this.isMoneyLow) {
+            const threads = this.calculateGrowth(this.ratio, maxThreads)
+            this.grow(threads.grow)
+            await this.weaken(threads.growWeak);
+        }
+
+        while (this.isSecurityHigh) await this.weaken(this.calculateWeaken(this.security, maxThreads));
+    }
+
     /**
      * @param {number} threads
      * @param {number} start
-     * @returns {function(): boolean}
+     * @returns {function(): Promise<void>}
      */
     hack(threads, start = undefined) {
         return this.execute('hack', threads, start);
@@ -140,7 +156,7 @@ export class Target {
     /**
      * @param {number} threads
      * @param {number} start
-     * @returns {function(): boolean}
+     * @returns {function(): Promise<void>}
      */
     weaken(threads, start = undefined) {
         return this.execute('weaken', threads, start);
@@ -149,7 +165,7 @@ export class Target {
     /**
      * @param {number} threads
      * @param {number} start
-     * @returns {function(): boolean}
+     * @returns {function(): Promise<void>}
      */
     grow(threads, start = undefined) {
         return this.execute('grow', threads, start);
@@ -159,14 +175,17 @@ export class Target {
      * @param {string} cmd
      * @param {number} threads
      * @param {number} start
-     * @returns {function(): boolean}
+     * @returns {function(): Promise<void>}
      * @private
      */
     execute(cmd, threads, start = undefined) {
         start ||= Date.now();
         const ns = this.ns;
         ns.exec('worker.js', this.host, threads, this.name, cmd, start);
-        return () => ns.isRunning('worker.js', this.host, this.name, cmd, start);
+        return async () => {
+            while (ns.isRunning('worker.js', this.host, this.name, cmd, start))
+                await ns.sleep(1000);
+        }
     }
 
 }

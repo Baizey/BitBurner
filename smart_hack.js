@@ -43,54 +43,35 @@ export async function main(ns) {
 
     // noinspection InfiniteLoopJS
     while (true) {
-        const name = ns.args[0] || findBestServer(ns)[0].name;
+        const bestAuto = findBestServer(ns)[0];
+        programPrint(ns, bestAuto)
+
+        const name = ns.args[0] || bestAuto.name;
         const target = new Target(ns, name);
+
+        programPrint(ns, `Target ${name}`)
 
         const maxRam = ns.getServerMaxRam(target.host);
         const threadCost = ns.getScriptRam('worker.js');
         const thisScriptCost = ns.getScriptRam('smart_hack.js');
         const maxThreads = Math.floor((maxRam - thisScriptCost) / threadCost);
 
-        await primeTarget(ns, target);
+        programPrint(ns, `Preparing...`)
+        await target.prepare();
 
         const threads = target.calculateHack(0.99, maxThreads);
+        programPrint(ns, threads)
 
         const timestamp = Date.now() + 5000;
         const growTime = ns.getGrowTime(target.name);
         const hackTime = ns.getHackTime(target.name);
         const weakTime = ns.getWeakenTime(target.name);
 
+        programPrint(ns, `Hacking...`)
         target.hack(threads.hack, timestamp + weakTime + 500 - hackTime);
         target.weaken(threads.hackWeak, timestamp + weakTime + 1000 - weakTime);
         target.grow(threads.grow, timestamp + weakTime + 1500 - growTime);
-        const isRunning = target.weaken(threads.growWeak, timestamp + weakTime + 2000 - weakTime);
-
-        while (isRunning()) await ns.sleep(100);
-    }
-}
-
-/**
- * @param {import("Ns").NS } ns
- * @param {Target} target
- */
-async function primeTarget(ns, target) {
-    const maxRam = ns.getServerMaxRam(target.host);
-
-    const threadCost = ns.getScriptRam('worker.js');
-    const thisScriptCost = ns.getScriptRam('smart_hack.js');
-
-    const maxThreads = Math.floor((maxRam - thisScriptCost) / threadCost);
-
-    while (target.isSecurityHigh) {
-        const isRunning = target.weaken(target.calculateWeaken(target.security, maxThreads));
-        while (isRunning()) await ns.sleep(1000);
-    }
-
-    while (target.isMoneyLow) {
-        const threads = target.calculateGrowth(target.ratio, maxThreads);
-        target.grow(threads.grow);
-        const isRunning = target.weaken(threads.growWeak);
-        while (isRunning()) await ns.sleep(1000);
+        await target.weaken(threads.growWeak, timestamp + weakTime + 2000 - weakTime);
     }
 }
 
