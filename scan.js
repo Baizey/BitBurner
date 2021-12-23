@@ -7,12 +7,6 @@
     "w0r1d_d43m0n": "red"
 };
 
-const ServerType = {
-    home: 'home',
-    own: 'own',
-    foreign: 'foreign'
-}
-
 class Server {
     /**
      * @param {string} name
@@ -21,13 +15,6 @@ class Server {
     constructor(name, depth) {
         this.name = name;
         this.depth = depth;
-    }
-
-    /**
-     * @returns {boolean}
-     */
-    isHome() {
-        return this.name === 'home';
     }
 }
 

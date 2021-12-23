@@ -30,7 +30,7 @@ export async function main(ns) {
             continue;
         }
 
-        const threads = target.calculateHack(0.1);
+        const threads = target.calculateCycleThreads(0.1);
         const hackTime = ns.getHackTime(target.name);
         const growTime = ns.getGrowTime(target.name);
         const weakenTime = ns.getWeakenTime(target.name);
